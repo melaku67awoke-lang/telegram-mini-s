@@ -75,7 +75,7 @@
                             <div style="font-size: 11px; color: #aaa;">⭐ 98% | 340 orders</div>
                         </div>
                     </div>
-                    <div style="width: 80px;"><button class="btn-action" onclick="startOrder('Teke_94', '193.90', '12.00', '2326.80', 'Telebirr')">Buy</button></div>
+                    <div style="width: 80px;"><button class="btn-action" onclick="openCheckout('Teke_94', '193.90', '1,000 - 14,174 ETB', 'Telebirr', '72.51')">Buy</button></div>
                 </div>
                 <div class="card-details">
                     <div>PRICE <val>193.90 ETB</val></div>
@@ -94,7 +94,7 @@
                             <div style="font-size: 11px; color: #aaa;">⭐ 80% | 752 orders</div>
                         </div>
                     </div>
-                    <div style="width: 80px;"><button class="btn-action" onclick="startOrder('Yona', '189.99', '5.26', '999.35', 'M-PESA')">Buy</button></div>
+                    <div style="width: 80px;"><button class="btn-action" onclick="openCheckout('Yona', '189.99', '1,000 - 1,050 ETB', 'M-PESA', '72.51')">Buy</button></div>
                 </div>
                 <div class="card-details">
                     <div>PRICE <val>189.99 ETB</val></div>
@@ -104,7 +104,63 @@
             </div>
         </div>
 
-        <!-- 2. ORDERS TAB -->
+        <!-- 2. CHECKOUT PRE-ORDER TAB (Added back!) -->
+        <div id="tab-checkout" class="tab-content" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="switchTab('home', document.querySelectorAll('.nav-item')[0])">
+                <span style="color: #f0b90b; font-size: 18px;">←</span>
+                <span id="checkout-title-header" style="color: #aaa; font-size: 14px;">AllP2PBot</span>
+            </div>
+
+            <div class="card" style="padding: 12px 15px; margin-bottom: 12px; font-size: 12px; color: #aaa;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <div>Minimum<br><span style="color: #fff; font-weight: bold; font-size: 13px;" id="chk-min">1,000.00 ETB</span></div>
+                    <div style="text-align: right;">Maximum<br><span style="color: #fff; font-weight: bold; font-size: 13px;" id="chk-max">14,174.09 ETB</span></div>
+                </div>
+                <div style="border-top: 1px solid #2a2a2a; padding-top: 8px; margin-top: 8px;">
+                    Seller's Available Balance<br>
+                    <span style="color: #fff; font-weight: bold; font-size: 14px;" id="chk-balance">72.51 USDT</span>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 12px;">
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">Payment Methods</div>
+                <div style="background: #121212; padding: 10px 12px; border-radius: 6px; font-weight: bold; color: #fff; border: 1px solid #2a2a2a;" id="chk-payment">Telebirr</div>
+                <div style="font-size: 11px; color: #777; margin-top: 6px;">Payment details will be shared after order confirmation</div>
+            </div>
+
+            <div class="card">
+                <div style="font-weight: bold; font-size: 15px; margin-bottom: 12px;">Buy USDT</div>
+                <div style="display: flex; background: #121212; border-radius: 6px; padding: 3px; margin-bottom: 12px; border: 1px solid #2a2a2a;">
+                    <div style="flex: 1; text-align: center; background: #0ecb81; color: #000; padding: 6px; border-radius: 4px; font-weight: bold; font-size: 13px;">USD</div>
+                    <div style="flex: 1; text-align: center; color: #777; padding: 6px; border-radius: 4px; font-weight: bold; font-size: 13px;">ETB</div>
+                </div>
+                <div style="background: #121212; border: 1px solid #f0b90b; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px;">
+                    <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Amount</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <input id="input-usd-amount" type="number" value="12" oninput="calculateETB()" style="background: transparent; border: none; color: #fff; font-size: 18px; font-weight: bold; width: 100%; outline: none;">
+                        <span style="color: #aaa; font-weight: bold; font-size: 13px;">USD</span>
+                    </div>
+                </div>
+                <div style="font-size: 11px; color: #777; margin-bottom: 12px;" id="chk-limits-note">Min: $5.16 - Max: $73.10 USDT</div>
+
+                <div style="background: #121212; padding: 12px; border-radius: 8px; border: 1px solid #2a2a2a; margin-bottom: 15px;">
+                    <div style="font-size: 11px; color: #aaa;">You will pay</div>
+                    <div style="color: #f0b90b; font-size: 20px; font-weight: bold; margin-top: 2px;" id="calc-etb-total">2326.80 ETB</div>
+                </div>
+
+                <div style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Rate: 1 USD = <span id="chk-rate-val">193.90</span> ETB</div>
+
+                <button class="btn-action" onclick="confirmAndStartTimer()" style="padding: 12px; font-size: 15px; margin-bottom: 15px;">Buy USDT</button>
+
+                <div style="font-size: 11px; color: #777; line-height: 1.6;">
+                    <div>• Request will be sent to <span id="note-advertiser" style="color: #aaa;">Teke_94</span></div>
+                    <div>• They have 5 minutes to accept</div>
+                    <div>• You'll be notified once accepted</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. ORDERS TAB -->
         <div id="tab-orders" class="tab-content" style="display: none;">
             <div class="header-flex">
                 <h2 style="margin: 0;">My Orders</h2>
@@ -133,7 +189,7 @@
             </div>
         </div>
 
-        <!-- 3. ADS TAB -->
+        <!-- 4. ADS TAB -->
         <div id="tab-ads" class="tab-content" style="display: none;">
             <div class="header-flex">
                 <h2>My Ads</h2>
@@ -144,7 +200,7 @@
             </div>
         </div>
 
-        <!-- 4. WALLET TAB -->
+        <!-- 5. WALLET TAB -->
         <div id="tab-wallet" class="tab-content" style="display: none;">
             <h2>Wallet</h2>
             <div class="wallet-card">
@@ -167,7 +223,7 @@
             </div>
         </div>
 
-        <!-- 5. HELP TAB -->
+        <!-- 6. HELP TAB -->
         <div id="tab-help" class="tab-content" style="display: none;">
             <h2>Help & Support</h2>
             <div class="card" onclick="alert('Connecting to support bot...')" style="cursor: pointer;">
@@ -213,9 +269,10 @@
 
     <script>
         let timerInterval = null;
-        let totalSeconds = 300; // 5 minutes timer
+        let totalSeconds = 300; 
         let currentOrderData = null;
         let cancelledOrdersList = [];
+        let activeCheckout = { advertiser: '', rate: 0, payment: '' };
 
         function switchTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
@@ -243,18 +300,45 @@
             }
         }
 
-        function startOrder(advertiser, rate, amountUsd, amountEtb, payment) {
+        function openCheckout(advertiser, rate, limits, payment, balance) {
+            activeCheckout.advertiser = advertiser;
+            activeCheckout.rate = parseFloat(rate);
+            activeCheckout.payment = payment;
+
+            document.getElementById('chk-payment').innerText = payment;
+            document.getElementById('chk-rate-val').innerText = rate;
+            document.getElementById('note-advertiser').innerText = advertiser;
+            document.getElementById('chk-balance').innerText = balance + " USDT";
+            document.getElementById('checkout-title-header').innerText = advertiser + " P2P";
+
+            // Default amount input
+            document.getElementById('input-usd-amount').value = "12";
+            calculateETB();
+
+            switchTab('checkout', null);
+        }
+
+        function calculateETB() {
+            let usd = parseFloat(document.getElementById('input-usd-amount').value) || 0;
+            let totalEtb = (usd * activeCheckout.rate).toFixed(2);
+            document.getElementById('calc-etb-total').innerText = totalEtb + " ETB";
+        }
+
+        function confirmAndStartTimer() {
+            let usd = document.getElementById('input-usd-amount').value || "12";
+            let etb = document.getElementById('calc-etb-total').innerText;
+
             currentOrderData = {
                 id: '#43f' + Math.floor(10000 + Math.random() * 90000),
-                advertiser: advertiser,
-                rate: rate,
-                amountUsd: amountUsd,
-                amountEtb: amountEtb,
-                payment: payment,
+                advertiser: activeCheckout.advertiser,
+                rate: activeCheckout.rate.toFixed(2),
+                amountUsd: usd,
+                amountEtb: etb.replace(' ETB', ''),
+                payment: activeCheckout.payment,
                 created: new Date().toLocaleString()
             };
 
-            totalSeconds = 300; // Reset to 5 mins
+            totalSeconds = 300; // Reset timer to 5 mins
 
             // Render ongoing order card HTML view
             document.getElementById('ongoing-empty').style.display = 'none';
@@ -325,7 +409,7 @@
                 
                 renderCancelledOrders();
 
-                // Completely clear & remove from Ongoing view
+                // Clear and hide ongoing card
                 document.getElementById('ongoing-order-card').style.display = 'none';
                 document.getElementById('ongoing-order-card').innerHTML = '';
                 document.getElementById('ongoing-empty').style.display = 'block';
