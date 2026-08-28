@@ -3,142 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AllP2PBot - Order Timeout & Auto-Cancel</title>
+    <title>One P2P Marketplace</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { background-color: #121212; color: #ffffff; font-family: sans-serif; padding: 15px; margin: 0; padding-bottom: 90px; }
         .container { max-width: 400px; margin: auto; }
-        .card { background: #1e1e1e; padding: 20px 15px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #2a2a2a; text-align: center; }
-        .waiting-timer-ring { width: 50px; height: 50px; border-radius: 50%; border: 3px solid #333; border-top-color: #f0b90b; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-size: 18px; }
+        h2 { color: #f0b90b; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .toggle-container { display: flex; background: #1e1e1e; border-radius: 6px; padding: 3px; width: fit-content; margin-bottom: 15px; }
+        .toggle-btn { background: transparent; border: none; color: #aaa; padding: 6px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .toggle-btn.active-buy { background: #0ecb81; color: #000; }
+        .toggle-btn.active-sell { background: #f6465d; color: #fff; }
         
-        .btn-action { background: #0ecb81; color: #000; border: none; padding: 12px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 14px; }
+        .card { background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #2a2a2a; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 35px; height: 35px; background: #f0b90b; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .btn-action { background: #0ecb81; color: #000; border: none; padding: 6px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; }
+        .btn-action.sell { background: #f6465d; color: #fff; }
+        .card-details { display: flex; justify-content: space-between; margin-top: 12px; font-size: 13px; color: #aaa; }
+        .card-details val { display: block; color: #fff; font-size: 14px; font-weight: bold; margin-top: 2px; }
         
-        /* Modal Popup for Auto-Cancellation */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
-        .modal-card { background: #1a1a1a; width: 100%; max-width: 320px; border-radius: 12px; padding: 24px 20px; border: 1px solid #333; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-
         .nav-bar { display: flex; justify-content: space-around; background: #181818; position: fixed; bottom: 0; left: 0; width: 100%; padding: 10px 0; border-top: 1px solid #2a2a2a; z-index: 100; }
         .nav-item { color: #888; font-size: 11px; text-align: center; cursor: pointer; flex: 1; }
         .nav-item.active { color: #f0b90b; }
         .nav-icon { display: block; margin: 0 auto 3px auto; width: 22px; height: 22px; fill: currentColor; }
+        
+        .wallet-card { background: linear-gradient(135deg, #2b2b2b, #1a1a1a); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; border: 1px solid #333; }
+        .wallet-menu-card { background: #1e1e1e; padding: 14px 16px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #2a2a2a; display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .wallet-menu-icon { width: 40px; height: 40px; background: #262626; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; fill: #f0b90b; }
+        .wallet-menu-icon svg { width: 20px; height: 20px; }
+        
+        .waiting-timer-ring { width: 50px; height: 50px; border-radius: 50%; border: 3px solid #333; border-top-color: #f0b90b; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-size: 18px; }
+        
+        /* Modal Overlay */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .modal-card { background: #1a1a1a; width: 100%; max-width: 320px; border-radius: 12px; padding: 24px 20px; border: 1px solid #333; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="alert('Returning to Orders')">
-            <span style="color: #f0b90b; font-size: 18px;">←</span>
-            <span style="color: #aaa; font-size: 14px;">Back to Orders</span>
-        </div>
+        
+        <!-- 1. HOME TAB -->
+        <div id="tab-home" class="tab-content">
+            <div class="header-flex">
+                <div>
+                    <h2 style="margin: 0;">One P2P</h2>
+                    <span style="font-size: 12px; color: #aaa;">Trade USDT with local currency</span>
+                </div>
+                <div style="background: #1e1e1e; padding: 6px 12px; border-radius: 20px; font-size: 12px; border: 1px solid #333;">🇪🇹 ETB</div>
+            </div>
 
-        <div class="card">
-            <div id="status-icon" class="waiting-timer-ring">⏱️</div>
-            <h3 id="status-title" style="margin: 0 0 5px 0; color: #fff;">Waiting for Response</h3>
-            <p id="status-subtitle" style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Advertiser is reviewing your request</p>
-            <div id="countdown-timer" style="background: #121212; display: inline-block; padding: 6px 16px; border-radius: 20px; color: #f0b90b; font-weight: bold; border: 1px solid #333; margin-bottom: 20px;">00:05</div>
+            <div class="toggle-container">
+                <button id="btn-buy-toggle" class="toggle-btn active-buy" onclick="setTradeMode('buy')">Buy</button>
+                <button id="btn-sell-toggle" class="toggle-btn" onclick="setTradeMode('sell')">Sell</button>
+            </div>
 
-            <div style="text-align: left; border-top: 1px solid #2a2a2a; padding-top: 15px;">
-                <div style="font-weight: bold; margin-bottom: 12px; color: #fff;">Order Details</div>
-                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                    <span>Request ID:</span> <span style="color: #fff; font-weight: bold;">#43f8b397</span>
+            <!-- Ad Card 1 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="user-info">
+                        <div class="avatar">T</div>
+                        <div>
+                            <span style="font-weight: bold;">Teke_94 🥉 🛡️</span>
+                            <div style="font-size: 11px; color: #aaa;">⭐ 98% | 340 orders</div>
+                        </div>
+                    </div>
+                    <div style="width: 80px;"><button class="btn-action" onclick="startOrder('Teke_94', '193.90', '12.00', '2326.80', 'Telebirr')">Buy</button></div>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                    <span>Trade Type:</span> <span style="color: #fff; font-weight: bold;">Buy USDT</span>
+                <div class="card-details">
+                    <div>PRICE <val>193.90 ETB</val></div>
+                    <div>LIMIT <val>1,000 - 14,174 ETB</val></div>
+                    <div>PAYMENT <val style="color: #00b0ff;">Telebirr</val></div>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                    <span>Amount:</span> <span style="color: #fff; font-weight: bold;">12.00 USDT</span>
+            </div>
+
+            <!-- Ad Card 2 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="user-info">
+                        <div class="avatar" style="background:#f0b90b;">Y</div>
+                        <div>
+                            <span style="font-weight: bold;">Yona 🥈 👑</span>
+                            <div style="font-size: 11px; color: #aaa;">⭐ 80% | 752 orders</div>
+                        </div>
+                    </div>
+                    <div style="width: 80px;"><button class="btn-action" onclick="startOrder('Yona', '189.99', '5.26', '999.35', 'M-PESA')">Buy</button></div>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                    <span>ETB Amount:</span> <span style="color: #f0b90b; font-weight: bold;">2326.80 ETB</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                    <span>Price per USD:</span> <span style="color: #fff; font-weight: bold;">193.90</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                    <span>Advertiser:</span> <span style="color: #fff; font-weight: bold;">Teke_94</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                    <span>Payment:</span> <span style="color: #00b0ff; font-weight: bold;">Telebirr</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 13px; color: #aaa;">
-                    <span>Created:</span> <span style="color: #fff; font-size: 12px;">8/28/2026, 11:13:18 AM</span>
+                <div class="card-details">
+                    <div>PRICE <val>189.99 ETB</val></div>
+                    <div>LIMIT <val>1,000 - 1,050 ETB</val></div>
+                    <div>PAYMENT <val style="color: #00b0ff;">M-PESA</val></div>
                 </div>
             </div>
         </div>
 
+        <!-- 2. ORDERS / ACTIVE TIMEOUT TAB -->
+        <div id="tab-orders" class="tab-content" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="switchTab('home', document.querySelectorAll('.nav-item')[0])">
+                <span style="color: #f0b90b; font-size: 18px;">←</span>
+                <span style="color: #aaa; font-size: 14px;">Back to Marketplace</span>
+            </div>
+
+            <div class="card">
+                <div id="status-icon" class="waiting-timer-ring">⏱️</div>
+                <h3 id="status-title" style="margin: 0 0 5px 0; color: #fff;">Waiting for Response</h3>
+                <p id="status-subtitle" style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Advertiser is reviewing your request</p>
+                <div id="countdown-timer" style="background: #121212; display: inline-block; padding: 6px 16px; border-radius: 20px; color: #f0b90b; font-weight: bold; border: 1px solid #333; margin-bottom: 20px;">00:05</div>
+
+                <div style="text-align: left; border-top: 1px solid #2a2a2a; padding-top: 15px;">
+                    <div style="font-weight: bold; margin-bottom: 12px; color: #fff;">Order Details</div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Request ID:</span> <span style="color: #fff; font-weight: bold;">#43f8b397</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Trade Type:</span> <span style="color: #fff; font-weight: bold;">Buy USDT</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Amount:</span> <span style="color: #fff; font-weight: bold;" id="order-amount">12.00 USDT</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>ETB Amount:</span> <span style="color: #f0b90b; font-weight: bold;" id="order-etb">2326.80 ETB</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Price per USD:</span> <span style="color: #fff; font-weight: bold;" id="order-rate">193.90</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Advertiser:</span> <span style="color: #fff; font-weight: bold;" id="order-advertiser">Teke_94</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Payment:</span> <span style="color: #00b0ff; font-weight: bold;" id="order-payment">Telebirr</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; color: #aaa;">
+                        <span>Created:</span> <span style="color: #fff; font-size: 12px;">8/28/2026, 11:13:18 AM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. ADS TAB -->
+        <div id="tab-ads" class="tab-content" style="display: none;">
+            <div class="header-flex">
+                <h2>My Ads</h2>
+                <button class="btn-action" style="width: auto; padding: 6px 16px;" onclick="alert('Post ad modal')">+ Post Ad</button>
+            </div>
+            <div class="card" style="text-align: center; padding: 40px 20px;">
+                <p style="color: #777; margin: 0;">You haven't posted any advertisements yet.</p>
+            </div>
+        </div>
+
+        <!-- 4. WALLET TAB -->
+        <div id="tab-wallet" class="tab-content" style="display: none;">
+            <h2>Wallet</h2>
+            <div class="wallet-card">
+                <span style="font-size: 13px; color: #aaa;">Estimated Total Balance</span>
+                <h1 style="color: #f0b90b; margin: 10px 0;">72.73 USDT</h1>
+                <span style="font-size: 12px; color: #777;">≈ 14,102.34 ETB</span>
+            </div>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button class="btn-action" onclick="alert('Deposit window')">Deposit</button>
+                <button class="btn-action sell" onclick="alert('Withdraw window')">Withdraw</button>
+            </div>
+            <div class="wallet-menu-card" onclick="alert('Payment Accounts...')">
+                <div class="wallet-menu-icon">
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+                </div>
+                <div>
+                    <div style="font-weight: bold; font-size: 14px;">Payment Accounts</div>
+                    <div style="font-size: 12px; color: #aaa; margin-top: 2px;">Telebirr Connected</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. HELP TAB -->
+        <div id="tab-help" class="tab-content" style="display: none;">
+            <h2>Help & Support</h2>
+            <div class="card" onclick="alert('Connecting to support bot...')" style="cursor: pointer;">
+                <span style="font-weight: bold;">💬 Customer Support</span>
+                <p style="font-size: 12px; color: #aaa; margin: 5px 0 0 0;">Chat with official admin support 24/7</p>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation Bar -->
         <div class="nav-bar">
-            <div class="nav-item active" onclick="alert('Home')">
+            <div class="nav-item active" onclick="switchTab('home', this)">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                 Home
             </div>
-            <div class="nav-item" onclick="alert('Orders')">
+            <div class="nav-item" onclick="switchTab('orders', this)">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
                 Orders
             </div>
-            <div class="nav-item" onclick="alert('Ads')">
+            <div class="nav-item" onclick="switchTab('ads', this)">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M18 11l-8-5v10l8-5zm-10 4V7L2 11l6 4zM21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
                 Ads
             </div>
-            <div class="nav-item" onclick="alert('Wallet')">
+            <div class="nav-item" onclick="switchTab('wallet', this)">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
                 Wallet
             </div>
-            <div class="nav-item" onclick="alert('Help')">
+            <div class="nav-item" onclick="switchTab('help', this)">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.03-.42 1.98-1.03 2.75z"/></svg>
                 Help
             </div>
         </div>
     </div>
 
+    <!-- TIMEOUT POPUP MODAL -->
     <div id="timeout-modal" class="modal-overlay">
         <div class="modal-card">
             <div style="font-size: 36px; margin-bottom: 10px;">⏰</div>
             <h3 style="margin: 0 0 8px 0; color: #fff; font-size: 18px;">Order Cancelled</h3>
-            <p style="font-size: 13px; color: #aaa; margin-bottom: 20px; line-height: 1.5;">The advertiser didn't respond within 5 minutes. This order has been automatically cancelled.</p>
+            <p style="font-size: 13px; color: #aaa; margin-bottom: 20px; line-height: 1.5;">The advertiser didn't respond within 5 minutes. Find another client.</p>
             <button class="btn-action" onclick="findAnotherClient()">Find Another Client</button>
         </div>
     </div>
 
     <script>
-        // Set short test timer (e.g., 5 seconds) or change to 300 for full 5 minutes
-        let totalSeconds = 5; 
-        const timerDisplay = document.getElementById('countdown-timer');
+        let timerInterval = null;
+        let totalSeconds = 5; // Set to 300 for real 5 minutes
 
-        function updateTimer() {
-            let minutes = Math.floor(totalSeconds / 60);
-            let seconds = totalSeconds % 60;
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             
-            timerDisplay.innerText = 
-                (minutes < 10 ? "0" : "") + minutes + ":" + 
-                (seconds < 10 ? "0" : "") + seconds;
-            
+            const target = document.getElementById('tab-' + tabId);
+            if (target) target.style.display = 'block';
+            if (element) element.classList.add('active');
+        }
+
+        function startOrder(advertiser, rate, amountUsd, amountEtb, payment) {
+            document.getElementById('order-advertiser').innerText = advertiser;
+            document.getElementById('order-rate').innerText = rate;
+            document.getElementById('order-amount').innerText = amountUsd + " USDT";
+            document.getElementById('order-etb').innerText = amountEtb + " ETB";
+            document.getElementById('order-payment').innerText = payment;
+
+            // Reset timer state
+            totalSeconds = 5;
+            document.getElementById('status-icon').innerText = "⏱️";
+            document.getElementById('status-icon').style.borderTopColor = "#f0b90b";
+            document.getElementById('status-title').innerText = "Waiting for Response";
+            document.getElementById('status-subtitle').innerText = "Advertiser is reviewing your request";
+            document.getElementById('timeout-modal').style.display = 'none';
+
+            // Switch to orders tab and highlight bottom nav
+            switchTab('orders', document.querySelectorAll('.nav-item')[1]);
+
+            if (timerInterval) clearInterval(timerInterval);
+            updateTimerDisplay();
+            timerInterval = setInterval(runTimer, 1000);
+        }
+
+        function runTimer() {
             if (totalSeconds > 0) {
                 totalSeconds--;
+                updateTimerDisplay();
             } else {
                 clearInterval(timerInterval);
-                timerDisplay.innerText = "00:00";
+                document.getElementById('countdown-timer').innerText = "00:00";
                 
-                // Update screen status to Cancelled
+                // Update order card status
                 document.getElementById('status-icon').innerText = "❌";
                 document.getElementById('status-icon').style.borderTopColor = "#f6465d";
                 document.getElementById('status-title').innerText = "Order Cancelled";
                 document.getElementById('status-subtitle').innerText = "Timed out - No response from advertiser";
                 document.getElementById('status-subtitle').style.color = "#f6465d";
 
-                // Show the popup notification text instructing user to find another client
+                // Show popup
                 document.getElementById('timeout-modal').style.display = 'flex';
             }
         }
 
-        updateTimer();
-        const timerInterval = setInterval(updateTimer, 1000);
+        function updateTimerDisplay() {
+            let m = Math.floor(totalSeconds / 60);
+            let s = totalSeconds % 60;
+            document.getElementById('countdown-timer').innerText = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+        }
 
         function findAnotherClient() {
-            // Closes modal and redirects user back to the Home/Marketplace buy page
             document.getElementById('timeout-modal').style.display = 'none';
-            alert('Redirecting to Home Marketplace to find another client...');
-            // In a full application, this would switch views back to tab-home or reload the marketplace
-            window.location.reload(); 
+            switchTab('home', document.querySelectorAll('.nav-item')[0]);
         }
     </script>
 </body>
