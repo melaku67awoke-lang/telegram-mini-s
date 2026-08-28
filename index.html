@@ -170,7 +170,7 @@
             </div>
         </div>
 
-        <!-- 5. WALLET TAB (Matches exact screenshots with non-skippable forms) -->
+        <!-- 5. WALLET TAB -->
         <div id="tab-wallet" class="tab-content" style="display: none;">
             <h2>Wallet</h2>
             <div class="wallet-card">
@@ -182,7 +182,7 @@
                 <button class="btn-action" onclick="openDepositModal()">Deposit</button>
                 <button class="btn-action sell" onclick="openWithdrawModal()">Withdraw</button>
             </div>
-            <!-- Payment Accounts Card matching screenshot -->
+            <!-- Payment Accounts Card -->
             <div class="wallet-menu-card" onclick="openPaymentAccountsModal()">
                 <div class="wallet-menu-icon">
                     <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
@@ -230,7 +230,7 @@
 
     <!-- NON-SKIPPABLE MODALS CONTAINER -->
     
-    <!-- 1. Payment Accounts Form Modal (Strictly Non-Skippable: Cannot close by clicking outside) -->
+    <!-- 1. Payment Accounts Form Modal -->
     <div id="modal-payment-accounts" class="modal-overlay">
         <div class="modal-card" style="max-width: 360px; padding: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px;">
@@ -281,7 +281,7 @@
         </div>
     </div>
 
-    <!-- 2. Provider Selection Sub-Modal (Non-Skippable) -->
+    <!-- 2. Provider Selection Sub-Modal (Updated with Telebirr matching the screenshot style) -->
     <div id="modal-provider-selector" class="modal-overlay">
         <div class="modal-card" style="max-width: 320px; padding: 20px;">
             <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; text-align: left; border-bottom: 1px solid #2a2a2a; padding-bottom: 8px;">Select a provider</div>
@@ -292,16 +292,13 @@
                 <div class="dropdown-item" onclick="selectProvider('Abyssinia')"><span style="color:#0ecb81">⚪</span> Abyssinia</div>
                 <div class="dropdown-item" onclick="selectProvider('Wegagen')"><span style="color:#0ecb81">⚪</span> Wegagen</div>
                 <div class="dropdown-item" onclick="selectProvider('Coop')"><span style="color:#0ecb81">⚪</span> Coop</div>
-                <div class="dropdown-item" onclick="selectProvider('Hibret')"><span style="color:#0ecb81">⚪</span> Hibret</div>
                 <div class="dropdown-item" onclick="selectProvider('Telebirr')"><span style="color:#0ecb81">⚪</span> Telebirr</div>
-                <div class="dropdown-item" onclick="selectProvider('CBE Birr')"><span style="color:#0ecb81">⚪</span> CBE Birr</div>
-                <div class="dropdown-item" onclick="selectProvider('M-PESA')"><span style="color:#0ecb81">⚪</span> M-PESA</div>
             </div>
             <button class="btn-action" style="background: #2b2b2b; color: #fff; margin-top: 15px;" onclick="closeProviderSelector()">Close</button>
         </div>
     </div>
 
-    <!-- 3. Deposit Modal (Non-Skippable) -->
+    <!-- 3. Deposit Modal -->
     <div id="modal-deposit" class="modal-overlay">
         <div class="modal-card">
             <h3 style="margin: 0 0 8px 0; color: #f0b90b;">Deposit USDT</h3>
@@ -313,7 +310,7 @@
         </div>
     </div>
 
-    <!-- 4. Withdraw Modal (Non-Skippable) -->
+    <!-- 4. Withdraw Modal -->
     <div id="modal-withdraw" class="modal-overlay">
         <div class="modal-card">
             <h3 style="margin: 0 0 8px 0; color: #f6465d;">Withdraw USDT</h3>
