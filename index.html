@@ -3,106 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deposit Wallets</title>
+    <title>One P2p</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0b0e11;
             color: #ffffff;
             margin: 0;
-            padding: 20px;
+            padding: 12px;
             display: flex;
             justify-content: center;
         }
-        .container {
+        .app-container {
             width: 100%;
-            max-width: 400px;
-            background: #1e1e1e;
+            max-width: 420px;
+            background: #181a20;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            overflow: hidden;
+            border: 1px solid #23272f;
+        }
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: #181a20;
+            border-bottom: 1px solid #23272f;
+        }
+        .app-header .left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .app-header .icons {
+            display: flex;
+            gap: 16px;
+            color: #848e9c;
+            font-size: 20px;
+        }
+        .content-body {
             padding: 20px;
+        }
+        .card {
+            background: #1e2329;
             border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #2b313a;
         }
-        .network-section {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #333;
-        }
-        .network-section:last-child {
-            border-bottom: none;
-        }
-        h3 {
-            margin-top: 0;
+        .network-title {
             color: #f0b90b;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 16px;
         }
         .qr-container {
-            text-align: center;
-            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
         }
-        .qr-container img {
-            width: 180px;
-            height: 180px;
-            background: #fff;
+        .qr-box {
+            background: #ffffff;
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 10px;
+            width: 160px;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .address-label {
+            font-size: 12px;
+            color: #848e9c;
+            margin-bottom: 6px;
         }
         .address-box {
-            background: #2b2b2b;
-            padding: 10px;
-            border-radius: 6px;
+            background: #2b313a;
+            padding: 12px;
+            border-radius: 8px;
             font-family: monospace;
             font-size: 12px;
             word-break: break-all;
-            margin-bottom: 10px;
-            border: 1px solid #444;
+            margin-bottom: 12px;
+            color: #eaecef;
+            border: 1px solid #363c4e;
         }
         .copy-btn {
             width: 100%;
             background-color: #f0b90b;
             color: #000;
             border: none;
-            padding: 10px;
+            padding: 12px;
             font-weight: bold;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 14px;
             transition: background 0.2s;
         }
-        .copy-btn:hover {
+        .copy-btn:active {
             background-color: #d4a30a;
         }
         .toast {
             text-align: center;
             font-size: 12px;
             color: #0ecb81;
-            margin-top: 5px;
-            height: 15px;
+            margin-top: 8px;
+            height: 14px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Solana Network Section -->
-    <div class="network-section">
-        <h3>Solana (SPL) Network</h3>
-        <div class="qr-container">
-            <!-- QR code from Screenshot_2026-08-28_134649.682.jpg -->
-            <img src="Screenshot_2026-08-28_134649.682.jpg" alt="Solana QR Code">
+<div class="app-container">
+    <!-- Top App Bar matching your screenshot style -->
+    <div class="app-header">
+        <div class="left">
+            <span>✕</span>
+            <span>One P2p</span>
         </div>
-        <div class="address-box" id="sol-address">H49kEYE5F1hnMPwiyJrSr51Ya44ySRaQW1FhE2gWEvmY</div>
-        <button class="copy-btn" onclick="copyAddress('H49kEYE5F1hnMPwiyJrSr51Ya44ySRaQW1FhE2gWEvmY', 'sol-toast')">Copy Address</button>
-        <div class="toast" id="sol-toast"></div>
+        <div class="icons">
+            <span>⌄</span>
+            <span>⋮</span>
+        </div>
     </div>
 
-    <!-- BSC Network Section -->
-    <div class="network-section">
-        <h3>BSC (BEP20) Network</h3>
-        <div class="qr-container">
-            <!-- QR code from Screenshot_2026-08-28_134632.444.jpg -->
-            <img src="Screenshot_2026-08-28_134632.444.jpg" alt="BSC QR Code">
+    <div class="content-body">
+        <!-- Solana Network Card -->
+        <div class="card">
+            <div class="network-title">Solana (SPL) Network</div>
+            <div class="qr-container">
+                <div class="qr-box">
+                    <img src="Screenshot_2026-08-28_134649.682.jpg" alt="Solana QR Code">
+                </div>
+            </div>
+            <div class="address-label">Your USDT Deposit Address</div>
+            <div class="address-box" id="sol-address">H49kEYE5F1hnMPwiyJrSr51Ya44ySRaQW1FhE2gWEvmY</div>
+            <button class="copy-btn" onclick="copyAddress('H49kEYE5F1hnMPwiyJrSr51Ya44ySRaQW1FhE2gWEvmY', 'sol-toast')">Copy Address</button>
+            <div class="toast" id="sol-toast"></div>
         </div>
-        <div class="address-box" id="bsc-address">0x8e54105bed3243e1ca44a0cccc6b62cf2bff9df4</div>
-        <button class="copy-btn" onclick="copyAddress('0x8e54105bed3243e1ca44a0cccc6b62cf2bff9df4', 'bsc-toast')">Copy Address</button>
-        <div class="toast" id="bsc-toast"></div>
+
+        <!-- BSC Network Card -->
+        <div class="card">
+            <div class="network-title">BSC (BEP20) Network</div>
+            <div class="qr-container">
+                <div class="qr-box">
+                    <img src="Screenshot_2026-08-28_134632.444.jpg" alt="BSC QR Code">
+                </div>
+            </div>
+            <div class="address-label">Your USDT Deposit Address</div>
+            <div class="address-box" id="bsc-address">0x8e54105bed3243e1ca44a0cccc6b62cf2bff9df4</div>
+            <button class="copy-btn" onclick="copyAddress('0x8e54105bed3243e1ca44a0cccc6b62cf2bff9df4', 'bsc-toast')">Copy Address</button>
+            <div class="toast" id="bsc-toast"></div>
+        </div>
     </div>
 </div>
 
