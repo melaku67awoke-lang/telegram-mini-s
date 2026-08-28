@@ -29,7 +29,7 @@
             position: relative;
         }
 
-        /* Top Header */
+        /* App Header */
         .app-header {
             display: flex;
             align-items: center;
@@ -54,7 +54,7 @@
             font-size: 18px;
         }
 
-        /* Tab Pages System */
+        /* Page System */
         .view {
             display: none;
             flex: 1;
@@ -75,7 +75,7 @@
             margin-bottom: 16px;
         }
 
-        /* Home View Content */
+        /* Marketplace Cards */
         .home-top-bar {
             display: flex;
             justify-content: space-between;
@@ -127,9 +127,9 @@
             cursor: pointer;
         }
 
-        /* Modal Overlay Screens */
+        /* Popups / Modals (HIDDEN BY DEFAULT) */
         .modal-overlay {
-            display: none;
+            display: none !important;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: #181a20;
@@ -139,7 +139,7 @@
         }
 
         .modal-overlay.active {
-            display: flex;
+            display: flex !important;
         }
 
         .seller-info-box {
@@ -222,7 +222,6 @@
             opacity: 0.7;
         }
 
-        /* Order Pending Timer Container */
         .timer-box {
             background: #1e2329;
             border: 1px solid #2b313a;
@@ -239,7 +238,7 @@
             margin: 8px 0;
         }
 
-        /* Bottom Fixed Navigation Bar */
+        /* Bottom Fixed Navigation */
         .bottom-nav {
             display: flex;
             justify-content: space-around;
@@ -273,6 +272,7 @@
 <body>
 
 <div class="app-container">
+    <!-- Top Header Navigation -->
     <div class="app-header">
         <div class="left">
             <span>✕</span>
@@ -284,6 +284,7 @@
         </div>
     </div>
 
+    <!-- PAGE 1: HOME MARKETPLACE -->
     <div class="view active" id="homeView">
         <div class="home-top-bar">
             <div>
@@ -316,6 +317,7 @@
         </div>
     </div>
 
+    <!-- PAGE 2: ORDERS LIST -->
     <div class="view" id="ordersView">
         <div class="section-title">My Orders</div>
         <div style="background: #1e2329; border: 1px solid #2b313a; border-radius: 8px; padding: 16px;">
@@ -325,11 +327,13 @@
         </div>
     </div>
 
+    <!-- PAGE 3: ADS -->
     <div class="view" id="adsView">
         <div class="section-title">My Ads</div>
         <div style="color: #848e9c; font-size: 13px;">No active advertisement listings.</div>
     </div>
 
+    <!-- PAGE 4: WALLET -->
     <div class="view" id="walletView">
         <div class="section-title">Wallet</div>
         <div style="background: #1e2329; border: 1px solid #2b313a; border-radius: 12px; padding: 20px; text-align: center;">
@@ -339,11 +343,13 @@
         </div>
     </div>
 
+    <!-- PAGE 5: HELP -->
     <div class="view" id="helpView">
         <div class="section-title">Help Support</div>
         <div style="color: #848e9c; font-size: 13px;">P2P Help Center & Customer Support.</div>
     </div>
 
+    <!-- BUY INPUT MODAL -->
     <div class="modal-overlay" id="buyModal">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
             <h2 style="font-size:18px;">Buy USDT</h2>
@@ -373,6 +379,7 @@
         <button class="submit-btn" id="confirmBuyBtn" disabled onclick="processOrder()">Buy USDT</button>
     </div>
 
+    <!-- ACTIVE ORDER COUNTDOWN MODAL -->
     <div class="modal-overlay" id="orderPendingModal">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
             <h2 style="font-size:18px;">Order Pending</h2>
@@ -395,6 +402,7 @@
         <button class="submit-btn" onclick="finishOrder()">Transferred, Notify Seller</button>
     </div>
 
+    <!-- Bottom Navigation Bar -->
     <div class="bottom-nav">
         <button class="nav-item active" onclick="switchTab('homeView', this)"><span>🏠</span><span>Home</span></button>
         <button class="nav-item" onclick="switchTab('ordersView', this)"><span>📋</span><span>Orders</span></button>
@@ -411,7 +419,6 @@
 
     let timerInterval = null;
 
-    // View Switching
     function switchTab(viewId, element) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
@@ -431,7 +438,6 @@
         }
     }
 
-    // Input Limit Logic
     document.getElementById('usdInput').addEventListener('input', function() {
         const usdVal = parseFloat(this.value);
         const etbOutput = document.getElementById('etbOutput');
@@ -460,7 +466,6 @@
         }
     });
 
-    // Step Transition to Active Pending Order
     function processOrder() {
         const val = parseFloat(document.getElementById('usdInput').value);
         const totalEtb = val * EXCHANGE_RATE;
@@ -476,7 +481,6 @@
         startTimer(15 * 60);
     }
 
-    // Countdown Timer Handler
     function startTimer(seconds) {
         clearInterval(timerInterval);
         let timeLeft = seconds;
@@ -492,7 +496,6 @@
         }, 1000);
     }
 
-    // Complete Transfer & View Orders Page
     function finishOrder() {
         alert('Payment confirmed! Seller notified.');
         closeModal('orderPendingModal');
