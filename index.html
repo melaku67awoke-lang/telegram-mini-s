@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>One P2P</title>
+    <title>AllP2PBot / One P2P</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { background-color: #121212; color: #ffffff; font-family: sans-serif; padding: 15px; margin: 0; padding-bottom: 90px; }
@@ -54,6 +54,9 @@
         .currency-toggle { display: flex; background: #121212; border: 1px solid #333; border-radius: 8px; padding: 3px; margin-bottom: 15px; }
         .currency-btn { flex: 1; background: transparent; border: none; color: #aaa; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: center; }
         .currency-btn.active { background: #0ecb81; color: #000; }
+        
+        /* Order status specific layout */
+        .waiting-timer-ring { width: 50px; height: 50px; border-radius: 50%; border: 3px solid #333; border-top-color: #f0b90b; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-size: 18px; }
     </style>
 </head>
 <body>
@@ -64,7 +67,7 @@
         <div id="tab-home" class="tab-content">
             <div class="header-flex">
                 <div>
-                    <h2 style="margin: 0;">One P2P</h2>
+                    <h2 style="margin: 0;">AllP2PBot</h2>
                     <span style="font-size: 12px; color: #aaa;">Trade USDT with local currency</span>
                 </div>
                 <div style="background: #1e1e1e; padding: 6px 12px; border-radius: 20px; font-size: 12px; border: 1px solid #333;">🇪🇹 ETB</div>
@@ -75,7 +78,26 @@
                 <button id="btn-sell-toggle" class="toggle-btn" onclick="setTradeMode('sell')">Sell</button>
             </div>
 
-            <!-- Ad Card 1 (Yona) -->
+            <!-- Ad Card 1 (Teke_94 - Active seller from recent screenshots) -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="user-info">
+                        <div class="avatar" style="background:#f0b90b;">T</div>
+                        <div>
+                            <span style="font-weight: bold;">Teke_94 🥉 🛡️</span>
+                            <div style="font-size: 11px; color: #aaa;">⭐ 98% | 340 orders</div>
+                        </div>
+                    </div>
+                    <div style="width: 80px;"><button class="btn-action" onclick="openBuyDetail('Teke_94', '193.90', '1,000.00 - 14,174.09 ETB', '5.16', '73.10', '72.51', 'Telebirr', '98% | 340 completed trades')">Buy</button></div>
+                </div>
+                <div class="card-details">
+                    <div>PRICE <val>193.90 ETB</val></div>
+                    <div>LIMIT <val>1,000.00 - 14,174.09 ETB</val></div>
+                    <div>PAYMENT <val style="color: #00b0ff;">Telebirr</val></div>
+                </div>
+            </div>
+
+            <!-- Ad Card 2 (Yona) -->
             <div class="card">
                 <div class="card-header">
                     <div class="user-info">
@@ -93,83 +115,43 @@
                     <div>PAYMENT <val style="color: #00b0ff;">M-PESA</val></div>
                 </div>
             </div>
-
-            <!-- Ad Card 2 (Dax) -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="user-info">
-                        <div class="avatar" style="background:#f0b90b;">D</div>
-                        <div>
-                            <span style="font-weight: bold;">Dax 🤘 🚀</span>
-                            <div style="font-size: 11px; color: #aaa;">⭐ 99.5% | 26 orders</div>
-                        </div>
-                    </div>
-                    <div style="width: 80px;"><button class="btn-action" onclick="openBuyDetail('Dax', '194.00', '1,000.00 - 1,757.64 ETB', '5.15', '9.06', '12.50', 'CBE | Telebirr', '99.5% | 26 completed trades')">Buy</button></div>
-                </div>
-                <div class="card-details">
-                    <div>PRICE <val>194.00 ETB</val></div>
-                    <div>LIMIT <val>1,000.00 - 1,757.64 ETB</val></div>
-                    <div>PAYMENT <val style="color: #00b0ff;">CBE | Telebirr</val></div>
-                </div>
-            </div>
-
-            <!-- Ad Card 3 (Dlnaod 24/7) -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="user-info">
-                        <div class="avatar" style="background:#f0b90b;">D</div>
-                        <div>
-                            <span style="font-weight: bold;">Dlnaod 24/7 🥉 🛡️</span>
-                            <div style="font-size: 11px; color: #aaa;">⭐ 100% | 697 orders</div>
-                        </div>
-                    </div>
-                    <div style="width: 80px;"><button class="btn-action" onclick="openBuyDetail('Dlnaod 24/7', '194.47', '200.00 - 31,468.48 ETB', '1.03', '161.82', '250.00', 'CBE | Telebirr +1', '100% | 697 completed trades')">Buy</button></div>
-                </div>
-                <div class="card-details">
-                    <div>PRICE <val>194.47 ETB</val></div>
-                    <div>LIMIT <val>200.00 - 31,468.48 ETB</val></div>
-                    <div>PAYMENT <val style="color: #00b0ff;">CBE | Telebirr +1</val></div>
-                </div>
-            </div>
         </div>
 
-        <!-- BUY DETAIL SUB-VIEW (Matches your exact screenshots when Buy is clicked) -->
+        <!-- BUY DETAIL SUB-VIEW -->
         <div id="tab-buy-detail" class="tab-content" style="display: none;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="closeBuyDetail()">
                 <span style="color: #f0b90b; font-size: 18px;">←</span>
                 <span style="color: #aaa; font-size: 14px;">Back to Marketplace</span>
             </div>
 
-            <h2 id="detail-title" style="margin-bottom: 5px;">Buy USDT from Yona</h2>
+            <h2 id="detail-title" style="margin-bottom: 5px;">Buy USDT from Teke_94</h2>
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
-                <span id="detail-rating" style="font-size: 12px; color: #aaa;">80% 752 completed trades</span>
+                <span id="detail-rating" style="font-size: 12px; color: #aaa;">98% 340 completed trades</span>
                 <span style="background: #1e3a8a; color: #60a5fa; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold;">Verified</span>
             </div>
 
             <!-- Top Specs Card -->
             <div class="card">
                 <div style="font-size: 12px; color: #aaa;">Price</div>
-                <div style="font-size: 20px; font-weight: bold; color: #fff; margin-top: 2px;"><span id="detail-price">189.99</span> ETB</div>
+                <div style="font-size: 20px; font-weight: bold; color: #fff; margin-top: 2px;"><span id="detail-price">193.90</span> ETB</div>
                 <div style="font-size: 11px; color: #777; margin-bottom: 12px;">per 1 USDT</div>
                 
-                <div style="display: flex; justify-content: border-box; border-top: 1px solid #2a2a2a; padding-top: 10px;">
-                    <div style="flex: 1;">
-                        <span style="font-size: 11px; color: #aaa;">Trading Limits</span>
-                        <div id="detail-limits" style="font-size: 13px; font-weight: bold; color: #fff; margin-top: 2px;">1,000.00 - 1,050.00 ETB</div>
-                        <div id="detail-limits-usd" style="font-size: 11px; color: #777;">≈ 5.26 - 5.53 USDT</div>
-                    </div>
+                <div style="border-top: 1px solid #2a2a2a; padding-top: 10px;">
+                    <span style="font-size: 11px; color: #aaa;">Trading Limits</span>
+                    <div id="detail-limits" style="font-size: 13px; font-weight: bold; color: #fff; margin-top: 2px;">1,000.00 - 14,174.09 ETB</div>
+                    <div id="detail-limits-usd" style="font-size: 11px; color: #777;">≈ 5.16 - 73.10 USDT</div>
                 </div>
 
                 <div style="border-top: 1px solid #2a2a2a; margin-top: 10px; padding-top: 10px;">
                     <span style="font-size: 11px; color: #aaa;">Seller's Available Balance</span>
-                    <div id="detail-balance" style="font-size: 14px; font-weight: bold; color: #fff; margin-top: 2px;">5.49 USDT</div>
+                    <div id="detail-balance" style="font-size: 14px; font-weight: bold; color: #fff; margin-top: 2px;">72.51 USDT</div>
                 </div>
             </div>
 
             <!-- Payment Methods Card -->
             <div class="card">
                 <div style="font-size: 12px; color: #aaa; margin-bottom: 6px;">Payment Methods</div>
-                <div id="detail-payment-method" style="background: #121212; border: 1px solid #333; padding: 10px; border-radius: 6px; font-weight: bold; color: #fff; display: inline-block;">M-PESA</div>
+                <div id="detail-payment-method" style="background: #121212; border: 1px solid #333; padding: 10px; border-radius: 6px; font-weight: bold; color: #fff; display: inline-block;">Telebirr</div>
                 <div style="font-size: 11px; color: #777; margin-top: 8px;">Payment details will be shared after order confirmation</div>
             </div>
 
@@ -185,25 +167,68 @@
                 <div class="form-group">
                     <label>Amount</label>
                     <div style="position: relative;">
-                        <input type="number" id="trade-amount-input" value="0.00" oninput="calculateTotal()" style="padding-right: 50px;">
+                        <input type="number" id="trade-amount-input" value="12.00" oninput="calculateTotal()" style="padding-right: 50px;">
                         <span id="amount-unit-label" style="position: absolute; right: 15px; top: 12px; color: #aaa; font-size: 14px;">USD</span>
                     </div>
-                    <span id="trade-min-max" style="font-size: 11px; color: #777; margin-top: 4px; display: block;">Min: $5.26 - Max: $5.53 USDT</span>
+                    <span id="trade-min-max" style="font-size: 11px; color: #777; margin-top: 4px; display: block;">Min: $5.16 - Max: 73.10 USDT</span>
                 </div>
 
                 <div style="background: #121212; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-bottom: 15px;">
                     <span style="font-size: 11px; color: #aaa;">You will pay</span>
-                    <div id="calculated-payment-display" style="font-size: 18px; font-weight: bold; color: #f0b90b; margin-top: 2px;">0.00 ETB</div>
+                    <div id="calculated-payment-display" style="font-size: 18px; font-weight: bold; color: #f0b90b; margin-top: 2px;">2326.80 ETB</div>
                 </div>
 
-                <div id="rate-display-text" style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Rate: 1 USD = 189.99 ETB</div>
+                <div id="rate-display-text" style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Rate: 1 USD = 193.90 ETB</div>
 
                 <button class="btn-action" style="background: #0ecb81; color: #000; padding: 14px; font-size: 14px;" onclick="confirmBuyOrder()">Buy USDT</button>
 
                 <div style="margin-top: 15px; font-size: 11px; color: #777; line-height: 1.6;">
-                    • Request will be sent to <span id="seller-name-ref">Yona</span><br>
+                    • Request will be sent to <span id="seller-name-ref">Teke_94</span><br>
                     • They have 5 minutes to accept<br>
                     • You'll be notified once accepted
+                </div>
+            </div>
+        </div>
+
+        <!-- WAITING FOR RESPONSE / ORDER STATUS SUB-VIEW (Matches your exact active order screen) -->
+        <div id="tab-order-status" class="tab-content" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="switchTab('orders', document.querySelectorAll('.nav-item')[1])">
+                <span style="color: #f0b90b; font-size: 18px;">←</span>
+                <span style="color: #aaa; font-size: 14px;">Back to Orders</span>
+            </div>
+
+            <div class="card" style="text-align: center; padding: 25px 15px;">
+                <div class="waiting-timer-ring">⏱️</div>
+                <h3 style="margin: 0 0 5px 0; color: #fff;">Waiting for Response</h3>
+                <p style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Advertiser is reviewing your request</p>
+                <div id="countdown-timer" style="background: #121212; display: inline-block; padding: 6px 16px; border-radius: 20px; color: #f0b90b; font-weight: bold; border: 1px solid #333; margin-bottom: 20px;">04:58</div>
+
+                <div style="text-align: left; border-top: 1px solid #2a2a2a; padding-top: 15px;">
+                    <div style="font-weight: bold; margin-bottom: 12px; color: #fff;">Order Details</div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Request ID:</span> <span style="color: #fff; font-weight: bold;">#43f8b397</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Trade Type:</span> <span style="color: #fff; font-weight: bold;">Buy USDT</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Amount:</span> <span style="color: #fff; font-weight: bold;" id="status-amount">12.00 USDT</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>ETB Amount:</span> <span style="color: #f0b90b; font-weight: bold;" id="status-etb">2326.80 ETB</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Price per USD:</span> <span style="color: #fff; font-weight: bold;" id="status-rate">193.90</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Advertiser:</span> <span style="color: #fff; font-weight: bold;" id="status-advertiser">Teke_94</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
+                        <span>Payment:</span> <span style="color: #00b0ff; font-weight: bold;" id="status-payment">Telebirr</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; color: #aaa;">
+                        <span>Created:</span> <span style="color: #fff; font-size: 12px;" id="status-date">8/28/2026, 11:13:18 AM</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -212,136 +237,54 @@
         <div id="tab-orders" class="tab-content" style="display: none;">
             <h2>Orders</h2>
             <div style="display: flex; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid #2a2a2a; padding-bottom: 8px;">
-                <span style="color: #f0b90b; font-weight: bold; border-bottom: 2px solid #f0b90b; padding-bottom: 6px;">Ongoing</span>
+                <span style="color: #f0b90b; font-weight: bold; border-bottom: 2px solid #f0b90b; padding-bottom: 6px; cursor: pointer;" onclick="showActiveOrder()">Ongoing (1)</span>
                 <span style="color: #777; cursor: pointer;">All Orders</span>
             </div>
-            <div class="card" style="text-align: center; padding: 40px 20px;">
-                <p style="color: #777; margin: 0;">No active P2P orders found</p>
+            
+            <div class="card" onclick="showActiveOrder()" style="cursor: pointer;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="color: #0ecb81; font-weight: bold; font-size: 13px;">🟢 Buy USDT</span>
+                    <span style="font-size: 11px; color: #f0b90b; background: rgba(240,185,11,0.1); padding: 2px 6px; border-radius: 4px;">Waiting Acceptance</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; margin-bottom: 4px;">
+                    <span>12.00 USDT</span>
+                    <span style="color: #f0b90b;">2,326.80 ETB</span>
+                </div>
+                <div style="font-size: 11px; color: #aaa;">Advertiser: Teke_94 • Telebirr</div>
             </div>
         </div>
 
         <!-- 3. ADS TAB -->
         <div id="tab-ads" class="tab-content" style="display: none;">
-            <div id="ads-list-view">
-                <div class="header-flex">
-                    <h2>My Ads</h2>
-                    <button class="btn-action" style="width: auto; padding: 6px 16px;" onclick="showCreateAd()">+ Post Ad</button>
-                </div>
-                <div class="card" style="text-align: center; padding: 40px 20px;">
-                    <p style="color: #777; margin: 0;">You haven't posted any advertisements yet.</p>
-                </div>
+            <div class="header-flex">
+                <h2>My Ads</h2>
+                <button class="btn-action" style="width: auto; padding: 6px 16px;" onclick="alert('Post ad modal')">+ Post Ad</button>
             </div>
-
-            <!-- Create New Ad Form View -->
-            <div id="create-ad-view" style="display: none;">
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="hideCreateAd()">
-                    <span style="color: #f0b90b; font-size: 18px;">←</span>
-                    <span style="color: #aaa; font-size: 14px;">Back to My Ads</span>
-                </div>
-                <h2 style="margin-bottom: 20px;">Create New Ad</h2>
-
-                <div class="form-group">
-                    <label>Ad Type</label>
-                    <div class="ad-type-grid">
-                        <div id="box-buy" class="ad-type-box selected-buy" onclick="selectAdType('buy')">
-                            📈<br><strong>I want to buy</strong><br><span style="font-size: 11px;">USDT with ETB</span>
-                        </div>
-                        <div id="box-sell" class="ad-type-box" onclick="selectAdType('sell')">
-                            📉<br><strong>I want to sell</strong><br><span style="font-size: 11px;">USDT for ETB</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Price per USDT (ETB)</label>
-                    <input type="number" id="ad-price" value="58.50">
-                </div>
-
-                <div class="form-group">
-                    <label>Total Amount (USDT)</label>
-                    <input type="number" id="ad-amount" value="100.00">
-                </div>
-
-                <div class="form-group">
-                    <label>Order Limits</label>
-                    <div class="limit-row">
-                        <div><input type="number" id="ad-min" value="200"></div>
-                        <div><input type="number" id="ad-max" value="5000"></div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Payment Methods</label>
-                    <div id="create-ad-payment-container" class="payment-checkboxes-grid"></div>
-                </div>
-
-                <div class="form-group">
-                    <label>Terms (Optional)</label>
-                    <textarea placeholder="Enter any special terms..." rows="3"></textarea>
-                </div>
-
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button class="btn-action" style="background: #2b2b2b; color: #fff;" onclick="hideCreateAd()">Cancel</button>
-                    <button class="btn-action" style="background: #f0b90b; color: #000;" onclick="validateAndCreateAd()">Create Ad</button>
-                </div>
+            <div class="card" style="text-align: center; padding: 40px 20px;">
+                <p style="color: #777; margin: 0;">You haven't posted any advertisements yet.</p>
             </div>
         </div>
 
         <!-- 4. WALLET TAB -->
         <div id="tab-wallet" class="tab-content" style="display: none;">
-            <div id="wallet-main-view">
-                <h2>Wallet</h2>
-                <div class="wallet-card">
-                    <span style="font-size: 13px; color: #aaa;">Estimated Total Balance</span>
-                    <h1 style="color: #f0b90b; margin: 10px 0;">0.22 USDT</h1>
-                    <span style="font-size: 12px; color: #777;">≈ 29.70 ETB</span>
-                </div>
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <button class="btn-action" onclick="alert('Deposit window')">Deposit</button>
-                    <button class="btn-action sell" onclick="alert('Withdraw window')">Withdraw</button>
-                </div>
-
-                <div class="wallet-menu-card" onclick="openPaymentAccounts()">
-                    <div class="wallet-menu-icon">
-                        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
-                    </div>
-                    <div>
-                        <div style="font-weight: bold; font-size: 14px;">Payment Accounts</div>
-                        <div style="font-size: 12px; color: #aaa; margin-top: 2px;">Manage your payment methods</div>
-                    </div>
-                </div>
-
-                <div class="wallet-menu-card" onclick="alert('Opening Bonus and Rewards...')">
-                    <div class="wallet-menu-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                    </div>
-                    <div>
-                        <div style="font-weight: bold; font-size: 14px;">Bonus and Rewards</div>
-                        <div style="font-size: 12px; color: #aaa; margin-top: 2px;">Earn points and win prizes</div>
-                    </div>
-                </div>
-
-                <div class="wallet-menu-card" onclick="alert('Opening Referral Program...')">
-                    <div class="wallet-menu-icon">
-                        <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7.1 10.62 8.9 12 12 8l3 4 1.8-1.38L14.92 8H20v6z"/></svg>
-                    </div>
-                    <div>
-                        <div style="font-weight: bold; font-size: 14px;">Referral Program</div>
-                        <div style="font-size: 12px; color: #aaa; margin-top: 2px;">Invite friends and earn rewards</div>
-                    </div>
-                </div>
+            <h2>Wallet</h2>
+            <div class="wallet-card">
+                <span style="font-size: 13px; color: #aaa;">Estimated Total Balance</span>
+                <h1 style="color: #f0b90b; margin: 10px 0;">72.73 USDT</h1>
+                <span style="font-size: 12px; color: #777;">≈ 14,102.34 ETB</span>
             </div>
-
-            <!-- Payment Accounts Sub-View -->
-            <div id="wallet-accounts-view" style="display: none;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
-                    <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="closePaymentAccounts()">
-                        <span style="color: #f0b90b; font-size: 18px;">←</span>
-                        <h3 style="margin: 0; font-size: 16px;">Payment Accounts</h3>
-                    </div>
-                    <button class="btn-action" style="background: #f0b90b; color: #000; width: auto; padding: 6px 12px; font-size: 12px;" onclick="openAddMethodModal()">Add Method</button>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button class="btn-action" onclick="alert('Deposit window')">Deposit</button>
+                <button class="btn-action sell" onclick="alert('Withdraw window')">Withdraw</button>
+            </div>
+            <div class="wallet-menu-card" onclick="alert('Payment Accounts...')">
+                <div class="wallet-menu-icon">
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
                 </div>
-                <div id="saved-methods-container"></div>
+                <div>
+                    <div style="font-weight: bold; font-size: 14px;">Payment Accounts</div>
+                    <div style="font-size: 12px; color: #aaa; margin-top: 2px;">Telebirr Connected</div>
+                </div>
             </div>
         </div>
 
@@ -351,14 +294,6 @@
             <div class="card" onclick="alert('Connecting to support bot...')" style="cursor: pointer;">
                 <span style="font-weight: bold;">💬 Customer Support</span>
                 <p style="font-size: 12px; color: #aaa; margin: 5px 0 0 0;">Chat with official admin support 24/7</p>
-            </div>
-            <div class="card" onclick="alert('Opening trading rules...')" style="cursor: pointer;">
-                <span style="font-weight: bold;">📖 P2P Trading Guide & Rules</span>
-                <p style="font-size: 12px; color: #aaa; margin: 5px 0 0 0;">Learn safe trading practices in Ethiopia</p>
-            </div>
-            <div class="card" onclick="alert('App version 1.0.0')" style="cursor: pointer;">
-                <span style="font-weight: bold;">ℹ️ About One P2P</span>
-                <p style="font-size: 12px; color: #aaa; margin: 5px 0 0 0;">Community-backed trading platform</p>
             </div>
         </div>
 
@@ -387,45 +322,14 @@
         </div>
     </div>
 
-    <!-- ADD PAYMENT METHOD MODAL -->
-    <div id="add-method-modal" class="modal-overlay">
-        <div class="modal-sheet">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="margin: 0; color: #fff;">Add Payment Method</h3>
-                <span style="color: #aaa; font-size: 20px; cursor: pointer;" onclick="closeAddMethodModal()">✕</span>
-            </div>
-            <div class="form-group">
-                <label>Provider *</label>
-                <select id="method-provider">
-                    <option value="" disabled selected>Select a provider</option>
-                    <option value="Telebirr">Telebirr</option>
-                    <option value="CBE">CBE</option>
-                    <option value="Awash">Awash</option>
-                    <option value="Dashen">Dashen</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Account Number *</label>
-                <input type="text" id="method-acc-num" placeholder="Enter account number">
-            </div>
-            <div class="form-group">
-                <label>Phone Number *</label>
-                <input type="text" id="method-phone" placeholder="Enter phone number">
-            </div>
-            <button class="btn-action" style="background: #f0b90b; color: #000; width: 100%; padding: 12px; margin-top: 10px;" onclick="savePaymentMethod()">Save</button>
-        </div>
-    </div>
-
     <script>
-        let savedMethods = [];
-        let currentTrade = { seller: '', price: 0, limits: '', minUsd: '', maxUsd: '', balance: '', payment: '', rating: '', currency: 'USD' };
+        let currentTrade = { seller: 'Teke_94', price: 193.90, limits: '1,000.00 - 14,174.09 ETB', minUsd: '5.16', maxUsd: '73.10', balance: '72.51', payment: 'Telebirr', rating: '98% | 340 completed trades', currency: 'USD' };
 
         function switchTab(tabName, element) {
             document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabName).style.display = 'block';
             if(element) element.classList.add('active');
-            if(tabName === 'ads') { hideCreateAd(); }
         }
 
         function openBuyDetail(seller, price, limits, minUsd, maxUsd, balance, payment, rating) {
@@ -440,7 +344,7 @@
             document.getElementById('detail-payment-method').innerText = payment;
             document.getElementById('seller-name-ref').innerText = seller;
             document.getElementById('trade-min-max').innerText = `Min: $${minUsd} - Max: ${maxUsd} USDT`;
-            document.getElementById('trade-amount-input').value = minUsd;
+            document.getElementById('trade-amount-input').value = "12.00";
             document.getElementById('rate-display-text').innerText = `Rate: 1 USD = ${price} ETB`;
 
             setCurrency('USD');
@@ -455,22 +359,9 @@
 
         function setCurrency(curr) {
             currentTrade.currency = curr;
-            const usdBtn = document.getElementById('curr-usd');
-            const etbBtn = document.getElementById('curr-etb');
-            const unitLabel = document.getElementById('amount-unit-label');
-            const inputField = document.getElementById('trade-amount-input');
-
-            if (curr === 'USD') {
-                usdBtn.className = 'currency-btn active';
-                etbBtn.className = 'currency-btn';
-                unitLabel.innerText = 'USD';
-                inputField.value = currentTrade.minUsd;
-            } else {
-                etbBtn.className = 'currency-btn active';
-                usdBtn.className = 'currency-btn';
-                unitLabel.innerText = 'ETB';
-                inputField.value = (parseFloat(currentTrade.minUsd) * currentTrade.price).toFixed(2);
-            }
+            document.getElementById('curr-usd').className = curr === 'USD' ? 'currency-btn active' : 'currency-btn';
+            document.getElementById('curr-etb').className = curr === 'ETB' ? 'currency-btn active' : 'currency-btn';
+            document.getElementById('amount-unit-label').innerText = curr;
             calculateTotal();
         }
 
@@ -486,116 +377,21 @@
         }
 
         function confirmBuyOrder() {
-            alert(`Order request successfully sent to ${currentTrade.seller}! They have 5 minutes to accept.`);
-            closeBuyDetail();
+            // Update status view with exact values from the 12 USD order
+            document.getElementById('status-amount').innerText = "12.00 USDT";
+            document.getElementById('status-etb').innerText = "2326.80 ETB";
+            document.getElementById('status-rate').innerText = currentTrade.price.toFixed(2);
+            document.getElementById('status-advertiser').innerText = currentTrade.seller;
+            document.getElementById('status-payment').innerText = currentTrade.payment;
+            document.getElementById('status-date').innerText = new Date().toLocaleString();
+
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.getElementById('tab-order-status').style.display = 'block';
         }
 
-        function showCreateAd() {
-            document.getElementById('ads-list-view').style.display = 'none';
-            document.getElementById('create-ad-view').style.display = 'block';
-            renderCreateAdPaymentOptions();
-        }
-
-        function hideCreateAd() {
-            document.getElementById('create-ad-view').style.display = 'none';
-            document.getElementById('ads-list-view').style.display = 'block';
-        }
-
-        function selectAdType(type) {
-            document.getElementById('box-buy').className = type === 'buy' ? 'ad-type-box selected-buy' : 'ad-type-box';
-            document.getElementById('box-sell').className = type === 'sell' ? 'ad-type-box selected-sell' : 'ad-type-box';
-        }
-
-        function setTradeMode(mode) {
-            const buyBtn = document.getElementById('btn-buy-toggle');
-            const sellBtn = document.getElementById('btn-sell-toggle');
-            if (mode === 'buy') {
-                buyBtn.className = 'toggle-btn active-buy';
-                sellBtn.className = 'toggle-btn';
-            } else {
-                sellBtn.className = 'toggle-btn active-sell';
-                buyBtn.className = 'toggle-btn';
-            }
-        }
-
-        function openPaymentAccounts() {
-            document.getElementById('wallet-main-view').style.display = 'none';
-            document.getElementById('wallet-accounts-view').style.display = 'block';
-        }
-
-        function closePaymentAccounts() {
-            document.getElementById('wallet-accounts-view').style.display = 'none';
-            document.getElementById('wallet-main-view').style.display = 'block';
-        }
-
-        function openAddMethodModal() { document.getElementById('add-method-modal').style.display = 'flex'; }
-        function closeAddMethodModal() { document.getElementById('add-method-modal').style.display = 'none'; }
-
-        function savePaymentMethod() {
-            const provider = document.getElementById('method-provider').value;
-            const accNum = document.getElementById('method-acc-num').value.trim();
-            const phone = document.getElementById('method-phone').value.trim();
-
-            if (!provider || !accNum || !phone) {
-                alert('Please fill out all required fields.');
-                return;
-            }
-
-            savedMethods.push({ provider, accountNumber: accNum, phoneNumber: phone, selected: true });
-            document.getElementById('method-provider').selectedIndex = 0;
-            document.getElementById('method-acc-num').value = '';
-            document.getElementById('method-phone').value = '';
-
-            renderSavedMethods();
-            closeAddMethodModal();
-        }
-
-        function renderSavedMethods() {
-            const container = document.getElementById('saved-methods-container');
-            if (savedMethods.length === 0) {
-                container.innerHTML = `<div class="card" style="text-align:center; color:#777;">No payment accounts saved.</div>`;
-                return;
-            }
-            container.innerHTML = savedMethods.map((m, idx) => `
-                <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                    <div><strong>${m.provider}</strong><br><span style="font-size:12px; color:#aaa;">${m.accountNumber}</span></div>
-                    <button class="btn-action sell" style="width: auto; padding:4px 10px; font-size:11px;" onclick="savedMethods.splice(${idx},1); renderSavedMethods();">Delete</button>
-                </div>
-            `).join('');
-        }
-
-        function renderCreateAdPaymentOptions() {
-            const container = document.getElementById('create-ad-payment-container');
-            if (savedMethods.length === 0) {
-                container.innerHTML = `
-                    <div style="background: #1e1e1e; border: 1px dashed #f0b90b; border-radius: 8px; padding: 15px; text-align: center;">
-                        <span style="font-size: 13px; color: #ffcc00; display: block; margin-bottom: 8px; font-weight: bold;">⚠️ Fill payment account first</span>
-                        <span style="font-size: 12px; color: #aaa;">You must add at least one payment method (e.g., Telebirr) in your wallet before creating an ad.</span>
-                        <div style="margin-top: 10px;">
-                            <button class="btn-action" style="background: #f0b90b; color: #000; font-size: 12px; padding: 6px 14px; width: auto;" onclick="switchTab('wallet', document.querySelectorAll('.nav-item')[3]); openPaymentAccounts(); openAddMethodModal();">+ Add Payment Account</button>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = savedMethods.map((m, index) => `
-                <div class="payment-check-box ${m.selected ? 'selected' : ''}" onclick="savedMethods[${index}].selected = !savedMethods[index].selected; renderCreateAdPaymentOptions();">
-                    <div>
-                        <strong style="font-size: 14px; color: #fff;">${m.provider}</strong><br>
-                        <span style="font-size: 12px; color: #aaa;">Acc: ${m.accountNumber}</span>
-                    </div>
-                    <div class="check-indicator">${m.selected ? '✓' : ''}</div>
-                </div>
-            `).join('');
-        }
-
-        function validateAndCreateAd() {
-            if (savedMethods.filter(m => m.selected).length === 0) {
-                alert('Please select or fill at least one payment method to proceed.');
-                return;
-            }
-            alert('Ad created successfully!');
+        function showActiveOrder() {
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.getElementById('tab-order-status').style.display = 'block';
         }
     </script>
 </body>
