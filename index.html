@@ -29,7 +29,7 @@
             position: relative;
         }
 
-        /* Top Bar */
+        /* Top Header */
         .app-header {
             display: flex;
             align-items: center;
@@ -54,7 +54,7 @@
             font-size: 18px;
         }
 
-        /* Views System */
+        /* Tab Pages System */
         .view {
             display: none;
             flex: 1;
@@ -75,7 +75,7 @@
             margin-bottom: 16px;
         }
 
-        /* Home View Styles */
+        /* Home View Content */
         .home-top-bar {
             display: flex;
             justify-content: space-between;
@@ -127,7 +127,7 @@
             cursor: pointer;
         }
 
-        /* Buy Modal Overlays */
+        /* Modal Overlay Screens */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -222,7 +222,24 @@
             opacity: 0.7;
         }
 
-        /* Navigation Bar */
+        /* Order Pending Timer Container */
+        .timer-box {
+            background: #1e2329;
+            border: 1px solid #2b313a;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .timer-display {
+            font-size: 32px;
+            font-weight: bold;
+            color: #f0b90b;
+            margin: 8px 0;
+        }
+
+        /* Bottom Fixed Navigation Bar */
         .bottom-nav {
             display: flex;
             justify-content: space-around;
@@ -303,8 +320,8 @@
         <div class="section-title">My Orders</div>
         <div style="background: #1e2329; border: 1px solid #2b313a; border-radius: 8px; padding: 16px;">
             <div style="font-size: 14px; font-weight: bold;">Buy USDT</div>
-            <div style="font-size: 12px; color: #848e9c; margin-top: 4px;">Order #43f58221</div>
-            <div style="font-size: 16px; font-weight: bold; color: #f0b90b; margin-top: 8px;">1,000.00 ETB (5.16 USD)</div>
+            <div style="font-size: 12px; color: #848e9c; margin-top: 4px;" id="latestOrderId">Order #43f58221</div>
+            <div style="font-size: 16px; font-weight: bold; color: #f0b90b; margin-top: 8px;" id="latestOrderAmount">1,000.00 ETB</div>
         </div>
     </div>
 
@@ -353,7 +370,29 @@
 
         <div class="error-message" id="errorMessage"></div>
 
-        <button class="submit-btn" id="confirmBuyBtn" disabled onclick="submitOrder()">Buy USDT</button>
+        <button class="submit-btn" id="confirmBuyBtn" disabled onclick="processOrder()">Buy USDT</button>
+    </div>
+
+    <div class="modal-overlay" id="orderPendingModal">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h2 style="font-size:18px;">Order Pending</h2>
+            <button onclick="closeModal('orderPendingModal')" style="background:none; border:none; color:#848e9c; font-size:20px; cursor:pointer;">✕</button>
+        </div>
+
+        <div class="timer-box">
+            <div style="font-size:12px; color:#848e9c;">Time remaining to pay seller</div>
+            <div class="timer-display" id="timer">15:00</div>
+            <div style="font-size:11px; color:#0ecb81;">Funds locked in Escrow</div>
+        </div>
+
+        <div class="seller-info-box">
+            <div class="info-row"><span>Order ID:</span><span class="info-value" id="orderIdDisplay">#---</span></div>
+            <div class="info-row"><span>Amount to Pay:</span><span class="info-value" id="payAmountDisplay" style="color:#f0b90b; font-weight:bold;">0.00 ETB</span></div>
+            <div class="info-row"><span>Receive:</span><span class="info-value" id="receiveAmountDisplay">0.00 USD</span></div>
+            <div class="info-row"><span>Payment Method:</span><span class="info-value">Telebirr</span></div>
+        </div>
+
+        <button class="submit-btn" onclick="finishOrder()">Transferred, Notify Seller</button>
     </div>
 
     <div class="bottom-nav">
@@ -370,13 +409,15 @@
     const MIN_LIMIT = 1000;
     const MAX_LIMIT = 10000;
 
-    // View Switching Function
+    let timerInterval = null;
+
+    // View Switching
     function switchTab(viewId, element) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
 
         document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-        element.classList.add('active');
+        if (element) element.classList.add('active');
     }
 
     function openModal(id) {
@@ -385,9 +426,12 @@
 
     function closeModal(id) {
         document.getElementById(id).classList.remove('active');
+        if (id === 'orderPendingModal') {
+            clearInterval(timerInterval);
+        }
     }
 
-    // Input Validation Logic
+    // Input Limit Logic
     document.getElementById('usdInput').addEventListener('input', function() {
         const usdVal = parseFloat(this.value);
         const etbOutput = document.getElementById('etbOutput');
@@ -416,10 +460,46 @@
         }
     });
 
-    function submitOrder() {
-        alert('Order submitted successfully!');
+    // Step Transition to Active Pending Order
+    function processOrder() {
+        const val = parseFloat(document.getElementById('usdInput').value);
+        const totalEtb = val * EXCHANGE_RATE;
+        const generatedId = '#' + Math.floor(10000000 + Math.random() * 90000000);
+
+        document.getElementById('orderIdDisplay').innerText = generatedId;
+        document.getElementById('payAmountDisplay').innerText = totalEtb.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ETB';
+        document.getElementById('receiveAmountDisplay').innerText = val.toFixed(2) + ' USD';
+
         closeModal('buyModal');
-        switchTab('ordersView', document.querySelectorAll('.nav-item')[1]);
+        openModal('orderPendingModal');
+
+        startTimer(15 * 60);
+    }
+
+    // Countdown Timer Handler
+    function startTimer(seconds) {
+        clearInterval(timerInterval);
+        let timeLeft = seconds;
+        timerInterval = setInterval(() => {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            document.getElementById('timer').innerText = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                closeModal('orderPendingModal');
+            }
+            timeLeft--;
+        }, 1000);
+    }
+
+    // Complete Transfer & View Orders Page
+    function finishOrder() {
+        alert('Payment confirmed! Seller notified.');
+        closeModal('orderPendingModal');
+        const navButtons = document.querySelectorAll('.nav-item');
+        if (navButtons[1]) {
+            switchTab('ordersView', navButtons[1]);
+        }
     }
 </script>
 
