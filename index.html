@@ -46,9 +46,402 @@
             font-size: 24px;
             cursor: pointer;
         }
-        .wallet-content {
-            padding: 20px;
+        
+        /* Views */
+        .view {
+            display: none;
             flex: 1;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+        .view.active {
+            display: flex;
+        }
+
+        /* Home View Styles */
+        .home-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .home-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f0b90b;
+        }
+        .home-subtitle {
+            font-size: 12px;
+            color: #848e9c;
+            margin-bottom: 16px;
+        }
+        .currency-badge {
+            background: #2b313a;
+            color: #f0b90b;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .trade-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .trade-tab {
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: #848e9c;
+            cursor: pointer;
+            padding-bottom: 4px;
+        }
+        .trade-tab.active {
+            color: #0ecb81;
+            border-bottom: 2px solid #0ecb81;
+        }
+        .trade-tab.sell-active {
+            color: #f6465d;
+            border-bottom: 2px solid #f6465d;
+        }
+        .ad-card {
+            background: #1e2329;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #2b313a;
+            margin-bottom: 12px;
+        }
+        .ad-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .merchant-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            background: #f0b90b;
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .merchant-name {
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .merchant-stats {
+            font-size: 11px;
+            color: #848e9c;
+        }
+        .action-buy-btn {
+            background-color: #0ecb81;
+            color: #000;
+            border: none;
+            padding: 8px 20px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .action-sell-btn {
+            background-color: #f6465d;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .ad-details-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .ad-label {
+            font-size: 11px;
+            color: #848e9c;
+            margin-bottom: 2px;
+        }
+        .ad-val-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .ad-val-limit {
+            font-size: 13px;
+            color: #eaecef;
+        }
+        .ad-val-payment {
+            font-size: 14px;
+            font-weight: bold;
+            color: #f0b90b;
+            text-align: right;
+        }
+
+        /* Ads Management View Styles */
+        .ads-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .ads-title-group .title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f0b90b;
+            margin-bottom: 2px;
+        }
+        .ads-title-group .subtitle {
+            font-size: 12px;
+            color: #848e9c;
+        }
+        .create-ad-top-btn {
+            background-color: #f0b90b;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .online-status-box {
+            background: #1e2329;
+            border: 1px solid #2b313a;
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #0ecb81;
+            border-radius: 50%;
+        }
+
+        /* Create Ad Form Styles */
+        .create-ad-container {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .create-ad-container.active {
+            display: flex;
+        }
+        .back-link {
+            color: #848e9c;
+            font-size: 13px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+        .form-section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #f0b90b;
+            margin-bottom: 10px;
+        }
+        .type-toggle-group {
+            display: flex;
+            gap: 12px;
+        }
+        .type-toggle-btn {
+            flex: 1;
+            background: #1e2329;
+            border: 1px solid #2b313a;
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+            cursor: pointer;
+            color: #848e9c;
+        }
+        .type-toggle-btn.active-buy {
+            border-color: #0ecb81;
+            color: #0ecb81;
+            background: rgba(14, 203, 129, 0.05);
+        }
+        .type-toggle-btn.active-sell {
+            border-color: #f6465d;
+            color: #f6465d;
+            background: rgba(246, 70, 93, 0.05);
+        }
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-label {
+            font-size: 12px;
+            color: #848e9c;
+        }
+        .form-input-box {
+            background: #1e2329;
+            border: 1px solid #2b313a;
+            border-radius: 8px;
+            padding: 12px;
+            color: #ffffff;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .form-input-box input {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            width: 100%;
+            outline: none;
+        }
+        .form-hint {
+            font-size: 11px;
+            color: #848e9c;
+        }
+        .limits-row {
+            display: flex;
+            gap: 12px;
+        }
+        .limits-row .form-field {
+            flex: 1;
+        }
+        .submit-ad-btn {
+            background-color: #f0b90b;
+            color: #000;
+            border: none;
+            padding: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        /* Orders View Styles */
+        .orders-tabs {
+            display: flex;
+            background: #1e2329;
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 16px;
+            border: 1px solid #2b313a;
+        }
+        .orders-tab {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 10px;
+            color: #848e9c;
+            font-weight: bold;
+            font-size: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .orders-tab.active {
+            background: #2b313a;
+            color: #fff;
+        }
+        .order-card {
+            background: #1e2329;
+            border: 1px solid #2b313a;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        .order-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #2b313a;
+            padding-bottom: 10px;
+        }
+        .order-status-badge {
+            font-size: 12px;
+            font-weight: bold;
+            color: #f0b90b;
+            background: rgba(240, 185, 11, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        /* Order Detail Modal / View */
+        .order-detail-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #181a20;
+            z-index: 80;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .order-detail-overlay.active {
+            display: flex;
+        }
+        .timer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #1e2329;
+            border: 1px solid #2b313a;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .timer-countdown {
+            font-size: 32px;
+            font-weight: bold;
+            color: #f0b90b;
+            margin: 10px 0;
+        }
+        .order-details-box {
+            background: #1e2329;
+            border: 1px solid #2b313a;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+        .detail-label {
+            color: #848e9c;
+        }
+        .detail-val {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Wallet & Profile Views */
+        .wallet-content {
             display: flex;
             flex-direction: column;
         }
@@ -139,13 +532,19 @@
             font-size: 12px;
             color: #848e9c;
         }
+
+        /* Bottom Navigation */
         .bottom-nav {
             display: flex;
             justify-content: space-around;
             background: #181a20;
             border-top: 1px solid #23272f;
             padding: 10px 0;
-            margin-top: auto;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 420px;
+            z-index: 40;
         }
         .nav-item {
             display: flex;
@@ -166,286 +565,16 @@
             color: #f0b90b;
         }
 
-        /* Deposit Modal Overlay */
-        .modal-overlay {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.75);
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            z-index: 50;
-            overflow-y: auto;
-        }
-        .modal-overlay.active {
-            display: flex;
-        }
-        .deposit-card-box {
-            background: #1e2329;
-            width: 100%;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #2b313a;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            position: relative;
-        }
-        .close-modal-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #848e9c;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        .network-section {
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #2b313a;
-        }
-        .network-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        .network-title {
-            color: #f0b90b;
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 14px;
-        }
-        .qr-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 14px;
-        }
-        .qr-box {
-            background: #ffffff;
-            padding: 8px;
-            border-radius: 8px;
-            width: 130px;
-            height: 130px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .qr-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        .address-box {
-            background: #2b313a;
-            padding: 10px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 11px;
-            word-break: break-all;
-            margin-bottom: 10px;
-            color: #eaecef;
-            border: 1px solid #363c4e;
-        }
-        .copy-btn {
-            width: 100%;
-            background-color: #f0b90b;
-            color: #000;
-            border: none;
-            padding: 10px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        .toast {
-            text-align: center;
-            font-size: 11px;
-            color: #0ecb81;
-            margin-top: 4px;
-            height: 14px;
-        }
-
-        /* Payment Accounts Manager Overlay */
-        .pa-view-container {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #181a20;
-            z-index: 55;
-            flex-direction: column;
-        }
-        .pa-view-container.active {
-            display: flex;
-        }
-        .pa-view-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 20px;
-            background: #181a20;
-            border-bottom: 1px solid #23272f;
-        }
-        .add-method-top-btn {
-            background-color: #f0b90b;
-            color: #000;
-            border: none;
-            padding: 6px 12px;
-            font-weight: bold;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        .pa-view-body {
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        .empty-wallet-icon {
-            font-size: 48px;
-            color: #848e9c;
-            margin-bottom: 12px;
-        }
-        .empty-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 6px;
-        }
-        .empty-desc {
-            font-size: 13px;
-            color: #848e9c;
-            margin-bottom: 20px;
-            max-width: 260px;
-        }
-        .add-first-btn {
-            background-color: #f0b90b;
-            color: #000;
-            border: none;
-            padding: 12px 20px;
-            font-weight: bold;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            width: 100%;
-            max-width: 280px;
-        }
-
-        /* Add Method Modal */
-        .add-method-overlay {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.75);
-            align-items: flex-end;
-            z-index: 60;
-        }
-        .add-method-overlay.active {
-            display: flex;
-        }
-        .add-method-box {
-            background: #1e2329;
-            width: 100%;
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
-            padding: 20px;
-            border-top: 1px solid #2b313a;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
-            box-sizing: border-box;
-        }
-        .amb-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .amb-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-        .amb-close {
-            background: none;
-            border: none;
-            color: #848e9c;
-            font-size: 18px;
-            cursor: pointer;
-        }
-        .amb-field {
-            margin-bottom: 16px;
-        }
-        .amb-label {
-            font-size: 12px;
-            color: #848e9c;
-            margin-bottom: 6px;
-        }
-        .amb-select, .amb-input {
-            width: 100%;
-            background: #2b313a;
-            border: 1px solid #363c4e;
-            border-radius: 8px;
-            padding: 12px;
-            color: #ffffff;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-        .amb-hint {
-            font-size: 11px;
-            color: #848e9c;
-            margin-top: 4px;
-        }
-        .amb-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-        }
-        .amb-cancel {
-            flex: 1;
-            background: #2b313a;
-            color: #ffffff;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .amb-save {
-            flex: 1;
-            background: #f0b90b;
-            color: #000;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Generic Alert Modal */
+        /* Generic Alerts & Modals */
         .alert-overlay {
             display: none;
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.75);
             align-items: center;
             justify-content: center;
             padding: 20px;
-            z-index: 70;
+            z-index: 100;
         }
         .alert-overlay.active {
             display: flex;
@@ -497,137 +626,221 @@
         </div>
     </div>
 
-    <!-- Wallet Page Content -->
-    <div class="wallet-content">
-        <div class="wallet-label">Wallet</div>
-        <div class="balance-box">
-            <div class="balance-title">Estimated Total Balance</div>
-            <div class="balance-value">72.51 USDT</div>
-            <div class="balance-fiat">≈ 14,102.34 ETB</div>
+    <!-- VIEW 1: HOME (P2P Market) -->
+    <div class="view active" id="homeView">
+        <div class="home-top-bar">
+            <div>
+                <div class="home-title">One P2P</div>
+                <div class="home-subtitle">Trade USDT with local currency</div>
+            </div>
+            <div class="currency-badge" onclick="showAlert('Currency', 'Currently trading in ETB.')">
+                <span>🇪🇹 ETB</span>
+            </div>
         </div>
-        <div class="action-buttons">
-            <button class="btn-deposit" onclick="openDepositModal()">Deposit</button>
-            <button class="btn-withdraw" onclick="showAlert('Withdraw USDT', 'Your request to withdraw funds is being initialized securely through the network gateway.')">Withdraw</button>
+        
+        <div class="trade-tabs">
+            <button class="trade-tab active" id="tabBuy" onclick="switchHomeTab('buy')">Buy</button>
+            <button class="trade-tab" id="tabSell" onclick="switchHomeTab('sell')">Sell</button>
         </div>
 
-        <!-- Payment Accounts Card -->
-        <div class="payment-accounts-card" onclick="openPaymentAccounts()">
-            <div class="pa-icon-box">💳</div>
-            <div class="pa-info">
-                <div class="pa-title">Payment Accounts</div>
-                <div class="pa-subtitle" id="cardSubtitle">Telebirr Connected</div>
+        <div id="homeAdsList">
+            <!-- Populated dynamically -->
+        </div>
+    </div>
+
+    <!-- VIEW 2: ORDERS -->
+    <div class="view" id="ordersView">
+        <div class="home-title" style="margin-bottom: 16px;">My Orders</div>
+        <div class="orders-tabs">
+            <button class="orders-tab active">Ongoing (1)</button>
+            <button class="orders-tab">Cancelled (0)</button>
+        </div>
+
+        <!-- Active Order Card matching screenshot -->
+        <div class="order-card" onclick="openOrderDetail()">
+            <div class="order-card-header">
+                <div>
+                    <div style="font-weight: bold; font-size: 15px;">Buy USDT</div>
+                    <div style="font-size: 11px; color: #848e9c;">#43f58221 • 8/28/2026, 11:49:54 AM</div>
+                </div>
+                <div class="order-status-badge">Waiting for Response</div>
             </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 11px; color: #848e9c;">Amount</div>
+                    <div style="font-size: 16px; font-weight: bold; color: #f0b90b;">5.26 USDT</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 11px; color: #848e9c;">Total ETB</div>
+                    <div style="font-size: 16px; font-weight: bold; color: #0ecb81;">999.35 ETB</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 3: ADS MANAGEMENT -->
+    <div class="view" id="adsView">
+        <!-- Main Ads List view -->
+        <div id="adsMainListContainer">
+            <div class="ads-header-row">
+                <div class="ads-title-group">
+                    <div class="title">My Ads</div>
+                    <div class="subtitle">Manage your buy and sell offers</div>
+                </div>
+                <button class="create-ad-top-btn" onclick="openCreateAdForm()">Create</button>
+            </div>
+
+            <div class="online-status-box">
+                <div class="status-dot"></div>
+                <div>
+                    <div style="font-weight: bold; font-size: 14px;">Keep Me Online</div>
+                    <div style="font-size: 11px; color: #848e9c;">Always visible to traders</div>
+                </div>
+            </div>
+
+            <div id="userAdsContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Populated user created ads -->
+            </div>
+        </div>
+
+        <!-- Create Ad Form view -->
+        <div class="create-ad-container" id="createAdContainer">
+            <div>
+                <span class="back-link" onclick="closeCreateAdForm()">← Back to My Ads</span>
+                <div class="home-title">Create New Ad</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-label">Ad Type</div>
+                <div class="type-toggle-group">
+                    <div class="type-toggle-btn active-buy" id="typeBuyBtn" onclick="setCreateType('buy')">I want to buy USDT</div>
+                    <div class="type-toggle-btn" id="typeSellBtn" onclick="setCreateType('sell')">I want to sell USDT</div>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-label">Price per USDT (ETB)</div>
+                <div class="form-input-box">
+                    <input type="number" id="adPriceInput" value="189.90">
+                    <span style="color: #848e9c; font-weight: bold;">ETB</span>
+                </div>
+                <div class="form-hint" id="priceRangeHint">Market reference: 180.00 to 200.00 ETB</div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-label">Total Amount (USDT)</div>
+                <div class="form-input-box">
+                    <input type="number" id="adAmountInput" value="100.00">
+                    <span style="color: #848e9c; font-weight: bold;">USDT</span>
+                </div>
+            </div>
+
+            <div class="limits-row">
+                <div class="form-field">
+                    <div class="form-label">Min Limit (ETB)</div>
+                    <div class="form-input-box">
+                        <input type="number" id="adMinLimit" value="1000">
+                    </div>
+                </div>
+                <div class="form-field">
+                    <div class="form-label">Max Limit (ETB)</div>
+                    <div class="form-input-box">
+                        <input type="number" id="adMaxLimit" value="14174">
+                    </div>
+                </div>
+            </div>
+            <div class="form-hint">Limits must fall between total order range</div>
+
+            <div class="form-field">
+                <div class="form-label">Payment Method</div>
+                <div class="form-input-box" style="color: #0ecb81; font-weight: bold;">
+                    <span>Telebirr Connected</span>
+                    <span>✓</span>
+                </div>
+            </div>
+
+            <button class="submit-ad-btn" onclick="submitNewAd()">Post Advertisement</button>
+        </div>
+    </div>
+
+    <!-- VIEW 4: WALLET -->
+    <div class="view" id="walletView">
+        <div class="wallet-content">
+            <div class="wallet-label">Wallet</div>
+            <div class="balance-box">
+                <div class="balance-title">Estimated Total Balance</div>
+                <div class="balance-value">72.51 USDT</div>
+                <div class="balance-fiat">≈ 14,102.34 ETB</div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn-deposit" onclick="showAlert('Deposit', 'Select network to deposit funds securely.')">Deposit</button>
+                <button class="btn-withdraw" onclick="showAlert('Withdraw USDT', 'Withdrawal gateway initialized.')">Withdraw</button>
+            </div>
+            <div class="payment-accounts-card" onclick="showAlert('Payment Accounts', 'Telebirr is connected and verified.')">
+                <div class="pa-icon-box">💳</div>
+                <div class="pa-info">
+                    <div class="pa-title">Payment Accounts</div>
+                    <div class="pa-subtitle">Telebirr Connected</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 5: HELP -->
+    <div class="view" id="helpView">
+        <div class="home-title" style="margin-bottom: 12px;">Help Center</div>
+        <div style="background: #1e2329; border: 1px solid #2b313a; border-radius: 12px; padding: 16px; color: #848e9c; font-size: 13px; line-height: 1.5;">
+            Need assistance with your P2P trades, ad creation limits, or payment verification? Contact our support staff 24/7 directly through the gateway.
+        </div>
+    </div>
+
+    <!-- ORDER DETAIL MODAL WITH FULL SEC/MIN TIMER -->
+    <div class="order-detail-overlay" id="orderDetailModal">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div style="font-size: 16px; font-weight: bold; color: #f0b90b;">Order Details</div>
+            <button onclick="closeOrderDetail()" style="background:none; border:none; color:#848e9c; font-size:22px; cursor:pointer;">✕</button>
+        </div>
+
+        <div class="timer-container">
+            <div style="font-size: 13px; color: #848e9c;">Advertiser is reviewing your request</div>
+            <div class="timer-countdown" id="activeCountdownTimer">04:59</div>
+            <div style="font-size: 11px; color: #0ecb81;">Secure Escrow Locked</div>
+        </div>
+
+        <div class="order-details-box">
+            <div class="detail-row"><span class="detail-label">Request ID</span><span class="detail-val">#43f58221</span></div>
+            <div class="detail-row"><span class="detail-label">Trade Type</span><span class="detail-val" style="color: #0ecb81;">Buy USDT</span></div>
+            <div class="detail-row"><span class="detail-label">Amount</span><span class="detail-val">5.26 USDT</span></div>
+            <div class="detail-row"><span class="detail-label">ETB Amount</span><span class="detail-val" style="color: #f0b90b;">999.35 ETB</span></div>
+            <div class="detail-row"><span class="detail-label">Price per USD</span><span class="detail-val">189.99 ETB</span></div>
+            <div class="detail-row"><span class="detail-label">Advertiser</span><span class="detail-val">Yona</span></div>
+            <div class="detail-row"><span class="detail-label">Payment</span><span class="detail-val" style="color: #f0b90b;">M-PESA / Telebirr</span></div>
+            <div class="detail-row"><span class="detail-label">Created</span><span class="detail-val">8/28/2026, 11:49:54 AM</span></div>
         </div>
     </div>
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <button class="nav-item" onclick="showAlert('Home', 'Redirecting to Home page.')">
+        <button class="nav-item active" onclick="switchView('homeView', this)">
             <span>🏠</span>
             <span>Home</span>
         </button>
-        <button class="nav-item" onclick="showAlert('Orders', 'Opening your active and past orders.')">
+        <button class="nav-item" onclick="switchView('ordersView', this)">
             <span>📋</span>
             <span>Orders</span>
         </button>
-        <button class="nav-item" onclick="showAlert('Ads', 'Loading P2P advertisements market.')">
+        <button class="nav-item" onclick="switchView('adsView', this)">
             <span>📢</span>
             <span>Ads</span>
         </button>
-        <button class="nav-item active" onclick="showAlert('Wallet', 'You are already on the Wallet page.')">
+        <button class="nav-item" onclick="switchView('walletView', this)">
             <span>👛</span>
             <span>Wallet</span>
         </button>
-        <button class="nav-item" onclick="showAlert('Help', 'Connecting you to support center.')">
+        <button class="nav-item" onclick="switchView('helpView', this)">
             <span>❓</span>
             <span>Help</span>
         </button>
-    </div>
-
-    <!-- Deposit Popup Modal -->
-    <div class="modal-overlay" id="depositModal" onclick="closeDepositOutside(event)">
-        <div class="deposit-card-box">
-            <button class="close-modal-btn" onclick="closeDepositModal()">✕</button>
-            
-            <!-- Solana Section -->
-            <div class="network-section">
-                <div class="network-title">Solana (SPL) Network</div>
-                <div class="qr-container">
-                    <div class="qr-box">
-                        <img src="Screenshot_2026-08-28_134649.682.jpg" alt="Solana QR">
-                    </div>
-                </div>
-                <div class="address-box" id="sol-address">H49kEYE5F1hnMPwiyJrSr51Ya44ySRaQW1FhE2gWEvmY</div>
-                <button class="copy-btn" onclick="copyAddress('H49kEYE5F1hnMPwiyJrSr51Ya44ySRaQW1FhE2gWEvmY', 'sol-toast')">Copy Address</button>
-                <div class="toast" id="sol-toast"></div>
-            </div>
-
-            <!-- BSC Section -->
-            <div class="network-section">
-                <div class="network-title">BSC (BEP20) Network</div>
-                <div class="qr-container">
-                    <div class="qr-box">
-                        <img src="Screenshot_2026-08-28_134632.444.jpg" alt="BSC QR">
-                    </div>
-                </div>
-                <div class="address-box" id="bsc-address">0x8e54105bed3243e1ca44a0cccc6b62cf2bff9df4</div>
-                <button class="copy-btn" onclick="copyAddress('0x8e54105bed3243e1ca44a0cccc6b62cf2bff9df4', 'bsc-toast')">Copy Address</button>
-                <div class="toast" id="bsc-toast"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment Accounts Manager View -->
-    <div class="pa-view-container" id="paContainer">
-        <div class="pa-view-header">
-            <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="closePaymentAccounts()">
-                <span style="font-size: 18px;">←</span>
-                <span style="font-size: 16px; font-weight: bold;">Payment Accounts</span>
-            </div>
-            <button class="add-method-top-btn" onclick="openAddMethod()">Add Method</button>
-        </div>
-        <div class="pa-view-body" id="paBody">
-            <!-- Dynamically populated list -->
-        </div>
-    </div>
-
-    <!-- Add Payment Method Modal -->
-    <div class="add-method-overlay" id="addMethodModal">
-        <div class="add-method-box">
-            <div class="amb-header">
-                <div class="amb-title">Add Payment Method</div>
-                <button class="amb-close" onclick="closeAddMethod()">✕</button>
-            </div>
-            <div class="amb-field">
-                <div class="amb-label">Provider *</div>
-                <select class="amb-select" id="providerSelect">
-                    <option value="Telebirr">Telebirr</option>
-                    <option value="CBE">CBE</option>
-                    <option value="Awash">Awash</option>
-                    <option value="Dashen">Dashen</option>
-                    <option value="Abyssinia">Abyssinia</option>
-                    <option value="Wegagen">Wegagen</option>
-                    <option value="Coop">Coop</option>
-                </select>
-            </div>
-            <div class="amb-field">
-                <div class="amb-label">Account Name *</div>
-                <input type="text" class="amb-input" value="Melaku Awoke" readonly>
-                <div class="amb-hint">Uses your verified full name (cannot be changed)</div>
-            </div>
-            <div class="amb-field">
-                <div class="amb-label">Account Number (Optional)</div>
-                <input type="text" class="amb-input" id="accountNumberInput" placeholder="Account number">
-            </div>
-            <div class="amb-field">
-                <div class="amb-label">Phone Number (Optional)</div>
-                <input type="text" class="amb-input" id="phoneNumberInput" placeholder="Phone number">
-            </div>
-            <div class="amb-actions">
-                <button class="amb-cancel" onclick="closeAddMethod()">Cancel</button>
-                <button class="amb-save" onclick="savePaymentMethod()">Save</button>
-            </div>
-        </div>
     </div>
 
     <!-- General Alert Modal -->
@@ -641,87 +854,188 @@
 </div>
 
 <script>
-    let savedMethods = [
-        { provider: "Telebirr", number: "", phone: "" }
+    let currentCreateType = 'buy';
+    let countdownInterval = null;
+    let secondsLeft = 299; // 04:59
+
+    let publicAds = [
+        { name: "Teke_94", rating: "98%", orders: 340, price: "193.90", min: "1,000", max: "14,174", payment: "Telebirr", type: "buy" },
+        { name: "EthioTrader", rating: "99%", orders: 512, price: "194.50", min: "500", max: "20,000", payment: "Telebirr", type: "buy" },
+        { name: "FastPay", rating: "97%", orders: 180, price: "192.00", min: "2,000", max: "10,000", payment: "CBE", type: "sell" }
     ];
 
-    function openDepositModal() {
-        document.getElementById('depositModal').classList.add('active');
+    let userAds = [];
+
+    function switchView(viewId, navElement) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        if(navElement) navElement.classList.add('active');
+
+        if(viewId === 'homeView') renderHomeAds('buy');
     }
 
-    function closeDepositModal() {
-        document.getElementById('depositModal').classList.remove('active');
+    function switchHomeTab(type) {
+        document.getElementById('tabBuy').className = "trade-tab " + (type === 'buy' ? 'active' : '');
+        document.getElementById('tabSell').className = "trade-tab " + (type === 'sell' ? 'sell-active' : '');
+        renderHomeAds(type);
     }
 
-    function closeDepositOutside(event) {
-        if (event.target === document.getElementById('depositModal')) {
-            closeDepositModal();
-        }
-    }
-
-    function openPaymentAccounts() {
-        renderMethods();
-        document.getElementById('paContainer').classList.add('active');
-    }
-
-    function closePaymentAccounts() {
-        document.getElementById('paContainer').classList.remove('active');
-    }
-
-    function renderMethods() {
-        const body = document.getElementById('paBody');
-        const subtitle = document.getElementById('cardSubtitle');
+    function renderHomeAds(type) {
+        const container = document.getElementById('homeAdsList');
+        const filtered = publicAds.filter(a => a.type === type);
         
-        if (savedMethods.length === 0) {
-            subtitle.innerText = "No payment methods linked";
-            body.innerHTML = `
-                <div class="empty-wallet-icon">💳</div>
-                <div class="empty-title">No Payment Methods</div>
-                <div class="empty-desc">Save your payment methods for quick access when creating ads</div>
-                <button class="add-first-btn" onclick="openAddMethod()">Add Your First Payment Method</button>
-            `;
-        } else {
-            subtitle.innerText = savedMethods.map(m => m.provider).join(', ') + " Connected";
-            let html = '<div style="width:100%; display:flex; flex-direction:column; gap:12px; align-self: flex-start;">';
-            savedMethods.forEach((m, idx) => {
-                html += `
-                    <div style="background:#1e2329; border:1px solid #2b313a; border-radius:10px; padding:16px; text-align:left; display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <div style="font-weight:bold; color:#f0b90b; font-size:15px; margin-bottom:4px;">${m.provider}</div>
-                            <div style="font-size:12px; color:#848e9c;">Melaku Awoke ${m.number ? '• ' + m.number : ''}</div>
+        let html = '';
+        filtered.forEach(ad => {
+            html += `
+                <div class="ad-card">
+                    <div class="ad-card-header">
+                        <div class="merchant-info">
+                            <div class="avatar-circle">${ad.name[0]}</div>
+                            <div>
+                                <div class="merchant-name">${ad.name} 🏅 🛡️</div>
+                                <div class="merchant-stats">★ ${ad.rating} | ${ad.orders} orders</div>
+                            </div>
                         </div>
-                        <button onclick="removeMethod(${idx})" style="background:none; border:none; color:#f6465d; cursor:pointer; font-size:13px; font-weight:bold;">Remove</button>
+                        <button class="${ad.type === 'buy' ? 'action-buy-btn' : 'action-sell-btn'}" onclick="showAlert('Trade Order', 'Initializing order for ${ad.name} at ${ad.price} ETB')">${ad.type === 'buy' ? 'Buy' : 'Sell'}</button>
                     </div>
-                `;
-            });
-            html += '</div>';
-            body.innerHTML = html;
+                    <div class="ad-details-grid">
+                        <div>
+                            <div class="ad-label">PRICE</div>
+                            <div class="ad-val-price">${ad.price} ETB</div>
+                            <div class="ad-label" style="margin-top: 6px;">LIMIT</div>
+                            <div class="ad-val-limit">${ad.min} - ${ad.max} ETB</div>
+                        </div>
+                        <div>
+                            <div class="ad-label">PAYMENT</div>
+                            <div class="ad-val-payment">${ad.payment}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function openCreateAdForm() {
+        document.getElementById('adsMainListContainer').style.display = 'none';
+        document.getElementById('createAdContainer').classList.add('active');
+    }
+
+    function closeCreateAdForm() {
+        document.getElementById('createAdContainer').classList.remove('active');
+        document.getElementById('adsMainListContainer').style.display = 'block';
+    }
+
+    function setCreateType(type) {
+        currentCreateType = type;
+        const buyBtn = document.getElementById('typeBuyBtn');
+        const sellBtn = document.getElementById('typeSellBtn');
+        if(type === 'buy') {
+            buyBtn.className = "type-toggle-btn active-buy";
+            sellBtn.className = "type-toggle-btn";
+        } else {
+            buyBtn.className = "type-toggle-btn";
+            sellBtn.className = "type-toggle-btn active-sell";
         }
     }
 
-    function openAddMethod() {
-        document.getElementById('addMethodModal').classList.add('active');
+    function submitNewAd() {
+        const price = document.getElementById('adPriceInput').value;
+        const amount = document.getElementById('adAmountInput').value;
+        const min = document.getElementById('adMinLimit').value;
+        const max = document.getElementById('adMaxLimit').value;
+
+        if(!price || !amount || !min || !max) {
+            showAlert('Error', 'Please fill in all ad creation fields correctly.');
+            return;
+        }
+
+        userAds.push({
+            type: currentCreateType,
+            price: price,
+            amount: amount,
+            min: Number(min).toLocaleString(),
+            max: Number(max).toLocaleString(),
+            payment: "Telebirr"
+        });
+
+        // Also add to public list so it's fully functional
+        publicAds.unshift({
+            name: "Melaku Awoke",
+            rating: "100%",
+            orders: 1,
+            price: price,
+            min: Number(min).toLocaleString(),
+            max: Number(max).toLocaleString(),
+            payment: "Telebirr",
+            type: currentCreateType === 'buy' ? 'sell' : 'buy' // inverted for market view
+        });
+
+        renderUserAds();
+        closeCreateAdForm();
+        showAlert('Success', 'Your advertisement has been successfully created and published!');
     }
 
-    function closeAddMethod() {
-        document.getElementById('addMethodModal').classList.remove('active');
+    function renderUserAds() {
+        const container = document.getElementById('userAdsContainer');
+        if(userAds.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
+        let html = '';
+        userAds.forEach((ad, idx) => {
+            html += `
+                <div class="ad-card" style="border-left: 4px solid ${ad.type === 'buy' ? '#0ecb81' : '#f6465d'};">
+                    <div class="ad-card-header">
+                        <div>
+                            <span style="font-weight:bold; color:${ad.type === 'buy' ? '#0ecb81' : '#f6465d'}; text-transform:uppercase; font-size:12px;">${ad.type} USDT</span>
+                            <div style="font-weight:bold; font-size:16px; margin-top:2px;">${ad.price} ETB</div>
+                        </div>
+                        <button onclick="removeUserAd(${idx})" style="background:none; border:none; color:#f6465d; cursor:pointer; font-size:13px; font-weight:bold;">Delete</button>
+                    </div>
+                    <div style="font-size:12px; color:#848e9c;">Amount: ${ad.amount} USDT | Limits: ${ad.min} - ${ad.max} ETB</div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
     }
 
-    function savePaymentMethod() {
-        const provider = document.getElementById('providerSelect').value;
-        const number = document.getElementById('accountNumberInput').value;
-        const phone = document.getElementById('phoneNumberInput').value;
-        
-        savedMethods.push({ provider, number, phone });
-        document.getElementById('accountNumberInput').value = '';
-        document.getElementById('phoneNumberInput').value = '';
-        closeAddMethod();
-        renderMethods();
+    function removeUserAd(idx) {
+        userAds.splice(idx, 1);
+        renderUserAds();
     }
 
-    function removeMethod(index) {
-        savedMethods.splice(index, 1);
-        renderMethods();
+    function openOrderDetail() {
+        document.getElementById('orderDetailModal').classList.add('active');
+        startTimer();
+    }
+
+    function closeOrderDetail() {
+        document.getElementById('orderDetailModal').classList.remove('active');
+        clearInterval(countdownInterval);
+    }
+
+    function startTimer() {
+        clearInterval(countdownInterval);
+        secondsLeft = 299;
+        updateTimerDisplay();
+        countdownInterval = setInterval(() => {
+            secondsLeft--;
+            if(secondsLeft <= 0) {
+                clearInterval(countdownInterval);
+                secondsLeft = 0;
+            }
+            updateTimerDisplay();
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const mins = Math.floor(secondsLeft / 60);
+        const secs = secondsLeft % 60;
+        const formatted = String(mins).padStart(2, '0') + ":" + String(secs).padStart(2, '0');
+        document.getElementById('activeCountdownTimer').innerText = formatted;
     }
 
     function showAlert(title, text) {
@@ -734,17 +1048,8 @@
         document.getElementById('alertModal').classList.remove('active');
     }
 
-    function copyAddress(text, toastId) {
-        navigator.clipboard.writeText(text).then(() => {
-            const toast = document.getElementById(toastId);
-            toast.innerText = "Address copied to clipboard!";
-            setTimeout(() => {
-                toast.innerText = "";
-            }, 2000);
-        }).catch(err => {
-            console.error('Failed to copy: ', err);
-        });
-    }
+    // Initial render
+    renderHomeAds('buy');
 </script>
 
 </body>
