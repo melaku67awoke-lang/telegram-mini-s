@@ -829,28 +829,49 @@
         </div>
     </div>
 
-    <!-- STRICT BUY MODAL WITH CORRECTED FIAT LIMIT ENFORCEMENT -->
+    <!-- STRICT BUY MODAL WITH EXPLICIT DYNAMIC LIMIT DISPLAY -->
     <div class="buy-flow-overlay" id="buyFlowModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <div style="font-size: 18px; font-weight: bold; color: #0ecb81;" id="buyModalMerchantTitle">Buy USDT</div>
             <button onclick="closeBuyModal()" style="background:none; border:none; color:#848e9c; font-size:22px; cursor:pointer;">✕</button>
         </div>
-        <div style="font-size: 12px; color: #848e9c; margin-bottom: 14px;" id="buyModalLimitDesc">Limit: 1,000 - 14,174 ETB</div>
+        
+        <div style="background: #1e2329; border: 1px solid #2b313a; border-radius: 10px; padding: 12px; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #848e9c; margin-bottom: 4px;">
+                <span>Minimum</span>
+                <span>Maximum</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; color: #fff;">
+                <span id="modalMinLimitText">1,000.00 ETB</span>
+                <span id="modalMaxLimitText">14,174.09 ETB</span>
+            </div>
+            <div style="font-size: 11px; color: #848e9c; margin-top: 8px; border-top: 1px solid #2b313a; padding-top: 6px;">
+                Seller's Available Balance: <span style="color: #fff;" id="modalSellerBalance">72.51 USDT</span>
+            </div>
+        </div>
+
+        <div style="background: #1e2329; border: 1px solid #2b313a; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="font-size: 13px; color: #848e9c;">Payment Methods</div>
+            <div style="background: #181a20; border: 1px solid #2b313a; border-radius: 8px; padding: 12px; font-weight: bold; color: #fff; font-size: 14px;">
+                Telebirr
+            </div>
+            <div style="font-size: 11px; color: #848e9c;">Payment details will be shared after order confirmation</div>
+        </div>
 
         <div class="buy-box">
-            <div style="font-size: 13px; color: #848e9c;">Amount (USDT)</div>
+            <div style="font-size: 13px; color: #848e9c;">Buy USDT</div>
             <div class="buy-input-group">
                 <input type="number" id="buyFiatInput" placeholder="Enter USDT amount" oninput="validateBuyInput()">
                 <span style="color: #f0b90b; font-weight: bold;">USD</span>
             </div>
             <div class="limit-error-msg" id="buyLimitErrorMsg"></div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; background: #181a20; border: 1px solid #2b313a; border-radius: 8px; padding: 12px;">
-                <span style="font-size: 13px; color: #848e9c;">You will pay</span>
-                <span style="font-size: 16px; font-weight: bold; color: #f0b90b;" id="buyReceiveQty">0.00 ETB</span>
+            <div style="background: #181a20; border: 1px solid #2b313a; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 11px; color: #848e9c;">You will pay</span>
+                <span style="font-size: 20px; font-weight: bold; color: #f0b90b;" id="buyReceiveQty">0.00 ETB</span>
             </div>
 
-            <button class="action-buy-btn" id="confirmBuyBtn" style="padding: 12px; margin-top: 4px; opacity: 0.5; cursor: not-allowed;" onclick="executeBuyOrder()" disabled>Buy USDT</button>
+            <button class="action-buy-btn" id="confirmBuyBtn" style="padding: 14px; margin-top: 4px; opacity: 0.5; cursor: not-allowed;" onclick="executeBuyOrder()" disabled>Buy USDT</button>
         </div>
     </div>
 
@@ -919,13 +940,13 @@
     let secondsLeft = 299;
 
     let activeAdMin = 1000;
-    let activeAdMax = 14174;
+    let activeAdMax = 14174.09;
     let activeAdPrice = 193.90;
 
     let publicAds = [
-        { name: "Teke_94", rating: "98%", orders: 340, price: 193.90, min: 1000, max: 14174, minStr: "1,000", maxStr: "14,174", payment: "Telebirr", type: "buy" },
-        { name: "EthioTrader", rating: "99%", orders: 512, price: 194.50, min: 500, max: 20000, minStr: "500", maxStr: "20,000", payment: "Telebirr", type: "buy" },
-        { name: "FastPay", rating: "97%", orders: 180, price: 192.00, min: 2000, max: 10000, minStr: "2,000", maxStr: "10,000", payment: "CBE", type: "sell" }
+        { name: "Teke_94", rating: "98%", orders: 340, price: 193.90, min: 1000, max: 14174.09, minStr: "1,000.00", maxStr: "14,174.09", payment: "Telebirr", type: "buy" },
+        { name: "EthioTrader", rating: "99%", orders: 512, price: 194.50, min: 500, max: 20000, minStr: "500.00", maxStr: "20,000.00", payment: "Telebirr", type: "buy" },
+        { name: "FastPay", rating: "97%", orders: 180, price: 192.00, min: 2000, max: 10000, minStr: "2,000.00", maxStr: "10,000.00", payment: "CBE", type: "sell" }
     ];
 
     let userAds = [];
@@ -988,7 +1009,8 @@
         activeAdPrice = price;
 
         document.getElementById('buyModalMerchantTitle').innerText = "Buy USDT from " + merchantName;
-        document.getElementById('buyModalLimitDesc').innerText = "Limit: " + minStr + " - " + maxStr + " ETB";
+        document.getElementById('modalMinLimitText').innerText = minStr + " ETB";
+        document.getElementById('modalMaxLimitText').innerText = maxStr + " ETB";
         document.getElementById('buyFiatInput').value = '';
         document.getElementById('buyLimitErrorMsg').innerText = '';
         document.getElementById('buyReceiveQty').innerText = '0.00 ETB';
@@ -1020,24 +1042,22 @@
             return;
         }
 
-        // Calculate the actual fiat equivalent in ETB
+        // Calculate fiat total in ETB based on USD input amount
         const fiatTotal = cryptoVal * activeAdPrice;
+        receiveBox.innerText = fiatTotal.toFixed(2) + " ETB";
 
         if (fiatTotal < activeAdMin) {
             errorBox.innerText = `Amount is below minimum limit (${activeAdMin.toLocaleString()} ETB).`;
-            receiveBox.innerText = fiatTotal.toFixed(2) + " ETB";
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = '0.5';
             confirmBtn.style.cursor = 'not-allowed';
         } else if (fiatTotal > activeAdMax) {
             errorBox.innerText = `Amount exceeds maximum limit (${activeAdMax.toLocaleString()} ETB).`;
-            receiveBox.innerText = fiatTotal.toFixed(2) + " ETB";
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = '0.5';
             confirmBtn.style.cursor = 'not-allowed';
         } else {
             errorBox.innerText = '';
-            receiveBox.innerText = fiatTotal.toFixed(2) + " ETB";
             confirmBtn.disabled = false;
             confirmBtn.style.opacity = '1';
             confirmBtn.style.cursor = 'pointer';
