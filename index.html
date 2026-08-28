@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AllP2PBot - Active Timer Order</title>
+    <title>AllP2PBot - Order Timeout & Auto-Cancel</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { background-color: #121212; color: #ffffff; font-family: sans-serif; padding: 15px; margin: 0; padding-bottom: 90px; }
@@ -11,6 +11,12 @@
         .card { background: #1e1e1e; padding: 20px 15px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #2a2a2a; text-align: center; }
         .waiting-timer-ring { width: 50px; height: 50px; border-radius: 50%; border: 3px solid #333; border-top-color: #f0b90b; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-size: 18px; }
         
+        .btn-action { background: #0ecb81; color: #000; border: none; padding: 12px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 14px; }
+        
+        /* Modal Popup for Auto-Cancellation */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .modal-card { background: #1a1a1a; width: 100%; max-width: 320px; border-radius: 12px; padding: 24px 20px; border: 1px solid #333; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+
         .nav-bar { display: flex; justify-content: space-around; background: #181818; position: fixed; bottom: 0; left: 0; width: 100%; padding: 10px 0; border-top: 1px solid #2a2a2a; z-index: 100; }
         .nav-item { color: #888; font-size: 11px; text-align: center; cursor: pointer; flex: 1; }
         .nav-item.active { color: #f0b90b; }
@@ -26,10 +32,10 @@
         </div>
 
         <div class="card">
-            <div class="waiting-timer-ring">⏱️</div>
-            <h3 style="margin: 0 0 5px 0; color: #fff;">Waiting for Response</h3>
-            <p style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Advertiser is reviewing your request</p>
-            <div id="countdown-timer" style="background: #121212; display: inline-block; padding: 6px 16px; border-radius: 20px; color: #f0b90b; font-weight: bold; border: 1px solid #333; margin-bottom: 20px;">05:00</div>
+            <div id="status-icon" class="waiting-timer-ring">⏱️</div>
+            <h3 id="status-title" style="margin: 0 0 5px 0; color: #fff;">Waiting for Response</h3>
+            <p id="status-subtitle" style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Advertiser is reviewing your request</p>
+            <div id="countdown-timer" style="background: #121212; display: inline-block; padding: 6px 16px; border-radius: 20px; color: #f0b90b; font-weight: bold; border: 1px solid #333; margin-bottom: 20px;">00:05</div>
 
             <div style="text-align: left; border-top: 1px solid #2a2a2a; padding-top: 15px;">
                 <div style="font-weight: bold; margin-bottom: 12px; color: #fff;">Order Details</div>
@@ -55,18 +61,17 @@
                     <span>Payment:</span> <span style="color: #00b0ff; font-weight: bold;">Telebirr</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 13px; color: #aaa;">
-                    <span>Created:</span> <span style="color: #fff; font-size: 12px;" id="created-time">8/28/2026, 11:13:18 AM</span>
+                    <span>Created:</span> <span style="color: #fff; font-size: 12px;">8/28/2026, 11:13:18 AM</span>
                 </div>
             </div>
         </div>
 
-        <!-- Bottom Navigation Bar -->
         <div class="nav-bar">
-            <div class="nav-item" onclick="alert('Home')">
+            <div class="nav-item active" onclick="alert('Home')">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                 Home
             </div>
-            <div class="nav-item active" onclick="alert('Orders')">
+            <div class="nav-item" onclick="alert('Orders')">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
                 Orders
             </div>
@@ -85,9 +90,18 @@
         </div>
     </div>
 
+    <div id="timeout-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div style="font-size: 36px; margin-bottom: 10px;">⏰</div>
+            <h3 style="margin: 0 0 8px 0; color: #fff; font-size: 18px;">Order Cancelled</h3>
+            <p style="font-size: 13px; color: #aaa; margin-bottom: 20px; line-height: 1.5;">The advertiser didn't respond within 5 minutes. This order has been automatically cancelled.</p>
+            <button class="btn-action" onclick="findAnotherClient()">Find Another Client</button>
+        </div>
+    </div>
+
     <script>
-        // Set exact countdown timer starting at 5 minutes (300 seconds)
-        let totalSeconds = 300;
+        // Set short test timer (e.g., 5 seconds) or change to 300 for full 5 minutes
+        let totalSeconds = 5; 
         const timerDisplay = document.getElementById('countdown-timer');
 
         function updateTimer() {
@@ -103,12 +117,29 @@
             } else {
                 clearInterval(timerInterval);
                 timerDisplay.innerText = "00:00";
+                
+                // Update screen status to Cancelled
+                document.getElementById('status-icon').innerText = "❌";
+                document.getElementById('status-icon').style.borderTopColor = "#f6465d";
+                document.getElementById('status-title').innerText = "Order Cancelled";
+                document.getElementById('status-subtitle').innerText = "Timed out - No response from advertiser";
+                document.getElementById('status-subtitle').style.color = "#f6465d";
+
+                // Show the popup notification text instructing user to find another client
+                document.getElementById('timeout-modal').style.display = 'flex';
             }
         }
 
-        // Run interval every 1 second
         updateTimer();
         const timerInterval = setInterval(updateTimer, 1000);
+
+        function findAnotherClient() {
+            // Closes modal and redirects user back to the Home/Marketplace buy page
+            document.getElementById('timeout-modal').style.display = 'none';
+            alert('Redirecting to Home Marketplace to find another client...');
+            // In a full application, this would switch views back to tab-home or reload the marketplace
+            window.location.reload(); 
+        }
     </script>
 </body>
 </html>
