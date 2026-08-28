@@ -283,16 +283,23 @@
 
             document.getElementById('tab-' + tabName).style.display = 'block';
             element.classList.add('active');
+
+            // Reset sub-views when switching tabs
+            if (tabName === 'ads') {
+                hideCreateAd();
+            }
         }
 
         function showCreateAd() {
             document.getElementById('ads-list-view').style.display = 'none';
             document.getElementById('create-ad-view').style.display = 'block';
+            window.scrollTo(0, 0);
         }
 
         function hideCreateAd() {
             document.getElementById('create-ad-view').style.display = 'none';
             document.getElementById('ads-list-view').style.display = 'block';
+            window.scrollTo(0, 0);
         }
 
         function selectAdType(type) {
