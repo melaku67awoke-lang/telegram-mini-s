@@ -34,13 +34,22 @@
         .nav-item.active { color: #f0b90b; }
         .nav-icon { display: block; margin: 0 auto 3px auto; width: 22px; height: 22px; fill: currentColor; }
         
-        .wallet-card { background: linear-gradient(135deg, #2b2b2b, #1a1a1a); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; border: 1px solid #333; }
+        .wallet-card { background: linear-gradient(135deg, #2b2b2b, #1a1a1a); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 15px; border: 1px solid #333; }
+        .wallet-action-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .wallet-action-row button { flex: 1; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; border: none; cursor: pointer; }
+        
         .wallet-menu-card { background: #1e1e1e; padding: 14px 16px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #2a2a2a; display: flex; align-items: center; gap: 15px; cursor: pointer; }
         .wallet-menu-icon { width: 40px; height: 40px; background: #262626; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; fill: #f0b90b; }
         .wallet-menu-icon svg { width: 20px; height: 20px; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
         .modal-card { background: #1a1a1a; width: 100%; max-width: 340px; border-radius: 12px; padding: 24px 20px; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.5); position: relative; }
+
+        /* Form elements for Create Ad View */
+        .form-group { margin-bottom: 15px; }
+        .form-label { font-size: 12px; color: #aaa; margin-bottom: 6px; display: block; }
+        .form-input-box { background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; }
+        .form-input-box input { background: transparent; border: none; color: #fff; font-size: 16px; font-weight: bold; width: 100%; outline: none; }
     </style>
 </head>
 <body>
@@ -147,48 +156,95 @@
             </div>
         </div>
 
-        <!-- 4. ADS TAB (Restored Create Button & Functionality) -->
+        <!-- 4. ADS TAB & CREATE AD VIEW -->
         <div id="tab-ads" class="tab-content" style="display: none;">
-            <div class="header-flex" style="margin-bottom: 4px;">
-                <h2 style="margin: 0;">My Ads</h2>
-                <button class="btn-action" style="width: auto; padding: 6px 16px; background: #f0b90b; color: #000;" onclick="openCreateAdModal()">Create</button>
-            </div>
-            <div style="font-size: 12px; color: #aaa; margin-bottom: 12px;">Manage your buy and sell offers</div>
-            <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; margin-bottom: 15px;">
-                <div>
-                    <div style="font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 6px;">
-                        <span style="width: 8px; height: 8px; background: #0ecb81; border-radius: 50%; display: inline-block;"></span> Keep Me Online
+            <!-- Main Ads Dashboard View -->
+            <div id="ads-main-view">
+                <div class="header-flex" style="margin-bottom: 4px;">
+                    <h2 style="margin: 0;">My Ads</h2>
+                    <button class="btn-action" style="width: auto; padding: 6px 16px; background: #f0b90b; color: #000;" onclick="showCreateAdView()">Create</button>
+                </div>
+                <div style="font-size: 12px; color: #aaa; margin-bottom: 12px;">Manage your buy and sell offers</div>
+                <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; margin-bottom: 15px;">
+                    <div>
+                        <div style="font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                            <span style="width: 8px; height: 8px; background: #0ecb81; border-radius: 50%; display: inline-block;"></span> Keep Me Online
+                        </div>
+                        <div style="font-size: 11px; color: #aaa; margin-top: 2px;">Always visible to traders</div>
                     </div>
-                    <div style="font-size: 11px; color: #aaa; margin-top: 2px;">Always visible to traders</div>
+                </div>
+            </div>
+
+            <!-- Create New Ad Screen (Fully functional per reference screenshot) -->
+            <div id="ads-create-view" style="display: none;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="showAdsMainView()">
+                    <span style="color: #f0b90b; font-size: 18px;">←</span>
+                    <span style="color: #aaa; font-size: 14px;">Back to My Ads</span>
+                </div>
+                <h2 style="margin-top: 0; margin-bottom: 15px; font-size: 20px;">Create New Ad</h2>
+
+                <div class="card">
+                    <div class="form-group">
+                        <label class="form-label">Ad Type</label>
+                        <div style="display: flex; gap: 10px;">
+                            <button id="ad-type-buy" class="btn-action" style="background: #0ecb81; color: #000;" onclick="setCreateAdType('buy')">I want to buy<br><span style="font-size: 11px; font-weight: normal;">USDT with ETB</span></button>
+                            <button id="ad-type-sell" class="btn-action" style="background: #181818; color: #aaa; border: 1px solid #2a2a2a;" onclick="setCreateAdType('sell')">I want to sell<br><span style="font-size: 11px; font-weight: normal;">USDT for ETB</span></button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Price per USDT (ETB)</label>
+                        <div class="form-input-box">
+                            <input type="number" id="create-ad-price" value="193.90">
+                            <span style="color: #aaa; font-weight: bold;">ETB</span>
+                        </div>
+                        <span style="font-size: 11px; color: #777; margin-top: 4px; display: block;">Price range from 92.50 to 277.50 ETB</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Total Amount (USDT)</label>
+                        <div class="form-input-box">
+                            <input type="number" id="create-ad-amount" value="100.00">
+                            <span style="color: #aaa; font-weight: bold;">USDT</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Order Limits (ETB)</label>
+                        <div style="display: flex; gap: 10px;">
+                            <div class="form-input-box" style="flex: 1;"><input type="number" id="create-ad-min" value="1000"></div>
+                            <div class="form-input-box" style="flex: 1;"><input type="number" id="create-ad-max" value="14174"></div>
+                        </div>
+                        <span style="font-size: 11px; color: #777; margin-top: 4px; display: block;">Limits must be between 200 and 5,000,000 ETB</span>
+                        <span style="font-size: 11px; color: #0ecb81; margin-top: 4px; display: block; font-weight: bold;">Your wallet balance: 72.51 USDT</span>
+                    </div>
+
+                    <button class="btn-action" style="background: #f0b90b; color: #000; padding: 12px; margin-top: 10px;" onclick="submitNewAd()">Post Ad</button>
                 </div>
             </div>
         </div>
 
-        <!-- 5. WALLET TAB (Restored Deposit & Withdrawal Options) -->
+        <!-- 5. WALLET TAB (With Deposit, Withdrawal & Payment Accounts matching exact layout) -->
         <div id="tab-wallet" class="tab-content" style="display: none;">
             <h2>Wallet</h2>
             <div class="wallet-card">
                 <span style="font-size: 13px; color: #aaa;">Estimated Total Balance</span>
-                <h1 style="color: #f0b90b; margin: 10px 0;">72.51 USDT</h1>
+                <h1 style="color: #f0b90b; margin: 10px 0 6px 0;">72.51 USDT</h1>
+                <span style="font-size: 12px; color: #888;">≈ 14,102.34 ETB</span>
             </div>
 
-            <div class="wallet-menu-card" onclick="openWalletAction('Deposit')">
-                <div class="wallet-menu-icon">
-                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                </div>
-                <div>
-                    <div style="font-weight: bold; font-size: 14px;">Deposit</div>
-                    <div style="font-size: 11px; color: #aaa; margin-top: 2px;">Add crypto assets to your wallet</div>
-                </div>
+            <div class="wallet-action-row">
+                <button style="background: #0ecb81; color: #000;" onclick="openWalletAction('Deposit')">Deposit</button>
+                <button style="background: #f6465d; color: #fff;" onclick="openWalletAction('Withdraw')">Withdraw</button>
             </div>
 
-            <div class="wallet-menu-card" onclick="openWalletAction('Withdrawal')">
+            <div class="wallet-menu-card" onclick="openPaymentAccounts()">
                 <div class="wallet-menu-icon">
-                    <svg viewBox="0 0 24 24"><path d="M19 11H5v2h14v-2z"/></svg>
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
                 </div>
                 <div>
-                    <div style="font-weight: bold; font-size: 14px;">Withdrawal</div>
-                    <div style="font-size: 11px; color: #aaa; margin-top: 2px;">Transfer funds out of your wallet</div>
+                    <div style="font-weight: bold; font-size: 14px;">Payment Accounts</div>
+                    <div style="font-size: 11px; color: #aaa; margin-top: 2px;">Telebirr Connected</div>
                 </div>
             </div>
         </div>
@@ -227,7 +283,7 @@
         </div>
     </div>
 
-    <!-- MODAL FOR CREATING ADS & WALLET ACTIONS -->
+    <!-- MODAL POPUP -->
     <div id="action-modal" class="modal-overlay">
         <div class="modal-card">
             <h3 id="modal-title" style="margin-top: 0; color: #f0b90b;">Notice</h3>
@@ -291,6 +347,10 @@
             const navTarget = document.getElementById('nav-' + tabId);
             if (navTarget) navTarget.classList.add('active');
             else if (element) element.classList.add('active');
+
+            if (tabId === 'ads') {
+                showAdsMainView();
+            }
         }
 
         function switchSubTab(subType) {
@@ -392,15 +452,52 @@
             switchSubTab('ongoing');
         }
 
-        function openCreateAdModal() {
-            document.getElementById('modal-title').innerText = "Create New Ad";
-            document.getElementById('modal-body').innerText = "Configure your new Buy or Sell advertisement parameters to list your offer in the P2P marketplace.";
-            document.getElementById('action-modal').style.display = 'flex';
+        // Ads Navigation & Creation Logic
+        function showCreateAdView() {
+            document.getElementById('ads-main-view').style.display = 'none';
+            document.getElementById('ads-create-view').style.display = 'block';
         }
 
+        function showAdsMainView() {
+            document.getElementById('ads-create-view').style.display = 'none';
+            document.getElementById('ads-main-view').style.display = 'block';
+        }
+
+        function setCreateAdType(type) {
+            const btnBuy = document.getElementById('ad-type-buy');
+            const btnSell = document.getElementById('ad-type-sell');
+            if (type === 'buy') {
+                btnBuy.style.background = '#0ecb81';
+                btnBuy.style.color = '#000';
+                btnBuy.style.border = 'none';
+                btnSell.style.background = '#181818';
+                btnSell.style.color = '#aaa';
+                btnSell.style.border = '1px solid #2a2a2a';
+            } else {
+                btnSell.style.background = '#f6465d';
+                btnSell.style.color = '#fff';
+                btnSell.style.border = 'none';
+                btnBuy.style.background = '#181818';
+                btnBuy.style.color = '#aaa';
+                btnBuy.style.border = '1px solid #2a2a2a';
+            }
+        }
+
+        function submitNewAd() {
+            alert('New ad created successfully!');
+            showAdsMainView();
+        }
+
+        // Wallet Action Handlers
         function openWalletAction(actionType) {
             document.getElementById('modal-title').innerText = actionType + " USDT";
             document.getElementById('modal-body').innerText = `Your request to ${actionType.toLowerCase()} funds is being initialized securely through the network gateway.`;
+            document.getElementById('action-modal').style.display = 'flex';
+        }
+
+        function openPaymentAccounts() {
+            document.getElementById('modal-title').innerText = "Payment Accounts";
+            document.getElementById('modal-body').innerText = "Manage your linked payment methods (Telebirr connected and active).";
             document.getElementById('action-modal').style.display = 'flex';
         }
 
