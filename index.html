@@ -28,12 +28,10 @@
         .nav-icon { display: block; margin: 0 auto 2px auto; width: 22px; height: 22px; fill: currentColor; }
         .wallet-card { background: linear-gradient(135deg, #2b2b2b, #1a1a1a); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; border: 1px solid #333; }
         
-        /* Wallet Menu List Cards */
         .wallet-menu-card { background: #1e1e1e; padding: 14px 16px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #2a2a2a; display: flex; align-items: center; gap: 15px; cursor: pointer; }
         .wallet-menu-icon { width: 40px; height: 40px; background: #262626; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; fill: #f0b90b; }
         .wallet-menu-icon svg { width: 20px; height: 20px; }
         
-        /* Create Ad Form Styles */
         .form-group { margin-bottom: 15px; }
         label { display: block; font-size: 13px; margin-bottom: 5px; color: #aaa; }
         input, textarea, select { width: 100%; padding: 12px; background-color: #1e1e1e; border: 1px solid #333; border-radius: 8px; color: white; box-sizing: border-box; font-size: 14px; }
@@ -43,14 +41,12 @@
         .ad-type-box.selected-sell { border-color: #f6465d; color: #f6465d; background: rgba(246, 70, 93, 0.05); }
         .limit-row { display: flex; gap: 10px; }
         
-        /* Multi-selection payment boxes in Create Ad */
         .payment-checkboxes-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
         .payment-check-box { background: #1e1e1e; border: 1px solid #333; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease; }
         .payment-check-box.selected { border-color: #0ecb81; background: rgba(14, 203, 129, 0.05); }
         .payment-check-box .check-indicator { width: 20px; height: 20px; border: 1px solid #555; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: transparent; }
         .payment-check-box.selected .check-indicator { border-color: #0ecb81; background: #0ecb81; color: #000; font-weight: bold; }
         
-        /* Modal Overlay */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
         .modal-sheet { background: #1a1a1a; width: 100%; max-width: 400px; border-top-left-radius: 16px; border-top-right-radius: 16px; padding: 20px; border: 1px solid #333; max-height: 90vh; overflow-y: auto; box-sizing: border-box; }
     </style>
@@ -59,6 +55,7 @@
 
     <div class="container">
         
+        <!-- HOME TAB -->
         <div id="tab-home" class="tab-content">
             <div class="header-flex">
                 <div>
@@ -82,7 +79,7 @@
                             <div style="font-size: 11px; color: #aaa;">⭐ 80% | 752 orders</div>
                         </div>
                     </div>
-                    <button id="action-btn-1" class="btn-action" onclick="alert('Proceeding with order...')">Buy</button>
+                    <button class="btn-action" onclick="alert('Proceeding with order...')">Buy</button>
                 </div>
                 <div class="card-details">
                     <div>PRICE <val>189.99 ETB</val></div>
@@ -90,50 +87,267 @@
                     <div>PAYMENT <val style="color: #00b0ff;">M-PESA</val></div>
                 </div>
             </div>
+        </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <div class="user-info">
-                        <div class="avatar" style="background:#f0b90b;">D</div>
-                        <div>
-                            <span style="font-weight: bold;">Dax 🤘 🚀</span>
-                            <div style="font-size: 11px; color: #aaa;">⭐ 99.5% | 26 orders</div>
-                        </div>
-                    </div>
-                    <button id="action-btn-2" class="btn-action" onclick="alert('Proceeding with order...')">Buy</button>
+        <!-- ORDERS TAB -->
+        <div id="tab-orders" class="tab-content" style="display: none;">
+            <h2>Orders</h2>
+            <div class="card" style="text-align: center; padding: 40px 20px;">
+                <p style="color: #777; margin: 0;">No active P2P orders found</p>
+            </div>
+        </div>
+
+        <!-- ADS TAB -->
+        <div id="tab-ads" class="tab-content" style="display: none;">
+            <div id="ads-list-view">
+                <div class="header-flex">
+                    <h2>My Ads</h2>
+                    <button class="btn-action" onclick="showCreateAd()">+ Post Ad</button>
                 </div>
-                <div class="card-details">
-                    <div>PRICE <val>194.00 ETB</val></div>
-                    <div>LIMIT <val>1,000.00 - 1,757.64 ETB</val></div>
-                    <div>PAYMENT <val style="color: #00b0ff;">CBE | Telebirr</val></div>
+                <div class="card" style="text-align: center; padding: 40px 20px;">
+                    <p style="color: #777; margin: 0;">You haven't posted any advertisements yet.</p>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <div class="user-info">
-                        <div class="avatar" style="background:#f0b90b;">D</div>
-                        <div>
-                            <span style="font-weight: bold;">Dlnaod 24/7 🥉 🛡️</span>
-                            <div style="font-size: 11px; color: #aaa;">⭐ 100% | 697 orders</div>
+            <!-- CREATE NEW AD SUB-VIEW -->
+            <div id="create-ad-view" style="display: none;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="hideCreateAd()">
+                    <span style="color: #f0b90b; font-size: 18px;">←</span>
+                    <span style="color: #aaa; font-size: 14px;">Back to My Ads</span>
+                </div>
+                <h2 style="margin-bottom: 20px;">Create New Ad</h2>
+
+                <div class="form-group">
+                    <label>Ad Type</label>
+                    <div class="ad-type-grid">
+                        <div id="box-buy" class="ad-type-box selected-buy" onclick="selectAdType('buy')">
+                            📈<br><strong>I want to buy</strong><br><span style="font-size: 11px;">USDT with ETB</span>
+                        </div>
+                        <div id="box-sell" class="ad-type-box" onclick="selectAdType('sell')">
+                            📉<br><strong>I want to sell</strong><br><span style="font-size: 11px;">USDT for ETB</span>
                         </div>
                     </div>
-                    <button id="action-btn-3" class="btn-action" onclick="alert('Proceeding with order...')">Buy</button>
                 </div>
-                <div class="card-details">
-                    <div>PRICE <val>194.47 ETB</val></div>
-                    <div>LIMIT <val>200.00 - 31,468.48 ETB</val></div>
-                    <div>PAYMENT <val style="color: #00b0ff;">CBE | Telebirr +1</val></div>
+
+                <div class="form-group">
+                    <label>Price per USDT (ETB)</label>
+                    <input type="number" id="ad-price" value="58.50">
+                </div>
+
+                <div class="form-group">
+                    <label>Total Amount (USDT)</label>
+                    <input type="number" id="ad-amount" value="100.00">
+                </div>
+
+                <div class="form-group">
+                    <label>Order Limits</label>
+                    <div class="limit-row">
+                        <div><input type="number" id="ad-min" value="200"></div>
+                        <div><input type="number" id="ad-max" value="5000"></div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Payment Accounts Container / Fill Prompt -->
+                <div class="form-group">
+                    <label>Payment Methods</label>
+                    <div id="create-ad-payment-container" class="payment-checkboxes-grid">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Terms (Optional)</label>
+                    <textarea placeholder="Enter any special terms..." rows="3"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn-action" style="background: #2b2b2b; color: #fff; flex: 1; padding: 14px;" onclick="hideCreateAd()">Cancel</button>
+                    <button class="btn-action" style="background: #f0b90b; color: #000; flex: 1; padding: 14px;" onclick="validateAndCreateAd()">Create Ad</button>
                 </div>
             </div>
         </div>
 
-        <div id="tab-orders" class="tab-content" style="display: none;">
-            <h2>Orders</h2>
-            <div style="display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 10px;">
-                <span style="color: #f0b90b; font-weight: bold; border-bottom: 2px solid #f0b90b; padding-bottom: 5px;">Ongoing</span>
-                <span style="color: #777;">All Orders</span>
+        <!-- WALLET TAB -->
+        <div id="tab-wallet" class="tab-content" style="display: none;">
+            <div id="wallet-main-view">
+                <h2>Wallet</h2>
+                <div class="wallet-card">
+                    <span style="font-size: 13px; color: #aaa;">Estimated Total Balance</span>
+                    <h1 style="color: #f0b90b; margin: 10px 0;">0.22 USDT</h1>
+                </div>
+                <div class="wallet-menu-card" onclick="openPaymentAccounts()">
+                    <div class="wallet-menu-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+                    </div>
+                    <div>
+                        <div style="font-weight: bold; font-size: 14px;">Payment Accounts</div>
+                        <div style="font-size: 12px; color: #aaa; margin-top: 2px;">Manage your payment methods</div>
+                    </div>
+                </div>
             </div>
-            <div class="card" style="text-align: center; padding: 40px 20px;">
-                <p style="color: #777; margin: 0;">No active P2P orders found</p>
+
+            <!-- PAYMENT ACCOUNTS SUB-VIEW -->
+            <div id="wallet-accounts-view" style="display: none;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                    <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="closePaymentAccounts()">
+                        <span style="color: #f0b90b; font-size: 18px;">←</span>
+                        <h3 style="margin: 0; font-size: 16px;">Payment Accounts</h3>
+                    </div>
+                    <button class="btn-action" style="background: #f0b90b; color: #000; padding: 6px 12px; font-size: 12px;" onclick="openAddMethodModal()">Add Method</button>
+                </div>
+                <div id="saved-methods-container"></div>
             </div>
+        </div>
+
+        <!-- HELP TAB -->
+        <div id="tab-more" class="tab-content" style="display: none;">
+            <h2>Help & Support</h2>
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="nav-bar">
+            <div class="nav-item active" onclick="switchTab('home', this)">Home</div>
+            <div class="nav-item" onclick="switchTab('orders', this)">Orders</div>
+            <div class="nav-item" onclick="switchTab('ads', this)">Ads</div>
+            <div class="nav-item" onclick="switchTab('wallet', this)">Wallet</div>
+            <div class="nav-item" onclick="switchTab('more', this)">Help</div>
+        </div>
+    </div>
+
+    <!-- ADD PAYMENT METHOD MODAL -->
+    <div id="add-method-modal" class="modal-overlay">
+        <div class="modal-sheet">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0; color: #fff;">Add Payment Method</h3>
+                <span style="color: #aaa; font-size: 20px; cursor: pointer;" onclick="closeAddMethodModal()">✕</span>
+            </div>
+            <div class="form-group">
+                <label>Provider *</label>
+                <select id="method-provider">
+                    <option value="" disabled selected>Select a provider</option>
+                    <option value="Telebirr">Telebirr</option>
+                    <option value="CBE">CBE</option>
+                    <option value="Awash">Awash</option>
+                    <option value="Dashen">Dashen</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Account Number *</label>
+                <input type="text" id="method-acc-num" placeholder="Enter account number">
+            </div>
+            <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="text" id="method-phone" placeholder="Enter phone number">
+            </div>
+            <button class="btn-action" style="background: #f0b90b; color: #000; width: 100%; padding: 12px; margin-top: 10px;" onclick="savePaymentMethod()">Save</button>
+        </div>
+    </div>
+
+    <script>
+        let savedMethods = [];
+
+        function switchTab(tabName, element) {
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabName).style.display = 'block';
+            element.classList.add('active');
+        }
+
+        function showCreateAd() {
+            document.getElementById('ads-list-view').style.display = 'none';
+            document.getElementById('create-ad-view').style.display = 'block';
+            renderCreateAdPaymentOptions();
+        }
+
+        function hideCreateAd() {
+            document.getElementById('create-ad-view').style.display = 'none';
+            document.getElementById('ads-list-view').style.display = 'block';
+        }
+
+        function selectAdType(type) {
+            document.getElementById('box-buy').className = type === 'buy' ? 'ad-type-box selected-buy' : 'ad-type-box';
+            document.getElementById('box-sell').className = type === 'sell' ? 'ad-type-box selected-sell' : 'ad-type-box';
+        }
+
+        function openPaymentAccounts() {
+            document.getElementById('wallet-main-view').style.display = 'none';
+            document.getElementById('wallet-accounts-view').style.display = 'block';
+        }
+
+        function closePaymentAccounts() {
+            document.getElementById('wallet-accounts-view').style.display = 'none';
+            document.getElementById('wallet-main-view').style.display = 'block';
+        }
+
+        function openAddMethodModal() { document.getElementById('add-method-modal').style.display = 'flex'; }
+        function closeAddMethodModal() { document.getElementById('add-method-modal').style.display = 'none'; }
+
+        function savePaymentMethod() {
+            const provider = document.getElementById('method-provider').value;
+            const accNum = document.getElementById('method-acc-num').value.trim();
+            const phone = document.getElementById('method-phone').value.trim();
+
+            if (!provider || !accNum || !phone) {
+                alert('Please fill out all required fields.');
+                return;
+            }
+
+            savedMethods.push({ provider, accountNumber: accNum, phoneNumber: phone, selected: true });
+            document.getElementById('method-provider').selectedIndex = 0;
+            document.getElementById('method-acc-num').value = '';
+            document.getElementById('method-phone').value = '';
+
+            renderSavedMethods();
+            closeAddMethodModal();
+        }
+
+        function renderSavedMethods() {
+            const container = document.getElementById('saved-methods-container');
+            if (savedMethods.length === 0) {
+                container.innerHTML = `<div class="card" style="text-align:center; color:#777;">No payment accounts saved.</div>`;
+                return;
+            }
+            container.innerHTML = savedMethods.map((m, idx) => `
+                <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div><strong>${m.provider}</strong><br><span style="font-size:12px; color:#aaa;">${m.accountNumber}</span></div>
+                    <button class="btn-action sell" style="padding:4px 10px; font-size:11px;" onclick="savedMethods.splice(${idx},1); renderSavedMethods();">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderCreateAdPaymentOptions() {
+            const container = document.getElementById('create-ad-payment-container');
+            if (savedMethods.length === 0) {
+                container.innerHTML = `
+                    <div style="background: #1e1e1e; border: 1px dashed #f0b90b; border-radius: 8px; padding: 15px; text-align: center;">
+                        <span style="font-size: 13px; color: #ffcc00; display: block; margin-bottom: 8px; font-weight: bold;">⚠️ Fill payment account first</span>
+                        <span style="font-size: 12px; color: #aaa;">You must add at least one payment method (e.g., Telebirr) in your wallet before creating an ad.</span>
+                        <div style="margin-top: 10px;">
+                            <button class="btn-action" style="background: #f0b90b; color: #000; font-size: 12px; padding: 6px 14px;" onclick="switchTab('wallet', document.querySelectorAll('.nav-item')[3]); openPaymentAccounts(); openAddMethodModal();">+ Add Payment Account</button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = savedMethods.map((m, index) => `
+                <div class="payment-check-box ${m.selected ? 'selected' : ''}" onclick="savedMethods[${index}].selected = !savedMethods[index].selected; renderCreateAdPaymentOptions();">
+                    <div>
+                        <strong style="font-size: 14px; color: #fff;">${m.provider}</strong><br>
+                        <span style="font-size: 12px; color: #aaa;">Acc: ${m.accountNumber}</span>
+                    </div>
+                    <div class="check-indicator">${m.selected ? '✓' : ''}</div>
+                </div>
+            `).join('');
+        }
+
+        function validateAndCreateAd() {
+            if (savedMethods.filter(m => m.selected).length === 0) {
+                alert('Please select or fill at least one payment method to proceed.');
+                return;
+            }
+            alert('Ad created successfully!');
+        }
+    </script>
+</body>
+</html>
