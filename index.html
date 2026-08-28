@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>P2P Trading App</title>
+  <title>One P2P Trading App</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
@@ -23,8 +23,12 @@
     body {
       background-color: var(--bg-dark);
       color: var(--text-main);
-      padding-bottom: 70px;
+      padding-bottom: 75px;
     }
+
+    /* Page visibility control */
+    .page { display: none; }
+    .page.active { display: block; }
 
     .header-bar {
       display: flex;
@@ -101,10 +105,7 @@
       color: #000;
       font-weight: 700;
     }
-    .filter-btn.active-accounts {
-      color: var(--accent-green);
-      background: none;
-    }
+    .filter-btn.filter-btn-accounts { color: var(--accent-green); }
 
     /* Empty State Section */
     .empty-state {
@@ -147,10 +148,19 @@
     }
     .notice-card strong { color: var(--primary-yellow); }
 
-    /* Create Ad Form Section */
-    .page { display: none; }
-    .page.active { display: block; }
+    /* Layout Cards & Generic UI */
+    .content-container { padding: 16px; }
+    .info-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border-color);
+    }
+    .info-card h3 { font-size: 16px; margin-bottom: 8px; color: #fff; }
+    .info-card p { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
 
+    /* Create Ad Form Section */
     .back-btn {
       display: inline-flex;
       align-items: center;
@@ -198,10 +208,7 @@
     }
     .type-option.selected-sell strong { color: var(--accent-red); }
 
-    .input-field {
-      position: relative;
-      margin-bottom: 6px;
-    }
+    .input-field { position: relative; margin-bottom: 6px; }
     .input-field input {
       width: 100%;
       background-color: var(--input-bg);
@@ -212,12 +219,10 @@
       font-size: 15px;
     }
     .input-suffix { position: absolute; right: 12px; top: 12px; color: var(--text-muted); font-size: 13px; }
-
     .field-hint { font-size: 11px; color: var(--text-muted); margin-bottom: 16px; display: block; }
 
     .limits-grid { display: flex; gap: 12px; }
     .limits-grid div { flex: 1; }
-
     .balance-info { font-size: 12px; color: var(--accent-green); margin-top: 6px; font-weight: 500; }
 
     /* Bottom Navigation Bar */
@@ -229,6 +234,7 @@
       justify-content: space-around;
       padding: 10px 0;
       border-top: 1px solid var(--border-color);
+      z-index: 99;
     }
     .nav-item {
       display: flex;
@@ -240,14 +246,57 @@
       background: none;
       border: none;
       cursor: pointer;
+      width: 20%;
     }
-    .nav-item.active { color: var(--primary-yellow); }
+    .nav-item.active { color: var(--primary-yellow); font-weight: bold; }
     .nav-item svg { width: 20px; height: 20px; fill: currentColor; }
   </style>
 </head>
 <body>
 
-  <!-- MAIN ADS LIST PAGE -->
+  <!-- 1. HOME PAGE -->
+  <div id="home-page" class="page">
+    <div class="header-bar">
+      <div class="title-group">
+        <h2>P2P Marketplace</h2>
+        <p>Buy & sell crypto directly with local payments</p>
+      </div>
+    </div>
+    <div class="content-container">
+      <div class="info-card">
+        <h3>Market Overview</h3>
+        <p>USDT / ETB Average Rate: <strong>265.50 ETB</strong></p>
+      </div>
+      <div class="info-card">
+        <h3>Quick Actions</h3>
+        <p>Select the <strong>Ads</strong> tab below to manage your active trading listings or create a new offer.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ORDERS PAGE -->
+  <div id="orders-page" class="page">
+    <div class="header-bar">
+      <div class="title-group">
+        <h2>My Orders</h2>
+        <p>View active and completed trades</p>
+      </div>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-btn active">Pending</button>
+      <button class="filter-btn">Completed</button>
+      <button class="filter-btn">Canceled</button>
+    </div>
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+      </div>
+      <h3>No Active Orders</h3>
+      <p>Your open P2P buy and sell orders will appear here.</p>
+    </div>
+  </div>
+
+  <!-- 3. ADS PAGE (Default Active) -->
   <div id="ads-page" class="page active">
     <div class="header-bar">
       <div class="title-group">
@@ -295,9 +344,50 @@
     </div>
   </div>
 
+  <!-- 4. WALLET PAGE -->
+  <div id="wallet-page" class="page">
+    <div class="header-bar">
+      <div class="title-group">
+        <h2>Asset Wallet</h2>
+        <p>Your available trading funds</p>
+      </div>
+    </div>
+    <div class="content-container">
+      <div class="info-card">
+        <h3>USDT Balance</h3>
+        <h2 style="font-size: 24px; color: var(--primary-yellow); margin: 6px 0;">0.22 USDT</h2>
+        <p>Estimated Value: ~58.41 ETB</p>
+      </div>
+      <div class="info-card">
+        <h3>Deposit / Withdraw</h3>
+        <p>Manage your crypto funds securely inside Telegram WebApp.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. MORE / HELP PAGE -->
+  <div id="more-page" class="page">
+    <div class="header-bar">
+      <div class="title-group">
+        <h2>Settings & Support</h2>
+        <p>Help center and account settings</p>
+      </div>
+    </div>
+    <div class="content-container">
+      <div class="info-card">
+        <h3>Help Center & FAQ</h3>
+        <p>Learn how to safely complete P2P trades, release escrow, or appeal disputed orders.</p>
+      </div>
+      <div class="info-card">
+        <h3>Customer Support</h3>
+        <p>Contact Telegram Support Bot for assistance with orders.</p>
+      </div>
+    </div>
+  </div>
+
   <!-- CREATE NEW AD PAGE -->
   <div id="create-page" class="page">
-    <div class="back-btn" onclick="navigateTo('ads-page')">
+    <div class="back-btn" onclick="switchTab('ads-page', document.getElementById('tab-ads'))">
       ← Back to My Ads
     </div>
 
@@ -355,23 +445,23 @@
 
   <!-- Bottom Navigation Bar -->
   <div class="nav-bar">
-    <button class="nav-item">
+    <button id="tab-home" class="nav-item" onclick="switchTab('home-page', this)">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       Home
     </button>
-    <button class="nav-item">
+    <button id="tab-orders" class="nav-item" onclick="switchTab('orders-page', this)">
       <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
       Orders
     </button>
-    <button class="nav-item active">
+    <button id="tab-ads" class="nav-item active" onclick="switchTab('ads-page', this)">
       <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
       Ads
     </button>
-    <button class="nav-item">
+    <button id="tab-wallet" class="nav-item" onclick="switchTab('wallet-page', this)">
       <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
       Wallet
     </button>
-    <button class="nav-item">
+    <button id="tab-more" class="nav-item" onclick="switchTab('more-page', this)">
       <svg viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
       More
     </button>
@@ -380,6 +470,19 @@
   <script>
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.expand();
+    }
+
+    // Tab switcher logic
+    function switchTab(pageId, element) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+
+      const targetPage = document.getElementById(pageId);
+      if (targetPage) targetPage.classList.add('active');
+
+      if (element) {
+        element.classList.add('active');
+      }
     }
 
     function navigateTo(pageId) {
