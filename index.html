@@ -27,6 +27,17 @@
         .nav-item.active { color: #f0b90b; }
         .nav-icon { display: block; margin: 0 auto 2px auto; width: 22px; height: 22px; fill: currentColor; }
         .wallet-card { background: linear-gradient(135deg, #2b2b2b, #1a1a1a); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; border: 1px solid #333; }
+        
+        /* Create Ad Form Styles */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; margin-bottom: 5px; color: #aaa; }
+        input, textarea { width: 100%; padding: 12px; background-color: #1e1e1e; border: 1px solid #333; border-radius: 8px; color: white; box-sizing: border-box; font-size: 14px; }
+        .ad-type-grid { display: flex; gap: 10px; margin-bottom: 15px; }
+        .ad-type-box { flex: 1; background: #1e1e1e; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center; cursor: pointer; font-size: 13px; color: #aaa; }
+        .ad-type-box.selected-buy { border-color: #0ecb81; color: #0ecb81; background: rgba(14, 203, 129, 0.05); }
+        .ad-type-box.selected-sell { border-color: #f6465d; color: #f6465d; background: rgba(246, 70, 93, 0.05); }
+        .limit-row { display: flex; gap: 10px; }
+        .payment-selector { background: #1e1e1e; border: 1px solid #0ecb81; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
@@ -119,14 +130,85 @@
             </div>
         </div>
 
-        <!-- ADS TAB -->
+        <!-- ADS TAB (Lists ads or switches to Create Ad form) -->
         <div id="tab-ads" class="tab-content" style="display: none;">
-            <div class="header-flex">
-                <h2>My Ads</h2>
-                <button class="btn-action" onclick="alert('Create new ad window')">+ Post Ad</button>
+            <div id="ads-list-view">
+                <div class="header-flex">
+                    <h2>My Ads</h2>
+                    <button class="btn-action" onclick="showCreateAd()">+ Post Ad</button>
+                </div>
+                <div class="card" style="text-align: center; padding: 40px 20px;">
+                    <p style="color: #777; margin: 0;">You haven't posted any advertisements yet.</p>
+                </div>
             </div>
-            <div class="card" style="text-align: center; padding: 40px 20px;">
-                <p style="color: #777; margin: 0;">You haven't posted any advertisements yet.</p>
+
+            <!-- CREATE NEW AD SUB-VIEW (Matches your screenshots) -->
+            <div id="create-ad-view" style="display: none;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="hideCreateAd()">
+                    <span style="color: #f0b90b; font-size: 18px;">←</span>
+                    <span style="color: #aaa; font-size: 14px;">Back to My Ads</span>
+                </div>
+                <h2 style="margin-bottom: 20px;">Create New Ad</h2>
+
+                <div class="form-group">
+                    <label>Ad Type</label>
+                    <div class="ad-type-grid">
+                        <div id="box-buy" class="ad-type-box selected-buy" onclick="selectAdType('buy')">
+                            📈<br><strong>I want to buy</strong><br><span style="font-size: 11px;">USDT with ETB</span>
+                        </div>
+                        <div id="box-sell" class="ad-type-box" onclick="selectAdType('sell')">
+                            📉<br><strong>I want to sell</strong><br><span style="font-size: 11px;">USDT for ETB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Price per USDT (ETB)</label>
+                    <input type="number" id="ad-price" value="58.50">
+                    <span style="font-size: 11px; color: #777; margin-top: 4px; display: block;">Price range from 92.00 to 276.00 ETB</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Total Amount (USDT)</label>
+                    <input type="number" id="ad-amount" value="100.00">
+                </div>
+
+                <div class="form-group">
+                    <label>Order Limits</label>
+                    <div class="limit-row">
+                        <div>
+                            <span style="font-size: 11px; color: #777;">Min (ETB)</span>
+                            <input type="number" id="ad-min" value="200">
+                        </div>
+                        <div>
+                            <span style="font-size: 11px; color: #777;">Max (ETB)</span>
+                            <input type="number" id="ad-max" value="5000">
+                        </div>
+                    </div>
+                    <span style="font-size: 11px; color: #777; margin-top: 4px; display: block;">Limits must be between 200 and 5,000,000 ETB</span>
+                    <span style="font-size: 11px; color: #0ecb81; margin-top: 2px; display: block;">Your wallet balance: $0.22 USDT</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Methods</label>
+                    <div class="payment-selector">
+                        <div>
+                            <strong>Telebirr</strong><br>
+                            <span style="font-size: 12px; color: #aaa;">Melaku Awoke</span>
+                        </div>
+                        <span style="color: #0ecb81; font-weight: bold;">✓</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Terms (Optional)</label>
+                    <textarea placeholder="Enter any special terms..." rows="3"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn-action" style="background: #2b2b2b; color: #fff; flex: 1; padding: 14px;" onclick="hideCreateAd()">Cancel</button>
+                    <button class="btn-action" style="background: #f0b90b; color: #000; flex: 1; padding: 14px;" onclick="alert('Ad created successfully!')">Create Ad</button>
+                </div>
             </div>
         </div>
 
@@ -135,8 +217,8 @@
             <h2>Wallet</h2>
             <div class="wallet-card">
                 <span style="font-size: 13px; color: #aaa;">Estimated Total Balance</span>
-                <h1 style="color: #f0b90b; margin: 10px 0;">0.00 USDT</h1>
-                <span style="font-size: 12px; color: #777;">≈ 0.00 ETB</span>
+                <h1 style="color: #f0b90b; margin: 10px 0;">0.22 USDT</h1>
+                <span style="font-size: 12px; color: #777;">≈ 29.70 ETB</span>
             </div>
             <div style="display: flex; gap: 10px;">
                 <button class="btn-action" style="flex: 1;" onclick="alert('Deposit window')">Deposit</button>
@@ -201,6 +283,28 @@
 
             document.getElementById('tab-' + tabName).style.display = 'block';
             element.classList.add('active');
+        }
+
+        function showCreateAd() {
+            document.getElementById('ads-list-view').style.display = 'none';
+            document.getElementById('create-ad-view').style.display = 'block';
+        }
+
+        function hideCreateAd() {
+            document.getElementById('create-ad-view').style.display = 'none';
+            document.getElementById('ads-list-view').style.display = 'block';
+        }
+
+        function selectAdType(type) {
+            const buyBox = document.getElementById('box-buy');
+            const sellBox = document.getElementById('box-sell');
+            if (type === 'buy') {
+                buyBox.className = 'ad-type-box selected-buy';
+                sellBox.className = 'ad-type-box';
+            } else {
+                sellBox.className = 'ad-type-box selected-sell';
+                buyBox.className = 'ad-type-box';
+            }
         }
 
         function setTradeMode(mode) {
