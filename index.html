@@ -104,7 +104,7 @@
             </div>
         </div>
 
-        <!-- 2. CHECKOUT PRE-ORDER TAB (Added back!) -->
+        <!-- 2. CHECKOUT PRE-ORDER TAB -->
         <div id="tab-checkout" class="tab-content" style="display: none;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="switchTab('home', document.querySelectorAll('.nav-item')[0])">
                 <span style="color: #f0b90b; font-size: 18px;">←</span>
@@ -189,18 +189,136 @@
             </div>
         </div>
 
-        <!-- 4. ADS TAB -->
+        <!-- 4. ADS TAB (Updated to exact design matching screenshots) -->
         <div id="tab-ads" class="tab-content" style="display: none;">
-            <div class="header-flex">
-                <h2>My Ads</h2>
-                <button class="btn-action" style="width: auto; padding: 6px 16px;" onclick="alert('Post ad modal')">+ Post Ad</button>
+            <div class="header-flex" style="margin-bottom: 4px;">
+                <h2 style="margin: 0;">My Ads</h2>
+                <button class="btn-action" style="width: auto; padding: 6px 16px; background: #f0b90b; color: #000;" onclick="openCreateAd()">Create</button>
             </div>
-            <div class="card" style="text-align: center; padding: 40px 20px;">
-                <p style="color: #777; margin: 0;">You haven't posted any advertisements yet.</p>
+            <div style="font-size: 12px; color: #aaa; margin-bottom: 12px;">Manage your buy and sell offers</div>
+
+            <!-- Keep Me Online Switch Card -->
+            <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; margin-bottom: 15px;">
+                <div>
+                    <div style="font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                        <span style="width: 8px; height: 8px; background: #0ecb81; border-radius: 50%; display: inline-block;"></span> Keep Me Online
+                    </div>
+                    <div style="font-size: 11px; color: #aaa; margin-top: 2px;">Always visible to traders</div>
+                </div>
+                <label style="position: relative; display: inline-block; width: 44px; height: 24px;">
+                    <input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
+                    <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #0ecb81; transition: .3s; border-radius: 24px;"></span>
+                    <span style="position: absolute; content: ''; height: 18px; width: 18px; left: 23px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;"></span>
+                </label>
+            </div>
+
+            <!-- Filter tabs bar -->
+            <div style="display: flex; background: #1e1e1e; border-radius: 6px; padding: 4px; margin-bottom: 15px; border: 1px solid #2a2a2a; text-align: center; font-size: 13px; font-weight: bold;">
+                <div style="flex: 1; padding: 6px; color: #aaa; cursor: pointer;">All</div>
+                <div style="flex: 1; padding: 6px; color: #aaa; cursor: pointer;">Buy</div>
+                <div style="flex: 1; padding: 6px; color: #aaa; cursor: pointer;">Sell</div>
+                <div style="flex: 1; padding: 6px; background: #0ecb81; color: #000; border-radius: 4px; cursor: pointer;">Accounts</div>
+            </div>
+
+            <!-- Saved Payment Methods Header & Button -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div style="font-weight: bold; font-size: 15px;">Saved Payment Methods</div>
+                <button style="background: #f0b90b; color: #000; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;" onclick="alert('Add Method window')">Add Method</button>
+            </div>
+            <div style="font-size: 11px; color: #aaa; margin-bottom: 15px;">Manage your payment methods for faster ad creation</div>
+
+            <!-- No Payment Methods Box -->
+            <div class="card" style="text-align: center; padding: 30px 20px;">
+                <div style="width: 45px; height: 45px; background: #262626; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto;">
+                    <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; fill: #aaa;"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+                </div>
+                <div style="font-weight: bold; font-size: 15px; margin-bottom: 6px;">No Payment Methods</div>
+                <div style="font-size: 11px; color: #aaa; margin-bottom: 15px;">Save your payment methods for quick access when creating ads</div>
+                <button style="background: #f0b90b; color: #000; border: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; width: 100%;" onclick="alert('Add Payment Method modal')">Add Your First Payment Method</button>
+            </div>
+
+            <!-- Note Box at bottom of Ads tab -->
+            <div class="card" style="border: 1px solid #2a2a2a; background: #181818; padding: 12px; font-size: 11px; color: #aaa; line-height: 1.5;">
+                <span style="color: #f0b90b; font-weight: bold;">Note:</span> You can create a maximum of 1 Buy ad and 1 Sell ad. Multiple ads of the same type are not allowed.
             </div>
         </div>
 
-        <!-- 5. WALLET TAB -->
+        <!-- 5. CREATE NEW AD FORM VIEW (Matches screenshots exactly) -->
+        <div id="tab-create-ad" class="tab-content" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="switchTab('ads', document.querySelectorAll('.nav-item')[2])">
+                <span style="color: #f0b90b; font-size: 18px;">←</span>
+                <span style="color: #aaa; font-size: 14px;">Back to My Ads</span>
+            </div>
+            <h2 style="margin: 0 0 15px 0; font-size: 20px;">Create New Ad</h2>
+
+            <!-- Ad Type Selection -->
+            <div class="card">
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 14px;">Ad Type</div>
+                <div style="display: flex; gap: 10px;">
+                    <div id="ad-type-buy" onclick="selectAdType('buy')" style="flex: 1; background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 12px; text-align: center; cursor: pointer;">
+                        <div style="color: #0ecb81; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📈 I want to buy</div>
+                        <div style="font-size: 10px; color: #777;">USDT with ETB</div>
+                    </div>
+                    <div id="ad-type-sell" onclick="selectAdType('sell')" style="flex: 1; background: #121212; border: 1px solid #f6465d; border-radius: 8px; padding: 12px; text-align: center; cursor: pointer;">
+                        <div style="color: #f6465d; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📉 I want to sell</div>
+                        <div style="font-size: 10px; color: #777;">USDT for ETB</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Section -->
+            <div class="card">
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">Pricing</div>
+                <div style="font-size: 11px; color: #aaa; margin-bottom: 6px;">Price per USDT (ETB)</div>
+                <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <input type="number" value="58.50" style="background: transparent; border: none; color: #fff; font-size: 16px; font-weight: bold; width: 100%; outline: none;">
+                    <span style="color: #aaa; font-weight: bold; font-size: 13px;">ETB</span>
+                </div>
+                <div style="font-size: 11px; color: #777;" id="pricing-range-note">Price range from 97.50 to 292.50 ETB</div>
+            </div>
+
+            <!-- Total Amount Section -->
+            <div class="card">
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">Total Amount</div>
+                <div style="font-size: 11px; color: #aaa; margin-bottom: 6px;">Amount (USDT)</div>
+                <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px;">
+                    <input type="number" value="100.00" style="background: transparent; border: none; color: #fff; font-size: 16px; font-weight: bold; width: 100%; outline: none;">
+                </div>
+            </div>
+
+            <!-- Order Limits Section -->
+            <div class="card">
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">Order Limits</div>
+                <div style="display: flex; gap: 10px; margin-bottom: 6px;">
+                    <div style="flex: 1;">
+                        <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Min (ETB)</div>
+                        <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px;">
+                            <input type="number" value="200" style="background: transparent; border: none; color: #fff; font-size: 15px; font-weight: bold; width: 100%; outline: none;">
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Max (ETB)</div>
+                        <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px;">
+                            <input type="number" value="5000" style="background: transparent; border: none; color: #fff; font-size: 15px; font-weight: bold; width: 100%; outline: none;">
+                        </div>
+                    </div>
+                </div>
+                <div style="font-size: 10px; color: #777; margin-bottom: 8px;">Limits must be between 200 and 5,000,000 ETB</div>
+                <div style="font-size: 11px; color: #aaa;">Your wallet balance: <span style="color: #0ecb81; font-weight: bold;">$0.22 USDT</span></div>
+            </div>
+
+            <!-- Payment Methods Section -->
+            <div class="card">
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">Payment Methods</div>
+                <div style="background: #121212; border: 1px solid #0ecb81; border-radius: 8px; padding: 12px; text-align: center; color: #0ecb81; font-weight: bold; font-size: 13px; cursor: pointer;" onclick="alert('Select payment method')">
+                    + Select Payment Method
+                </div>
+            </div>
+
+            <button class="btn-action" style="padding: 14px; font-size: 15px; background: #f0b90b; color: #000; margin-bottom: 20px;" onclick="alert('Ad successfully posted!')">Post Advertisement</button>
+        </div>
+
+        <!-- 6. WALLET TAB -->
         <div id="tab-wallet" class="tab-content" style="display: none;">
             <h2>Wallet</h2>
             <div class="wallet-card">
@@ -223,7 +341,7 @@
             </div>
         </div>
 
-        <!-- 6. HELP TAB -->
+        <!-- 7. HELP TAB -->
         <div id="tab-help" class="tab-content" style="display: none;">
             <h2>Help & Support</h2>
             <div class="card" onclick="alert('Connecting to support bot...')" style="cursor: pointer;">
@@ -311,11 +429,30 @@
             document.getElementById('chk-balance').innerText = balance + " USDT";
             document.getElementById('checkout-title-header').innerText = advertiser + " P2P";
 
-            // Default amount input
             document.getElementById('input-usd-amount').value = "12";
             calculateETB();
 
             switchTab('checkout', null);
+        }
+
+        function openCreateAd() {
+            switchTab('create-ad', null);
+        }
+
+        function selectAdType(type) {
+            const buyCard = document.getElementById('ad-type-buy');
+            const sellCard = document.getElementById('ad-type-sell');
+            if (type === 'buy') {
+                buyCard.style.border = '1px solid #0ecb81';
+                buyCard.children[0].style.color = '#0ecb81';
+                sellCard.style.border = '1px solid #2a2a2a';
+                sellCard.children[0].style.color = '#f6465d';
+            } else {
+                sellCard.style.border = '1px solid #f6465d';
+                sellCard.children[0].style.color = '#f6465d';
+                buyCard.style.border = '1px solid #2a2a2a';
+                buyCard.children[0].style.color = '#0ecb81';
+            }
         }
 
         function calculateETB() {
@@ -338,9 +475,8 @@
                 created: new Date().toLocaleString()
             };
 
-            totalSeconds = 300; // Reset timer to 5 mins
+            totalSeconds = 300; 
 
-            // Render ongoing order card HTML view
             document.getElementById('ongoing-empty').style.display = 'none';
             const ongoingCard = document.getElementById('ongoing-order-card');
             ongoingCard.style.display = 'block';
@@ -385,7 +521,6 @@
             document.getElementById('ongoing-count').innerText = "1";
             document.getElementById('timeout-modal').style.display = 'none';
 
-            // Navigate user to Orders Tab -> Ongoing subtab
             switchTab('orders', document.getElementById('nav-orders'));
             switchSubTab('ongoing');
 
@@ -400,22 +535,17 @@
                 updateTimerDisplay();
             } else {
                 clearInterval(timerInterval);
-                
-                // Move order from ongoing to cancelled list storage
                 if (currentOrderData) {
                     cancelledOrdersList.unshift(currentOrderData);
                     currentOrderData = null;
                 }
-                
                 renderCancelledOrders();
 
-                // Clear and hide ongoing card
                 document.getElementById('ongoing-order-card').style.display = 'none';
                 document.getElementById('ongoing-order-card').innerHTML = '';
                 document.getElementById('ongoing-empty').style.display = 'block';
                 document.getElementById('ongoing-count').innerText = "0";
 
-                // Show timeout popup modal
                 document.getElementById('timeout-modal').style.display = 'flex';
             }
         }
@@ -457,7 +587,7 @@
                             <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                                 <span>Amount:</span> <span style="color: #fff; font-weight: bold;">${order.amountUsd} USDT</span>
                             </div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <div style="display: flex; justify-content: space-sub between; margin-bottom: 6px;">
                                 <span>ETB Amount:</span> <span style="color: #f0b90b; font-weight: bold;">${order.amountEtb} ETB</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
