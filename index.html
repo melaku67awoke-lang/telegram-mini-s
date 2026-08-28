@@ -376,13 +376,13 @@
             </div>
 
             <div class="form-group">
-                <label>Account Number (Optional)</label>
-                <input type="text" id="method-acc-num" placeholder="Account number">
+                <label>Account Number *</label>
+                <input type="text" id="method-acc-num" placeholder="Enter account number">
             </div>
 
             <div class="form-group">
-                <label>Phone Number (Optional)</label>
-                <input type="text" id="method-phone" placeholder="Phone number">
+                <label>Phone Number *</label>
+                <input type="text" id="method-phone" placeholder="Enter phone number">
             </div>
 
             <div style="display: flex; gap: 10px; margin-top: 25px;">
@@ -476,11 +476,16 @@
 
         function savePaymentMethod() {
             const provider = document.getElementById('method-provider').value;
-            const accNum = document.getElementById('method-acc-num').value;
-            const phone = document.getElementById('method-phone').value;
+            const accNum = document.getElementById('method-acc-num').value.trim();
+            const phone = document.getElementById('method-phone').value.trim();
 
             if (!provider) {
                 alert('Please select a provider');
+                return;
+            }
+
+            if (!accNum || !phone) {
+                alert('Account Number and Phone Number are required and cannot be left blank.');
                 return;
             }
 
@@ -516,7 +521,7 @@
                             <div>
                                 <span style="font-weight: bold; color: #f0b90b; font-size: 15px;">${m.provider}</span>
                                 <div style="font-size: 13px; color: #fff; margin-top: 2px;">${m.name}</div>
-                                <div style="font-size: 11px; color: #aaa; margin-top: 2px;">${m.accountNumber ? 'Acc: ' + m.accountNumber : ''} ${m.phoneNumber ? 'Phone: ' + m.phoneNumber : ''}</div>
+                                <div style="font-size: 11px; color: #aaa; margin-top: 2px;">Acc: ${m.accountNumber} | Phone: ${m.phoneNumber}</div>
                             </div>
                             <button class="btn-action sell" style="padding: 4px 10px; font-size: 11px;" onclick="deleteMethod(${index})">Delete</button>
                         </div>
