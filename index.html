@@ -19,7 +19,7 @@
         .card-header { display: flex; justify-content: space-between; align-items: center; }
         .user-info { display: flex; align-items: center; gap: 10px; }
         .avatar { width: 35px; height: 35px; background: #f0b90b; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .btn-action { background: #0ecb81; color: #000; border: none; padding: 6px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; }
+        .btn-action { background: #0ecb81; color: #000; border: none; padding: 6px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; text-align: center; text-decoration: none; display: inline-block; box-sizing: border-box; }
         .btn-action.sell { background: #f6465d; color: #fff; }
         .btn-action:disabled { background: #2b2b2b !important; color: #666 !important; cursor: not-allowed; }
         .card-details { display: flex; justify-content: space-between; margin-top: 12px; font-size: 13px; color: #aaa; }
@@ -147,11 +147,11 @@
             </div>
         </div>
 
-        <!-- 4. ADS TAB -->
+        <!-- 4. ADS TAB (Restored Create Button & Functionality) -->
         <div id="tab-ads" class="tab-content" style="display: none;">
             <div class="header-flex" style="margin-bottom: 4px;">
                 <h2 style="margin: 0;">My Ads</h2>
-                <button class="btn-action" style="width: auto; padding: 6px 16px; background: #f0b90b; color: #000;">Create</button>
+                <button class="btn-action" style="width: auto; padding: 6px 16px; background: #f0b90b; color: #000;" onclick="openCreateAdModal()">Create</button>
             </div>
             <div style="font-size: 12px; color: #aaa; margin-bottom: 12px;">Manage your buy and sell offers</div>
             <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; margin-bottom: 15px;">
@@ -164,12 +164,32 @@
             </div>
         </div>
 
-        <!-- 5. WALLET TAB -->
+        <!-- 5. WALLET TAB (Restored Deposit & Withdrawal Options) -->
         <div id="tab-wallet" class="tab-content" style="display: none;">
             <h2>Wallet</h2>
             <div class="wallet-card">
                 <span style="font-size: 13px; color: #aaa;">Estimated Total Balance</span>
                 <h1 style="color: #f0b90b; margin: 10px 0;">72.51 USDT</h1>
+            </div>
+
+            <div class="wallet-menu-card" onclick="openWalletAction('Deposit')">
+                <div class="wallet-menu-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </div>
+                <div>
+                    <div style="font-weight: bold; font-size: 14px;">Deposit</div>
+                    <div style="font-size: 11px; color: #aaa; margin-top: 2px;">Add crypto assets to your wallet</div>
+                </div>
+            </div>
+
+            <div class="wallet-menu-card" onclick="openWalletAction('Withdrawal')">
+                <div class="wallet-menu-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19 11H5v2h14v-2z"/></svg>
+                </div>
+                <div>
+                    <div style="font-weight: bold; font-size: 14px;">Withdrawal</div>
+                    <div style="font-size: 11px; color: #aaa; margin-top: 2px;">Transfer funds out of your wallet</div>
+                </div>
             </div>
         </div>
 
@@ -207,9 +227,18 @@
         </div>
     </div>
 
+    <!-- MODAL FOR CREATING ADS & WALLET ACTIONS -->
+    <div id="action-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 id="modal-title" style="margin-top: 0; color: #f0b90b;">Notice</h3>
+            <div id="modal-body" style="font-size: 13px; color: #ccc; margin-bottom: 20px; line-height: 1.5;"></div>
+            <button class="btn-action" style="background: #f0b90b; color: #000;" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
     <script>
         let homeMode = 'buy';
-        let activeInputCurrency = 'USD'; // 'USD' or 'ETB'
+        let activeInputCurrency = 'USD'; 
         let activeCheckout = { advertiser: '', rate: 193.9, payment: 'Telebirr', minETB: 1000, maxETB: 14174 };
 
         const listingsData = {
@@ -289,12 +318,10 @@
             document.getElementById('chk-advertiser-name').innerText = item.advertiser;
             document.getElementById('chk-rate-text').innerText = `Rate: 1 USD = ${item.rateVal} ETB`;
             
-            // Subtext range in USD equivalent
             let minUSD = (item.minETB / item.rateVal).toFixed(2);
             let maxUSD = (item.maxETB / item.rateVal).toFixed(2);
             document.getElementById('chk-range-subtext').innerText = `Min: $${minUSD} - Max: $${maxUSD} USDT`;
 
-            // Default input value matching user screenshot input (2 USD)
             document.getElementById('input-trade-amount').value = "2";
             setCurrency('USD');
             switchTab('checkout', null);
@@ -345,7 +372,6 @@
             let noticeBox = document.getElementById('limit-error-notice');
             let confirmBtn = document.getElementById('btn-confirm-buy');
 
-            // Enforce limit validation and real-time notice per instructions
             if (etbAmount < activeCheckout.minETB) {
                 noticeBox.style.display = 'block';
                 noticeBox.innerText = `Amount is below the minimum limit! Minimum allowed is ${activeCheckout.minETB.toLocaleString()} ETB.`;
@@ -364,6 +390,22 @@
             alert('Order request sent successfully!');
             switchTab('orders', document.getElementById('nav-orders'));
             switchSubTab('ongoing');
+        }
+
+        function openCreateAdModal() {
+            document.getElementById('modal-title').innerText = "Create New Ad";
+            document.getElementById('modal-body').innerText = "Configure your new Buy or Sell advertisement parameters to list your offer in the P2P marketplace.";
+            document.getElementById('action-modal').style.display = 'flex';
+        }
+
+        function openWalletAction(actionType) {
+            document.getElementById('modal-title').innerText = actionType + " USDT";
+            document.getElementById('modal-body').innerText = `Your request to ${actionType.toLowerCase()} funds is being initialized securely through the network gateway.`;
+            document.getElementById('action-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('action-modal').style.display = 'none';
         }
 
         renderHomeListings();
