@@ -45,7 +45,6 @@
 
     <div class="container">
         
-        <!-- 1. HOME TAB -->
         <div id="tab-home" class="tab-content">
             <div class="header-flex">
                 <div>
@@ -60,7 +59,6 @@
                 <button id="btn-sell-toggle" class="toggle-btn" onclick="setTradeMode('sell')">Sell</button>
             </div>
 
-            <!-- Ad Card 1 -->
             <div class="card">
                 <div class="card-header">
                     <div class="user-info">
@@ -79,7 +77,6 @@
                 </div>
             </div>
 
-            <!-- Ad Card 2 -->
             <div class="card">
                 <div class="card-header">
                     <div class="user-info">
@@ -99,7 +96,6 @@
             </div>
         </div>
 
-        <!-- 2. ORDERS / ACTIVE TIMEOUT TAB -->
         <div id="tab-orders" class="tab-content" style="display: none;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="switchTab('home', document.querySelectorAll('.nav-item')[0])">
                 <span style="color: #f0b90b; font-size: 18px;">←</span>
@@ -110,7 +106,7 @@
                 <div id="status-icon" class="waiting-timer-ring">⏱️</div>
                 <h3 id="status-title" style="margin: 0 0 5px 0; color: #fff;">Waiting for Response</h3>
                 <p id="status-subtitle" style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Advertiser is reviewing your request</p>
-                <div id="countdown-timer" style="background: #121212; display: inline-block; padding: 6px 16px; border-radius: 20px; color: #f0b90b; font-weight: bold; border: 1px solid #333; margin-bottom: 20px;">00:05</div>
+                <div id="countdown-timer" style="background: #121212; display: inline-block; padding: 6px 16px; border-radius: 20px; color: #f0b90b; font-weight: bold; border: 1px solid #333; margin-bottom: 20px;">05:00</div>
 
                 <div style="text-align: left; border-top: 1px solid #2a2a2a; padding-top: 15px;">
                     <div style="font-weight: bold; margin-bottom: 12px; color: #fff;">Order Details</div>
@@ -142,7 +138,6 @@
             </div>
         </div>
 
-        <!-- 3. ADS TAB -->
         <div id="tab-ads" class="tab-content" style="display: none;">
             <div class="header-flex">
                 <h2>My Ads</h2>
@@ -153,7 +148,6 @@
             </div>
         </div>
 
-        <!-- 4. WALLET TAB -->
         <div id="tab-wallet" class="tab-content" style="display: none;">
             <h2>Wallet</h2>
             <div class="wallet-card">
@@ -176,7 +170,6 @@
             </div>
         </div>
 
-        <!-- 5. HELP TAB -->
         <div id="tab-help" class="tab-content" style="display: none;">
             <h2>Help & Support</h2>
             <div class="card" onclick="alert('Connecting to support bot...')" style="cursor: pointer;">
@@ -185,32 +178,30 @@
             </div>
         </div>
 
-        <!-- Bottom Navigation Bar -->
         <div class="nav-bar">
-            <div class="nav-item active" onclick="switchTab('home', this)">
+            <div id="nav-home" class="nav-item active" onclick="switchTab('home', this)">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                 Home
             </div>
-            <div class="nav-item" onclick="switchTab('orders', this)">
+            <div id="nav-orders" class="nav-item" onclick="switchTab('orders', this)">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
                 Orders
             </div>
-            <div class="nav-item" onclick="switchTab('ads', this)">
+            <div id="nav-ads" class="nav-item" onclick="switchTab('ads', this)">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M18 11l-8-5v10l8-5zm-10 4V7L2 11l6 4zM21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
                 Ads
             </div>
-            <div class="nav-item" onclick="switchTab('wallet', this)">
+            <div id="nav-wallet" class="nav-item" onclick="switchTab('wallet', this)">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
                 Wallet
             </div>
-            <div class="nav-item" onclick="switchTab('help', this)">
+            <div id="nav-help" class="nav-item" onclick="switchTab('help', this)">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.03-.42 1.98-1.03 2.75z"/></svg>
                 Help
             </div>
         </div>
     </div>
 
-    <!-- TIMEOUT POPUP MODAL -->
     <div id="timeout-modal" class="modal-overlay">
         <div class="modal-card">
             <div style="font-size: 36px; margin-bottom: 10px;">⏰</div>
@@ -222,7 +213,7 @@
 
     <script>
         let timerInterval = null;
-        let totalSeconds = 5; // Set to 300 for real 5 minutes
+        let totalSeconds = 300; // Full 5 minutes (300 seconds)
 
         function switchTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
@@ -230,7 +221,10 @@
             
             const target = document.getElementById('tab-' + tabId);
             if (target) target.style.display = 'block';
-            if (element) element.classList.add('active');
+            
+            const navTarget = document.getElementById('nav-' + tabId);
+            if (navTarget) navTarget.classList.add('active');
+            else if (element) element.classList.add('active');
         }
 
         function startOrder(advertiser, rate, amountUsd, amountEtb, payment) {
@@ -240,8 +234,8 @@
             document.getElementById('order-etb').innerText = amountEtb + " ETB";
             document.getElementById('order-payment').innerText = payment;
 
-            // Reset timer state
-            totalSeconds = 5;
+            // Reset timer back to 300 seconds (5 mins)
+            totalSeconds = 300;
             document.getElementById('status-icon').innerText = "⏱️";
             document.getElementById('status-icon').style.borderTopColor = "#f0b90b";
             document.getElementById('status-title').innerText = "Waiting for Response";
@@ -249,7 +243,7 @@
             document.getElementById('timeout-modal').style.display = 'none';
 
             // Switch to orders tab and highlight bottom nav
-            switchTab('orders', document.querySelectorAll('.nav-item')[1]);
+            switchTab('orders', document.getElementById('nav-orders'));
 
             if (timerInterval) clearInterval(timerInterval);
             updateTimerDisplay();
@@ -284,7 +278,7 @@
 
         function findAnotherClient() {
             document.getElementById('timeout-modal').style.display = 'none';
-            switchTab('home', document.querySelectorAll('.nav-item')[0]);
+            switchTab('home', document.getElementById('nav-home'));
         }
     </script>
 </body>
