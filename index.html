@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>One P2p</title>
+    <title>One P2P</title>
     <style>
         * {
             box-sizing: border-box;
@@ -42,19 +42,19 @@
         .app-header .left {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             font-size: 18px;
-            font-weight: 500;
+            font-weight: bold;
         }
 
         .app-header .icons {
             display: flex;
-            gap: 20px;
+            gap: 16px;
             color: #848e9c;
-            font-size: 20px;
+            font-size: 18px;
         }
 
-        /* Views */
+        /* Views System */
         .view {
             display: none;
             flex: 1;
@@ -68,23 +68,19 @@
             display: flex;
         }
 
-        /* Home View */
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f0b90b;
+            margin-bottom: 16px;
+        }
+
+        /* Home View Styles */
         .home-top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 16px;
-        }
-
-        .home-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #f0b90b;
-        }
-
-        .home-subtitle {
-            font-size: 12px;
-            color: #848e9c;
         }
 
         .currency-badge {
@@ -94,27 +90,6 @@
             border-radius: 6px;
             font-size: 13px;
             font-weight: bold;
-        }
-
-        .trade-tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .trade-tab {
-            background: none;
-            border: none;
-            font-size: 16px;
-            font-weight: bold;
-            color: #848e9c;
-            cursor: pointer;
-            padding-bottom: 4px;
-        }
-
-        .trade-tab.active {
-            color: #0ecb81;
-            border-bottom: 2px solid #0ecb81;
         }
 
         .ad-card {
@@ -152,18 +127,18 @@
             cursor: pointer;
         }
 
-        /* Buy Modal Form */
-        .buy-modal {
+        /* Buy Modal Overlays */
+        .modal-overlay {
             display: none;
-            position: absolute;
+            position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: #181a20;
-            z-index: 90;
+            z-index: 100;
             flex-direction: column;
             padding: 20px;
         }
 
-        .buy-modal.active {
+        .modal-overlay.active {
             display: flex;
         }
 
@@ -200,7 +175,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 8px;
         }
 
         .input-group input {
@@ -216,6 +191,7 @@
             background: #1e2329;
             border-radius: 8px;
             padding: 12px;
+            margin-top: 10px;
             margin-bottom: 12px;
         }
 
@@ -244,23 +220,6 @@
             color: #848e9c;
             cursor: not-allowed;
             opacity: 0.7;
-        }
-
-        /* Order Details View */
-        .timer-container {
-            background: #1e2329;
-            border: 1px solid #2b313a;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 16px;
-        }
-
-        .timer-display {
-            font-size: 32px;
-            font-weight: bold;
-            color: #f0b90b;
-            margin: 8px 0;
         }
 
         /* Navigation Bar */
@@ -297,11 +256,10 @@
 <body>
 
 <div class="app-container">
-    <!-- Header -->
     <div class="app-header">
         <div class="left">
             <span>✕</span>
-            <span>One P2p</span>
+            <span>One P2P</span>
         </div>
         <div class="icons">
             <span>⌄</span>
@@ -309,19 +267,13 @@
         </div>
     </div>
 
-    <!-- VIEW 1: HOME (MARKET PLACE) -->
     <div class="view active" id="homeView">
         <div class="home-top-bar">
             <div>
-                <div class="home-title">One P2P</div>
-                <div class="home-subtitle">Trade USDT with local currency</div>
+                <div class="section-title" style="margin-bottom: 2px;">One P2P</div>
+                <div style="font-size: 12px; color: #848e9c;">Trade USDT with local currency</div>
             </div>
             <div class="currency-badge">🇪🇹 ETB</div>
-        </div>
-        
-        <div class="trade-tabs">
-            <button class="trade-tab active">Buy</button>
-            <button class="trade-tab">Sell</button>
         </div>
 
         <div class="ad-card">
@@ -330,7 +282,7 @@
                     <div class="merchant-name">Teke_94 🏅</div>
                     <div class="merchant-stats">★ 98% | 340 orders</div>
                 </div>
-                <button class="action-buy-btn" onclick="openBuyModal()">Buy</button>
+                <button class="action-buy-btn" onclick="openModal('buyModal')">Buy</button>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:flex-end;">
                 <div>
@@ -347,23 +299,22 @@
         </div>
     </div>
 
-    <!-- VIEW 2: ORDERS -->
     <div class="view" id="ordersView">
-        <div class="home-title" style="margin-bottom: 16px;">My Orders</div>
-        <div id="ordersList">
-            <div style="color: #848e9c; font-size: 13px;">No completed orders yet.</div>
+        <div class="section-title">My Orders</div>
+        <div style="background: #1e2329; border: 1px solid #2b313a; border-radius: 8px; padding: 16px;">
+            <div style="font-size: 14px; font-weight: bold;">Buy USDT</div>
+            <div style="font-size: 12px; color: #848e9c; margin-top: 4px;">Order #43f58221</div>
+            <div style="font-size: 16px; font-weight: bold; color: #f0b90b; margin-top: 8px;">1,000.00 ETB (5.16 USD)</div>
         </div>
     </div>
 
-    <!-- VIEW 3: ADS -->
     <div class="view" id="adsView">
-        <div class="home-title" style="margin-bottom: 16px;">My Advertisements</div>
-        <div style="color: #848e9c; font-size: 13px;">You have no active ad listings.</div>
+        <div class="section-title">My Ads</div>
+        <div style="color: #848e9c; font-size: 13px;">No active advertisement listings.</div>
     </div>
 
-    <!-- VIEW 4: WALLET -->
     <div class="view" id="walletView">
-        <div class="home-title" style="margin-bottom: 16px;">Wallet</div>
+        <div class="section-title">Wallet</div>
         <div style="background: #1e2329; border: 1px solid #2b313a; border-radius: 12px; padding: 20px; text-align: center;">
             <div style="font-size: 12px; color: #848e9c;">Total Balance</div>
             <div style="font-size: 28px; font-weight: bold; color: #f0b90b; margin: 6px 0;">72.51 USDT</div>
@@ -371,17 +322,15 @@
         </div>
     </div>
 
-    <!-- VIEW 5: HELP -->
     <div class="view" id="helpView">
-        <div class="home-title" style="margin-bottom: 16px;">Help & Support</div>
-        <div style="color: #848e9c; font-size: 13px;">24/7 P2P Customer Support Gateway.</div>
+        <div class="section-title">Help Support</div>
+        <div style="color: #848e9c; font-size: 13px;">P2P Help Center & Customer Support.</div>
     </div>
 
-    <!-- BUY MODAL SCREEN -->
-    <div class="buy-modal" id="buyModal">
+    <div class="modal-overlay" id="buyModal">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
             <h2 style="font-size:18px;">Buy USDT</h2>
-            <button onclick="closeBuyModal()" style="background:none; border:none; color:#848e9c; font-size:20px; cursor:pointer;">✕</button>
+            <button onclick="closeModal('buyModal')" style="background:none; border:none; color:#848e9c; font-size:20px; cursor:pointer;">✕</button>
         </div>
 
         <div class="seller-info-box">
@@ -404,39 +353,15 @@
 
         <div class="error-message" id="errorMessage"></div>
 
-        <button class="submit-btn" id="confirmBuyBtn" disabled onclick="processOrder()">Buy USDT</button>
+        <button class="submit-btn" id="confirmBuyBtn" disabled onclick="submitOrder()">Buy USDT</button>
     </div>
 
-    <!-- ORDER PENDING CONFIRMATION SCREEN -->
-    <div class="buy-modal" id="orderPendingModal">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-            <h2 style="font-size:18px;">Order Pending</h2>
-            <button onclick="closeOrderPendingModal()" style="background:none; border:none; color:#848e9c; font-size:20px; cursor:pointer;">✕</button>
-        </div>
-
-        <div class="timer-container">
-            <div style="font-size:12px; color:#848e9c;">Time remaining to pay seller</div>
-            <div class="timer-display" id="timer">15:00</div>
-            <div style="font-size:11px; color:#0ecb81;">Funds locked in Escrow</div>
-        </div>
-
-        <div class="seller-info-box">
-            <div class="info-row"><span>Order ID:</span><span class="info-value" id="orderIdDisplay">#---</span></div>
-            <div class="info-row"><span>Amount to Pay:</span><span class="info-value" id="payAmountDisplay" style="color:#f0b90b; font-weight:bold;">0.00 ETB</span></div>
-            <div class="info-row"><span>Receive:</span><span class="info-value" id="receiveAmountDisplay">0.00 USD</span></div>
-            <div class="info-row"><span>Payment Method:</span><span class="info-value">Telebirr</span></div>
-        </div>
-
-        <button class="submit-btn" onclick="alert('Payment status sent to seller!')">Transferred, Notify Seller</button>
-    </div>
-
-    <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <button class="nav-item active" onclick="switchView('homeView', this)"><span>🏠</span><span>Home</span></button>
-        <button class="nav-item" onclick="switchView('ordersView', this)"><span>📋</span><span>Orders</span></button>
-        <button class="nav-item" onclick="switchView('adsView', this)"><span>📢</span><span>Ads</span></button>
-        <button class="nav-item" onclick="switchView('walletView', this)"><span>👛</span><span>Wallet</span></button>
-        <button class="nav-item" onclick="switchView('helpView', this)"><span>❓</span><span>Help</span></button>
+        <button class="nav-item active" onclick="switchTab('homeView', this)"><span>🏠</span><span>Home</span></button>
+        <button class="nav-item" onclick="switchTab('ordersView', this)"><span>📋</span><span>Orders</span></button>
+        <button class="nav-item" onclick="switchTab('adsView', this)"><span>📢</span><span>Ads</span></button>
+        <button class="nav-item" onclick="switchTab('walletView', this)"><span>👛</span><span>Wallet</span></button>
+        <button class="nav-item" onclick="switchTab('helpView', this)"><span>❓</span><span>Help</span></button>
     </div>
 </div>
 
@@ -445,40 +370,38 @@
     const MIN_LIMIT = 1000;
     const MAX_LIMIT = 10000;
 
-    const usdInput = document.getElementById('usdInput');
-    const etbOutput = document.getElementById('etbOutput');
-    const errorMessage = document.getElementById('errorMessage');
-    const confirmBuyBtn = document.getElementById('confirmBuyBtn');
-
-    let timerInterval = null;
-
-    function switchView(viewId, navElement) {
+    // View Switching Function
+    function switchTab(viewId, element) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
 
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        if (navElement) navElement.classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+        element.classList.add('active');
     }
 
-    function openBuyModal() {
-        document.getElementById('buyModal').classList.add('active');
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
     }
 
-    function closeBuyModal() {
-        document.getElementById('buyModal').classList.remove('active');
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
     }
 
-    usdInput.addEventListener('input', function() {
-        const val = parseFloat(this.value);
+    // Input Validation Logic
+    document.getElementById('usdInput').addEventListener('input', function() {
+        const usdVal = parseFloat(this.value);
+        const etbOutput = document.getElementById('etbOutput');
+        const errorMessage = document.getElementById('errorMessage');
+        const confirmBuyBtn = document.getElementById('confirmBuyBtn');
 
-        if (isNaN(val) || this.value.trim() === '' || val <= 0) {
+        if (isNaN(usdVal) || this.value.trim() === '' || usdVal <= 0) {
             etbOutput.innerText = '0.00 ETB';
             errorMessage.innerText = '';
             confirmBuyBtn.disabled = true;
             return;
         }
 
-        const totalEtb = val * EXCHANGE_RATE;
+        const totalEtb = usdVal * EXCHANGE_RATE;
         etbOutput.innerText = totalEtb.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ETB';
 
         if (totalEtb < MIN_LIMIT) {
@@ -493,38 +416,10 @@
         }
     });
 
-    function processOrder() {
-        const val = parseFloat(usdInput.value);
-        const totalEtb = val * EXCHANGE_RATE;
-
-        document.getElementById('orderIdDisplay').innerText = '#' + Math.floor(10000000 + Math.random() * 90000000);
-        document.getElementById('payAmountDisplay').innerText = totalEtb.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ETB';
-        document.getElementById('receiveAmountDisplay').innerText = val.toFixed(2) + ' USD';
-
-        closeBuyModal();
-        document.getElementById('orderPendingModal').classList.add('active');
-
-        startTimer(15 * 60);
-    }
-
-    function closeOrderPendingModal() {
-        clearInterval(timerInterval);
-        document.getElementById('orderPendingModal').classList.remove('active');
-    }
-
-    function startTimer(seconds) {
-        clearInterval(timerInterval);
-        let timeLeft = seconds;
-        timerInterval = setInterval(() => {
-            const mins = Math.floor(timeLeft / 60);
-            const secs = timeLeft % 60;
-            document.getElementById('timer').innerText = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                closeOrderPendingModal();
-            }
-            timeLeft--;
-        }, 1000);
+    function submitOrder() {
+        alert('Order submitted successfully!');
+        closeModal('buyModal');
+        switchTab('ordersView', document.querySelectorAll('.nav-item')[1]);
     }
 </script>
 
