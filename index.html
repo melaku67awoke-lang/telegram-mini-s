@@ -40,11 +40,8 @@
         
         .waiting-timer-ring { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #333; border-top-color: #f0b90b; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; font-size: 16px; }
         
-        /* Modal Overlay (Non-skippable modal) */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
         .modal-card { background: #1a1a1a; width: 100%; max-width: 340px; border-radius: 12px; padding: 24px 20px; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.5); position: relative; }
-        
-        /* Dropdown custom modal list */
         .dropdown-modal-list { max-height: 250px; overflow-y: auto; text-align: left; margin-top: 10px; }
         .dropdown-item { padding: 12px 10px; border-bottom: 1px solid #2a2a2a; display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; font-weight: bold; }
         .dropdown-item:hover { background: #262626; }
@@ -54,7 +51,7 @@
 
     <div class="container">
         
-        <!-- 1. HOME TAB (Buy & Sell Marketplace matching requested screenshots) -->
+        <!-- 1. HOME TAB -->
         <div id="tab-home" class="tab-content">
             <div class="header-flex">
                 <div>
@@ -69,12 +66,10 @@
                 <button id="btn-sell-toggle" class="toggle-btn" onclick="setHomeTradeMode('sell')">Sell</button>
             </div>
 
-            <div id="home-listings-container">
-                <!-- Dynamically populated or rendered via JS -->
-            </div>
+            <div id="home-listings-container"></div>
         </div>
 
-        <!-- 2. CHECKOUT PRE-ORDER TAB (Matches precise requested look) -->
+        <!-- 2. CHECKOUT PRE-ORDER TAB -->
         <div id="tab-checkout" class="tab-content" style="display: none;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="switchTab('home', document.querySelectorAll('.nav-item')[0])">
                 <span style="color: #f0b90b; font-size: 18px;">←</span>
@@ -155,11 +150,11 @@
             </div>
         </div>
 
-        <!-- 4. ADS TAB -->
+        <!-- 4. ADS TAB (Main Ads List) -->
         <div id="tab-ads" class="tab-content" style="display: none;">
             <div class="header-flex" style="margin-bottom: 4px;">
                 <h2 style="margin: 0;">My Ads</h2>
-                <button class="btn-action" style="width: auto; padding: 6px 16px; background: #f0b90b; color: #000;">Create</button>
+                <button class="btn-action" style="width: auto; padding: 6px 16px; background: #f0b90b; color: #000;" onclick="openCreateAdScreen()">Create</button>
             </div>
             <div style="font-size: 12px; color: #aaa; margin-bottom: 12px;">Manage your buy and sell offers</div>
             <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; margin-bottom: 15px;">
@@ -172,7 +167,70 @@
             </div>
         </div>
 
-        <!-- 5. WALLET TAB (Matches exact requested wallet layout) -->
+        <!-- 4b. CREATE NEW AD SUB-SCREEN (Matches exact requested layout) -->
+        <div id="tab-create-ad" class="tab-content" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="switchTab('ads', document.querySelectorAll('.nav-item')[2])">
+                <span style="color: #f0b90b; font-size: 18px;">←</span>
+                <span style="color: #aaa; font-size: 14px;">Back to My Ads</span>
+            </div>
+            
+            <h2 style="margin: 0 0 15px 0; font-size: 20px;">Create New Ad</h2>
+
+            <div class="card">
+                <div style="font-weight: bold; font-size: 14px; margin-bottom: 8px;">Ad Type</div>
+                <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+                    <button id="ad-type-buy" style="flex: 1; background: #121212; border: 2px solid #0ecb81; border-radius: 8px; padding: 12px; color: #fff; text-align: left; cursor: pointer;" onclick="setCreateAdType('buy')">
+                        <div style="color: #0ecb81; font-weight: bold; font-size: 13px; margin-bottom: 2px;">↗ I want to buy</div>
+                        <div style="font-size: 11px; color: #aaa;">USDT with ETB</div>
+                    </button>
+                    <button id="ad-type-sell" style="flex: 1; background: #121212; border: 2px solid #2a2a2a; border-radius: 8px; padding: 12px; color: #fff; text-align: left; cursor: pointer;" onclick="setCreateAdType('sell')">
+                        <div style="color: #f6465d; font-weight: bold; font-size: 13px; margin-bottom: 2px;">↘ I want to sell</div>
+                        <div style="font-size: 11px; color: #aaa;">USDT for ETB</div>
+                    </button>
+                </div>
+
+                <div style="font-weight: bold; font-size: 14px; margin-bottom: 8px;">Pricing</div>
+                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Price per USDT (ETB)</div>
+                <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
+                    <input type="number" value="58.50" style="background: transparent; border: none; color: #fff; font-size: 16px; font-weight: bold; width: 100%; outline: none;">
+                    <span style="color: #aaa; font-weight: bold; font-size: 13px;">ETB</span>
+                </div>
+                <div style="font-size: 11px; color: #777; margin-bottom: 15px;">Price range from 92.50 to 277.50 ETB</div>
+
+                <div style="font-weight: bold; font-size: 14px; margin-bottom: 8px;">Total Amount</div>
+                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Amount (USDT)</div>
+                <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px; margin-bottom: 15px;">
+                    <input type="number" value="100.00" style="background: transparent; border: none; color: #fff; font-size: 16px; font-weight: bold; width: 100%; outline: none;">
+                </div>
+
+                <div style="font-weight: bold; font-size: 14px; margin-bottom: 8px;">Order Limits</div>
+                <div style="display: flex; gap: 10px; margin-bottom: 6px;">
+                    <div style="flex: 1;">
+                        <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Min (ETB)</div>
+                        <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px;">
+                            <input type="number" value="200" style="background: transparent; border: none; color: #fff; font-size: 14px; font-weight: bold; width: 100%; outline: none;">
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Max (ETB)</div>
+                        <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px;">
+                            <input type="number" value="5000" style="background: transparent; border: none; color: #fff; font-size: 14px; font-weight: bold; width: 100%; outline: none;">
+                        </div>
+                    </div>
+                </div>
+                <div style="font-size: 11px; color: #777; margin-bottom: 15px;">Limits must be between 200 and 5,000,000 ETB</div>
+
+                <div style="font-weight: bold; font-size: 14px; margin-bottom: 8px;">Payment Methods</div>
+                <div style="background: #121212; border: 1px solid #0ecb81; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <span style="font-weight: bold; font-size: 14px;">Telebirr</span>
+                    <span style="color: #0ecb81; font-weight: bold;">✔</span>
+                </div>
+
+                <button class="btn-action" style="background: #f0b90b; color: #000; padding: 12px; font-size: 15px;" onclick="publishAd()">Publish Ad</button>
+            </div>
+        </div>
+
+        <!-- 5. WALLET TAB -->
         <div id="tab-wallet" class="tab-content" style="display: none;">
             <h2>Wallet</h2>
             <div class="wallet-card">
@@ -229,9 +287,7 @@
         </div>
     </div>
 
-    <!-- NON-SKIPPABLE MODALS CONTAINER -->
-    
-    <!-- 1. Payment Accounts Form Modal -->
+    <!-- MODALS -->
     <div id="modal-payment-accounts" class="modal-overlay">
         <div class="modal-card" style="max-width: 360px; padding: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px;">
@@ -240,8 +296,6 @@
                     <div style="font-size: 11px; color: #aaa;">Manage your payment methods</div>
                 </div>
             </div>
-
-            <!-- Provider Selector -->
             <div style="text-align: left; margin-bottom: 12px;">
                 <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Provider *</div>
                 <div onclick="openProviderSelector()" style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 12px; font-size: 14px; font-weight: bold; color: #fff; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
@@ -249,32 +303,12 @@
                     <span style="color: #777;">▼</span>
                 </div>
             </div>
-
-            <!-- Account Name -->
             <div style="text-align: left; margin-bottom: 12px;">
                 <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Account Name *</div>
                 <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px;">
-                    <input type="text" id="input-account-name" value="Melaku Awoke" style="background: transparent; border: none; color: #fff; font-size: 14px; font-weight: bold; width: 100%; outline: none;" readonly>
-                </div>
-                <div style="font-size: 10px; color: #777; margin-top: 3px;">Uses your verified full name (cannot be changed)</div>
-            </div>
-
-            <!-- Account Number -->
-            <div style="text-align: left; margin-bottom: 12px;">
-                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Account Number (Optional)</div>
-                <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px;">
-                    <input type="text" id="input-acc-num" placeholder="Account number" style="background: transparent; border: none; color: #fff; font-size: 14px; width: 100%; outline: none;">
+                    <input type="text" value="Melaku Awoke" style="background: transparent; border: none; color: #fff; font-size: 14px; font-weight: bold; width: 100%; outline: none;" readonly>
                 </div>
             </div>
-
-            <!-- Phone Number -->
-            <div style="text-align: left; margin-bottom: 16px;">
-                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Phone Number (Optional)</div>
-                <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px;">
-                    <input type="text" id="input-phone-num" placeholder="Phone number" style="background: transparent; border: none; color: #fff; font-size: 14px; width: 100%; outline: none;">
-                </div>
-            </div>
-
             <div style="display: flex; gap: 10px;">
                 <button class="btn-action" style="background: #2b2b2b; color: #fff;" onclick="closePaymentAccountsModal()">Cancel</button>
                 <button class="btn-action" style="background: #f0b90b; color: #000;" onclick="savePaymentMethod()">Save</button>
@@ -282,70 +316,27 @@
         </div>
     </div>
 
-    <!-- 2. Provider Selection Sub-Modal (Includes Telebirr) -->
-    <div id="modal-provider-selector" class="modal-overlay">
-        <div class="modal-card" style="max-width: 320px; padding: 20px;">
-            <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; text-align: left; border-bottom: 1px solid #2a2a2a; padding-bottom: 8px;">Select a provider</div>
-            <div class="dropdown-modal-list">
-                <div class="dropdown-item" onclick="selectProvider('Telebirr')"><span style="color:#0ecb81">🔘</span> Telebirr</div>
-                <div class="dropdown-item" onclick="selectProvider('CBE')"><span style="color:#0ecb81">⚪</span> CBE</div>
-                <div class="dropdown-item" onclick="selectProvider('Awash')"><span style="color:#0ecb81">⚪</span> Awash</div>
-                <div class="dropdown-item" onclick="selectProvider('Dashen')"><span style="color:#0ecb81">⚪</span> Dashen</div>
-                <div class="dropdown-item" onclick="selectProvider('Abyssinia')"><span style="color:#0ecb81">⚪</span> Abyssinia</div>
-                <div class="dropdown-item" onclick="selectProvider('Wegagen')"><span style="color:#0ecb81">⚪</span> Wegagen</div>
-                <div class="dropdown-item" onclick="selectProvider('Coop')"><span style="color:#0ecb81">⚪</span> Coop</div>
-                <div class="dropdown-item" onclick="selectProvider('M-PESA')"><span style="color:#0ecb81">⚪</span> M-PESA</div>
-            </div>
-            <button class="btn-action" style="background: #2b2b2b; color: #fff; margin-top: 15px;" onclick="closeProviderSelector()">Close</button>
-        </div>
-    </div>
-
-    <!-- 3. Deposit Modal -->
     <div id="modal-deposit" class="modal-overlay">
         <div class="modal-card">
             <h3 style="margin: 0 0 8px 0; color: #f0b90b;">Deposit USDT</h3>
-            <p style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Send only USDT to this deposit address (TRC20 / BEP20)</p>
             <div style="background: #121212; padding: 12px; border-radius: 8px; border: 1px solid #2a2a2a; font-family: monospace; font-size: 12px; word-break: break-all; color: #0ecb81; margin-bottom: 20px;">
                 0x71C...392F8aB901452e
             </div>
-            <button class="btn-action" style="background: #f0b90b; color: #000;" onclick="closeDepositModal()">I Have Sent / Done</button>
+            <button class="btn-action" style="background: #f0b90b; color: #000;" onclick="closeDepositModal()">Done</button>
         </div>
     </div>
 
-    <!-- 4. Withdraw Modal -->
     <div id="modal-withdraw" class="modal-overlay">
         <div class="modal-card">
             <h3 style="margin: 0 0 8px 0; color: #f6465d;">Withdraw USDT</h3>
-            <div style="text-align: left; margin-bottom: 12px;">
-                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Destination Address</div>
-                <input type="text" placeholder="Paste wallet address" style="width: 100%; background: #121212; border: 1px solid #2a2a2a; border-radius: 6px; padding: 10px; color: #fff; font-size: 13px; outline: none; box-sizing: border-box;">
-            </div>
-            <div style="text-align: left; margin-bottom: 20px;">
-                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Amount (USDT)</div>
-                <input type="number" value="50" style="width: 100%; background: #121212; border: 1px solid #2a2a2a; border-radius: 6px; padding: 10px; color: #fff; font-size: 13px; outline: none; box-sizing: border-box;">
-            </div>
             <div style="display: flex; gap: 10px;">
                 <button class="btn-action" style="background: #2b2b2b; color: #fff;" onclick="closeWithdrawModal()">Cancel</button>
-                <button class="btn-action sell" onclick="closeWithdrawModal()">Confirm Withdrawal</button>
+                <button class="btn-action sell" onclick="closeWithdrawModal()">Confirm</button>
             </div>
-        </div>
-    </div>
-
-    <!-- 5. TIMEOUT POPUP MODAL -->
-    <div id="timeout-modal" class="modal-overlay">
-        <div class="modal-card">
-            <div style="font-size: 36px; margin-bottom: 10px;">⏰</div>
-            <h3 style="margin: 0 0 8px 0; color: #fff; font-size: 18px;">Order Cancelled</h3>
-            <p style="font-size: 13px; color: #aaa; margin-bottom: 20px; line-height: 1.5;">The advertiser didn't respond within 5 minutes. Find another client.</p>
-            <button class="btn-action" onclick="findAnotherClient()">Find Another Client</button>
         </div>
     </div>
 
     <script>
-        let timerInterval = null;
-        let totalSeconds = 300; 
-        let currentOrderData = null;
-        let cancelledOrdersList = [];
         let homeMode = 'buy';
         let activeCheckout = { advertiser: '', rate: 0, payment: '', balance: '', maxLimit: '' };
 
@@ -416,6 +407,31 @@
             else if (element) element.classList.add('active');
         }
 
+        function openCreateAdScreen() {
+            switchTab('create-ad', null);
+        }
+
+        function setCreateAdType(type) {
+            const buyBtn = document.getElementById('ad-type-buy');
+            const sellBtn = document.getElementById('ad-type-sell');
+            if (type === 'buy') {
+                buyBtn.style.border = '2px solid #0ecb81';
+                buyBtn.querySelector('div').style.color = '#0ecb81';
+                sellBtn.style.border = '2px solid #2a2a2a';
+                sellBtn.querySelector('div').style.color = '#f6465d';
+            } else {
+                sellBtn.style.border = '2px solid #f6465d';
+                sellBtn.querySelector('div').style.color = '#f6465d';
+                buyBtn.style.border = '2px solid #2a2a2a';
+                buyBtn.querySelector('div').style.color = '#0ecb81';
+            }
+        }
+
+        function publishAd() {
+            alert('Ad successfully published!');
+            switchTab('ads', document.querySelectorAll('.nav-item')[2]);
+        }
+
         function switchSubTab(subType) {
             if (subType === 'ongoing') {
                 document.getElementById('sub-ongoing-btn').classList.add('active');
@@ -430,144 +446,39 @@
             }
         }
 
-        /* Non-Skippable Modal Controls */
-        function openPaymentAccountsModal() {
-            document.getElementById('modal-payment-accounts').style.display = 'flex';
-        }
-        function closePaymentAccountsModal() {
-            document.getElementById('modal-payment-accounts').style.display = 'none';
-        }
-        function openProviderSelector() {
-            document.getElementById('modal-provider-selector').style.display = 'flex';
-        }
-        function closeProviderSelector() {
-            document.getElementById('modal-provider-selector').style.display = 'none';
-        }
-        function selectProvider(name) {
-            document.getElementById('selected-provider-label').innerText = name;
-            closeProviderSelector();
-        }
-        function savePaymentMethod() {
-            alert('Payment Method successfully saved!');
-            closePaymentAccountsModal();
-        }
-
-        function openDepositModal() {
-            document.getElementById('modal-deposit').style.display = 'flex';
-        }
-        function closeDepositModal() {
-            document.getElementById('modal-deposit').style.display = 'none';
-        }
-
-        function openWithdrawModal() {
-            document.getElementById('modal-withdraw').style.display = 'flex';
-        }
-        function closeWithdrawModal() {
-            document.getElementById('modal-withdraw').style.display = 'none';
-        }
+        function openPaymentAccountsModal() { document.getElementById('modal-payment-accounts').style.display = 'flex'; }
+        function closePaymentAccountsModal() { document.getElementById('modal-payment-accounts').style.display = 'none'; }
+        function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
+        function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
+        function openWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'flex'; }
+        function closeWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'none'; }
+        function savePaymentMethod() { alert('Saved!'); closePaymentAccountsModal(); }
 
         function openCheckout(idx) {
             const item = listingsData[homeMode][idx];
-            activeCheckout = {
-                advertiser: item.advertiser,
-                rate: item.rateVal,
-                payment: item.payment,
-                balance: item.balance,
-                maxLimit: item.limit
-            };
-
+            activeCheckout = { advertiser: item.advertiser, rate: item.rateVal, payment: item.payment, balance: item.balance, maxLimit: item.limit };
             document.getElementById('chk-payment').innerText = item.payment;
             document.getElementById('chk-balance').innerText = item.balance + " USDT";
             document.getElementById('checkout-title-header').innerText = item.advertiser + " P2P";
             document.getElementById('chk-advertiser-name').innerText = item.advertiser;
             document.getElementById('chk-rate-text').innerText = `Rate: 1 USD = ${item.rateVal} ETB`;
             document.getElementById('chk-max-limit').innerText = item.limit.split(' - ')[1];
-
-            document.getElementById('input-usd-amount').value = (homeMode === 'buy' && item.advertiser === 'Yona') ? "5.49" : "12.00";
+            document.getElementById('input-usd-amount').value = "5.49";
             calculateETB();
-
             switchTab('checkout', null);
         }
 
         function calculateETB() {
             let usd = parseFloat(document.getElementById('input-usd-amount').value) || 0;
-            let totalEtb = (usd * activeCheckout.rate).toFixed(2);
-            document.getElementById('calc-etb-total').innerText = totalEtb + " ETB";
+            document.getElementById('calc-etb-total').innerText = (usd * activeCheckout.rate).toFixed(2) + " ETB";
         }
 
         function confirmAndStartTimer() {
-            let usd = document.getElementById('input-usd-amount').value || "5.49";
-            let etb = document.getElementById('calc-etb-total').innerText;
-
-            currentOrderData = {
-                id: '#43f' + Math.floor(10000 + Math.random() * 90000),
-                advertiser: activeCheckout.advertiser,
-                rate: activeCheckout.rate.toFixed(2),
-                amountUsd: usd,
-                amountEtb: etb.replace(' ETB', ''),
-                payment: activeCheckout.payment,
-                created: new Date().toLocaleString()
-            };
-
-            totalSeconds = 300; 
-
-            document.getElementById('ongoing-empty').style.display = 'none';
-            const ongoingCard = document.getElementById('ongoing-order-card');
-            ongoingCard.style.display = 'block';
-            ongoingCard.innerHTML = `
-                <div class="card">
-                    <div id="status-icon" class="waiting-timer-ring">⏱️</div>
-                    <h3 style="margin: 0 0 5px 0; color: #fff; text-align: center;">Waiting for Response</h3>
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <div id="countdown-timer" style="background: #121212; display: inline-block; padding: 6px 16px; border-radius: 20px; color: #f0b90b; font-weight: bold; border: 1px solid #333;">05:00</div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('ongoing-count').innerText = "1";
-            document.getElementById('timeout-modal').style.display = 'none';
-
+            alert('Order request sent successfully!');
             switchTab('orders', document.getElementById('nav-orders'));
             switchSubTab('ongoing');
-
-            if (timerInterval) clearInterval(timerInterval);
-            updateTimerDisplay();
-            timerInterval = setInterval(runTimer, 1000);
         }
 
-        function runTimer() {
-            if (totalSeconds > 0) {
-                totalSeconds--;
-                updateTimerDisplay();
-            } else {
-                clearInterval(timerInterval);
-                if (currentOrderData) {
-                    cancelledOrdersList.unshift(currentOrderData);
-                    currentOrderData = null;
-                }
-                document.getElementById('ongoing-order-card').style.display = 'none';
-                document.getElementById('ongoing-empty').style.display = 'block';
-                document.getElementById('ongoing-count').innerText = "0";
-
-                document.getElementById('timeout-modal').style.display = 'flex';
-            }
-        }
-
-        function updateTimerDisplay() {
-            const timerEl = document.getElementById('countdown-timer');
-            if (timerEl) {
-                let m = Math.floor(totalSeconds / 60);
-                let s = totalSeconds % 60;
-                timerEl.innerText = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
-            }
-        }
-
-        function findAnotherClient() {
-            document.getElementById('timeout-modal').style.display = 'none';
-            switchTab('home', document.getElementById('nav-home'));
-        }
-
-        // Initialize home listings on load
         renderHomeListings();
     </script>
 </body>
