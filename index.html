@@ -104,7 +104,7 @@
             </div>
         </div>
 
-        <!-- 2. ORDERS TAB (With Ongoing & Cancelled sub-sections) -->
+        <!-- 2. ORDERS TAB -->
         <div id="tab-orders" class="tab-content" style="display: none;">
             <div class="header-flex">
                 <h2 style="margin: 0;">My Orders</h2>
@@ -317,7 +317,7 @@
             } else {
                 clearInterval(timerInterval);
                 
-                // Move order to cancelled list storage
+                // Move order from ongoing to cancelled list storage
                 if (currentOrderData) {
                     cancelledOrdersList.unshift(currentOrderData);
                     currentOrderData = null;
@@ -325,13 +325,13 @@
                 
                 renderCancelledOrders();
 
-                // Hide ongoing card, show empty state for ongoing
-                document.getElementById('ongoing-order-card.style.display') = 'none'; // safe check
+                // Completely clear & remove from Ongoing view
                 document.getElementById('ongoing-order-card').style.display = 'none';
+                document.getElementById('ongoing-order-card').innerHTML = '';
                 document.getElementById('ongoing-empty').style.display = 'block';
                 document.getElementById('ongoing-count').innerText = "0";
 
-                // Show popup notification
+                // Show timeout popup modal
                 document.getElementById('timeout-modal').style.display = 'flex';
             }
         }
@@ -361,16 +361,33 @@
             let html = '';
             cancelledOrdersList.forEach(order => {
                 html += `
-                    <div class="card" style="border-left: 3px solid #f6465d;">
+                    <div class="card" style="border-left: 3px solid #f6465d; margin-bottom: 12px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                             <span style="font-weight: bold; color: #fff;">Buy USDT</span>
                             <span style="font-size: 11px; background: rgba(246,70,93,0.15); color: #f6465d; padding: 2px 8px; border-radius: 4px; font-weight: bold;">Cancelled</span>
                         </div>
-                        <div style="font-size: 12px; color: #aaa; line-height: 1.6;">
-                            <div>Request ID: <span style="color:#fff;">${order.id}</span></div>
-                            <div>Amount: <span style="color:#fff;">${order.amountUsd} USDT</span> (${order.amountEtb} ETB)</div>
-                            <div>Advertiser: <span style="color:#fff;">${order.advertiser}</span></div>
-                            <div style="color: #f6465d; font-size: 11px; margin-top: 4px;">Reason: Timed out - No response from advertiser</div>
+                        <div style="text-align: left; font-size: 13px; color: #aaa;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span>Request ID:</span> <span style="color: #fff; font-weight: bold;">${order.id}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span>Amount:</span> <span style="color: #fff; font-weight: bold;">${order.amountUsd} USDT</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span>ETB Amount:</span> <span style="color: #f0b90b; font-weight: bold;">${order.amountEtb} ETB</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span>Advertiser:</span> <span style="color: #fff; font-weight: bold;">${order.advertiser}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span>Payment:</span> <span style="color: #00b0ff; font-weight: bold;">${order.payment}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span>Created:</span> <span style="color: #fff; font-size: 12px;">${order.created}</span>
+                            </div>
+                            <div style="border-top: 1px solid #2a2a2a; margin-top: 10px; padding-top: 8px; color: #f6465d; font-size: 11px; font-weight: bold;">
+                                Reason: Timed out - No response from advertiser
+                            </div>
                         </div>
                     </div>
                 `;
