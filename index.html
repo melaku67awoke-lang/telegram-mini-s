@@ -24,7 +24,6 @@
         .card-details { display: flex; justify-content: space-between; margin-top: 12px; font-size: 13px; color: #aaa; }
         .card-details val { display: block; color: #fff; font-size: 14px; font-weight: bold; margin-top: 2px; }
         
-        /* Orders Sub-tabs */
         .orders-sub-tabs { display: flex; background: #181818; border-radius: 8px; padding: 4px; margin-bottom: 15px; border: 1px solid #2a2a2a; }
         .sub-tab-btn { flex: 1; background: transparent; border: none; color: #aaa; padding: 8px 0; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; text-align: center; }
         .sub-tab-btn.active { background: #2b2b2b; color: #f0b90b; border: 1px solid #3d3d3d; }
@@ -41,9 +40,14 @@
         
         .waiting-timer-ring { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #333; border-top-color: #f0b90b; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; font-size: 16px; }
         
-        /* Modal Overlay */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
-        .modal-card { background: #1a1a1a; width: 100%; max-width: 320px; border-radius: 12px; padding: 24px 20px; border: 1px solid #333; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        /* Modal Overlay (Non-skippable modal) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .modal-card { background: #1a1a1a; width: 100%; max-width: 340px; border-radius: 12px; padding: 24px 20px; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.5); position: relative; }
+        
+        /* Dropdown custom modal list */
+        .dropdown-modal-list { max-height: 250px; overflow-y: auto; text-align: left; margin-top: 10px; }
+        .dropdown-item { padding: 12px 10px; border-bottom: 1px solid #2a2a2a; display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        .dropdown-item:hover { background: #262626; }
     </style>
 </head>
 <body>
@@ -83,25 +87,6 @@
                     <div>PAYMENT <val style="color: #00b0ff;">Telebirr</val></div>
                 </div>
             </div>
-
-            <!-- Ad Card 2 -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="user-info">
-                        <div class="avatar" style="background:#f0b90b;">Y</div>
-                        <div>
-                            <span style="font-weight: bold;">Yona 🥈 👑</span>
-                            <div style="font-size: 11px; color: #aaa;">⭐ 80% | 752 orders</div>
-                        </div>
-                    </div>
-                    <div style="width: 80px;"><button class="btn-action" onclick="openCheckout('Yona', '189.99', '1,000 - 1,050 ETB', 'M-PESA', '72.51')">Buy</button></div>
-                </div>
-                <div class="card-details">
-                    <div>PRICE <val>189.99 ETB</val></div>
-                    <div>LIMIT <val>1,000 - 1,050 ETB</val></div>
-                    <div>PAYMENT <val style="color: #00b0ff;">M-PESA</val></div>
-                </div>
-            </div>
         </div>
 
         <!-- 2. CHECKOUT PRE-ORDER TAB -->
@@ -113,8 +98,8 @@
 
             <div class="card" style="padding: 12px 15px; margin-bottom: 12px; font-size: 12px; color: #aaa;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <div>Minimum<br><span style="color: #fff; font-weight: bold; font-size: 13px;" id="chk-min">1,000.00 ETB</span></div>
-                    <div style="text-align: right;">Maximum<br><span style="color: #fff; font-weight: bold; font-size: 13px;" id="chk-max">14,174.09 ETB</span></div>
+                    <div>Minimum<br><span style="color: #fff; font-weight: bold; font-size: 13px;">1,000.00 ETB</span></div>
+                    <div style="text-align: right;">Maximum<br><span style="color: #fff; font-weight: bold; font-size: 13px;">14,174.09 ETB</span></div>
                 </div>
                 <div style="border-top: 1px solid #2a2a2a; padding-top: 8px; margin-top: 8px;">
                     Seller's Available Balance<br>
@@ -130,10 +115,6 @@
 
             <div class="card">
                 <div style="font-weight: bold; font-size: 15px; margin-bottom: 12px;">Buy USDT</div>
-                <div style="display: flex; background: #121212; border-radius: 6px; padding: 3px; margin-bottom: 12px; border: 1px solid #2a2a2a;">
-                    <div style="flex: 1; text-align: center; background: #0ecb81; color: #000; padding: 6px; border-radius: 4px; font-weight: bold; font-size: 13px;">USD</div>
-                    <div style="flex: 1; text-align: center; color: #777; padding: 6px; border-radius: 4px; font-weight: bold; font-size: 13px;">ETB</div>
-                </div>
                 <div style="background: #121212; border: 1px solid #f0b90b; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px;">
                     <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Amount</div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -141,22 +122,11 @@
                         <span style="color: #aaa; font-weight: bold; font-size: 13px;">USD</span>
                     </div>
                 </div>
-                <div style="font-size: 11px; color: #777; margin-bottom: 12px;" id="chk-limits-note">Min: $5.16 - Max: $73.10 USDT</div>
-
                 <div style="background: #121212; padding: 12px; border-radius: 8px; border: 1px solid #2a2a2a; margin-bottom: 15px;">
                     <div style="font-size: 11px; color: #aaa;">You will pay</div>
                     <div style="color: #f0b90b; font-size: 20px; font-weight: bold; margin-top: 2px;" id="calc-etb-total">2326.80 ETB</div>
                 </div>
-
-                <div style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Rate: 1 USD = <span id="chk-rate-val">193.90</span> ETB</div>
-
                 <button class="btn-action" onclick="confirmAndStartTimer()" style="padding: 12px; font-size: 15px; margin-bottom: 15px;">Buy USDT</button>
-
-                <div style="font-size: 11px; color: #777; line-height: 1.6;">
-                    <div>• Request will be sent to <span id="note-advertiser" style="color: #aaa;">Teke_94</span></div>
-                    <div>• They have 5 minutes to accept</div>
-                    <div>• You'll be notified once accepted</div>
-                </div>
             </div>
         </div>
 
@@ -165,22 +135,16 @@
             <div class="header-flex">
                 <h2 style="margin: 0;">My Orders</h2>
             </div>
-
-            <!-- Sub-tabs for Ongoing vs Cancelled -->
             <div class="orders-sub-tabs">
                 <button id="sub-ongoing-btn" class="sub-tab-btn active" onclick="switchSubTab('ongoing')">Ongoing (<span id="ongoing-count">0</span>)</button>
                 <button id="sub-cancelled-btn" class="sub-tab-btn" onclick="switchSubTab('cancelled')">Cancelled (<span id="cancelled-count">0</span>)</button>
             </div>
-
-            <!-- Ongoing Orders Section Content -->
             <div id="sub-content-ongoing">
                 <div id="ongoing-empty" class="card" style="text-align: center; padding: 35px 20px;">
                     <p style="color: #777; margin: 0; font-size: 13px;">No ongoing orders right now.</p>
                 </div>
                 <div id="ongoing-order-card" style="display: none;"></div>
             </div>
-
-            <!-- Cancelled Orders Section Content -->
             <div id="sub-content-cancelled" style="display: none;">
                 <div id="cancelled-empty" class="card" style="text-align: center; padding: 35px 20px;">
                     <p style="color: #777; margin: 0; font-size: 13px;">No cancelled orders.</p>
@@ -189,15 +153,13 @@
             </div>
         </div>
 
-        <!-- 4. ADS TAB (Updated to exact design matching screenshots) -->
+        <!-- 4. ADS TAB -->
         <div id="tab-ads" class="tab-content" style="display: none;">
             <div class="header-flex" style="margin-bottom: 4px;">
                 <h2 style="margin: 0;">My Ads</h2>
                 <button class="btn-action" style="width: auto; padding: 6px 16px; background: #f0b90b; color: #000;" onclick="openCreateAd()">Create</button>
             </div>
             <div style="font-size: 12px; color: #aaa; margin-bottom: 12px;">Manage your buy and sell offers</div>
-
-            <!-- Keep Me Online Switch Card -->
             <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; margin-bottom: 15px;">
                 <div>
                     <div style="font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 6px;">
@@ -205,120 +167,10 @@
                     </div>
                     <div style="font-size: 11px; color: #aaa; margin-top: 2px;">Always visible to traders</div>
                 </div>
-                <label style="position: relative; display: inline-block; width: 44px; height: 24px;">
-                    <input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
-                    <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #0ecb81; transition: .3s; border-radius: 24px;"></span>
-                    <span style="position: absolute; content: ''; height: 18px; width: 18px; left: 23px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;"></span>
-                </label>
-            </div>
-
-            <!-- Filter tabs bar -->
-            <div style="display: flex; background: #1e1e1e; border-radius: 6px; padding: 4px; margin-bottom: 15px; border: 1px solid #2a2a2a; text-align: center; font-size: 13px; font-weight: bold;">
-                <div style="flex: 1; padding: 6px; color: #aaa; cursor: pointer;">All</div>
-                <div style="flex: 1; padding: 6px; color: #aaa; cursor: pointer;">Buy</div>
-                <div style="flex: 1; padding: 6px; color: #aaa; cursor: pointer;">Sell</div>
-                <div style="flex: 1; padding: 6px; background: #0ecb81; color: #000; border-radius: 4px; cursor: pointer;">Accounts</div>
-            </div>
-
-            <!-- Saved Payment Methods Header & Button -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <div style="font-weight: bold; font-size: 15px;">Saved Payment Methods</div>
-                <button style="background: #f0b90b; color: #000; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;" onclick="alert('Add Method window')">Add Method</button>
-            </div>
-            <div style="font-size: 11px; color: #aaa; margin-bottom: 15px;">Manage your payment methods for faster ad creation</div>
-
-            <!-- No Payment Methods Box -->
-            <div class="card" style="text-align: center; padding: 30px 20px;">
-                <div style="width: 45px; height: 45px; background: #262626; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto;">
-                    <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; fill: #aaa;"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
-                </div>
-                <div style="font-weight: bold; font-size: 15px; margin-bottom: 6px;">No Payment Methods</div>
-                <div style="font-size: 11px; color: #aaa; margin-bottom: 15px;">Save your payment methods for quick access when creating ads</div>
-                <button style="background: #f0b90b; color: #000; border: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; width: 100%;" onclick="alert('Add Payment Method modal')">Add Your First Payment Method</button>
-            </div>
-
-            <!-- Note Box at bottom of Ads tab -->
-            <div class="card" style="border: 1px solid #2a2a2a; background: #181818; padding: 12px; font-size: 11px; color: #aaa; line-height: 1.5;">
-                <span style="color: #f0b90b; font-weight: bold;">Note:</span> You can create a maximum of 1 Buy ad and 1 Sell ad. Multiple ads of the same type are not allowed.
             </div>
         </div>
 
-        <!-- 5. CREATE NEW AD FORM VIEW (Matches screenshots exactly) -->
-        <div id="tab-create-ad" class="tab-content" style="display: none;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;" onclick="switchTab('ads', document.querySelectorAll('.nav-item')[2])">
-                <span style="color: #f0b90b; font-size: 18px;">←</span>
-                <span style="color: #aaa; font-size: 14px;">Back to My Ads</span>
-            </div>
-            <h2 style="margin: 0 0 15px 0; font-size: 20px;">Create New Ad</h2>
-
-            <!-- Ad Type Selection -->
-            <div class="card">
-                <div style="font-weight: bold; margin-bottom: 10px; font-size: 14px;">Ad Type</div>
-                <div style="display: flex; gap: 10px;">
-                    <div id="ad-type-buy" onclick="selectAdType('buy')" style="flex: 1; background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 12px; text-align: center; cursor: pointer;">
-                        <div style="color: #0ecb81; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📈 I want to buy</div>
-                        <div style="font-size: 10px; color: #777;">USDT with ETB</div>
-                    </div>
-                    <div id="ad-type-sell" onclick="selectAdType('sell')" style="flex: 1; background: #121212; border: 1px solid #f6465d; border-radius: 8px; padding: 12px; text-align: center; cursor: pointer;">
-                        <div style="color: #f6465d; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📉 I want to sell</div>
-                        <div style="font-size: 10px; color: #777;">USDT for ETB</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pricing Section -->
-            <div class="card">
-                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">Pricing</div>
-                <div style="font-size: 11px; color: #aaa; margin-bottom: 6px;">Price per USDT (ETB)</div>
-                <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <input type="number" value="58.50" style="background: transparent; border: none; color: #fff; font-size: 16px; font-weight: bold; width: 100%; outline: none;">
-                    <span style="color: #aaa; font-weight: bold; font-size: 13px;">ETB</span>
-                </div>
-                <div style="font-size: 11px; color: #777;" id="pricing-range-note">Price range from 97.50 to 292.50 ETB</div>
-            </div>
-
-            <!-- Total Amount Section -->
-            <div class="card">
-                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">Total Amount</div>
-                <div style="font-size: 11px; color: #aaa; margin-bottom: 6px;">Amount (USDT)</div>
-                <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px;">
-                    <input type="number" value="100.00" style="background: transparent; border: none; color: #fff; font-size: 16px; font-weight: bold; width: 100%; outline: none;">
-                </div>
-            </div>
-
-            <!-- Order Limits Section -->
-            <div class="card">
-                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">Order Limits</div>
-                <div style="display: flex; gap: 10px; margin-bottom: 6px;">
-                    <div style="flex: 1;">
-                        <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Min (ETB)</div>
-                        <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px;">
-                            <input type="number" value="200" style="background: transparent; border: none; color: #fff; font-size: 15px; font-weight: bold; width: 100%; outline: none;">
-                        </div>
-                    </div>
-                    <div style="flex: 1;">
-                        <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Max (ETB)</div>
-                        <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px;">
-                            <input type="number" value="5000" style="background: transparent; border: none; color: #fff; font-size: 15px; font-weight: bold; width: 100%; outline: none;">
-                        </div>
-                    </div>
-                </div>
-                <div style="font-size: 10px; color: #777; margin-bottom: 8px;">Limits must be between 200 and 5,000,000 ETB</div>
-                <div style="font-size: 11px; color: #aaa;">Your wallet balance: <span style="color: #0ecb81; font-weight: bold;">$0.22 USDT</span></div>
-            </div>
-
-            <!-- Payment Methods Section -->
-            <div class="card">
-                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">Payment Methods</div>
-                <div style="background: #121212; border: 1px solid #0ecb81; border-radius: 8px; padding: 12px; text-align: center; color: #0ecb81; font-weight: bold; font-size: 13px; cursor: pointer;" onclick="alert('Select payment method')">
-                    + Select Payment Method
-                </div>
-            </div>
-
-            <button class="btn-action" style="padding: 14px; font-size: 15px; background: #f0b90b; color: #000; margin-bottom: 20px;" onclick="alert('Ad successfully posted!')">Post Advertisement</button>
-        </div>
-
-        <!-- 6. WALLET TAB -->
+        <!-- 5. WALLET TAB (Matches exact screenshots with non-skippable forms) -->
         <div id="tab-wallet" class="tab-content" style="display: none;">
             <h2>Wallet</h2>
             <div class="wallet-card">
@@ -327,10 +179,11 @@
                 <span style="font-size: 12px; color: #777;">≈ 14,102.34 ETB</span>
             </div>
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <button class="btn-action" onclick="alert('Deposit window')">Deposit</button>
-                <button class="btn-action sell" onclick="alert('Withdraw window')">Withdraw</button>
+                <button class="btn-action" onclick="openDepositModal()">Deposit</button>
+                <button class="btn-action sell" onclick="openWithdrawModal()">Withdraw</button>
             </div>
-            <div class="wallet-menu-card" onclick="alert('Payment Accounts...')">
+            <!-- Payment Accounts Card matching screenshot -->
+            <div class="wallet-menu-card" onclick="openPaymentAccountsModal()">
                 <div class="wallet-menu-icon">
                     <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
                 </div>
@@ -341,10 +194,10 @@
             </div>
         </div>
 
-        <!-- 7. HELP TAB -->
+        <!-- 6. HELP TAB -->
         <div id="tab-help" class="tab-content" style="display: none;">
             <h2>Help & Support</h2>
-            <div class="card" onclick="alert('Connecting to support bot...')" style="cursor: pointer;">
+            <div class="card" style="cursor: pointer;">
                 <span style="font-weight: bold;">💬 Customer Support</span>
                 <p style="font-size: 12px; color: #aaa; margin: 5px 0 0 0;">Chat with official admin support 24/7</p>
             </div>
@@ -375,7 +228,111 @@
         </div>
     </div>
 
-    <!-- TIMEOUT POPUP MODAL -->
+    <!-- NON-SKIPPABLE MODALS CONTAINER -->
+    
+    <!-- 1. Payment Accounts Form Modal (Strictly Non-Skippable: Cannot close by clicking outside) -->
+    <div id="modal-payment-accounts" class="modal-overlay">
+        <div class="modal-card" style="max-width: 360px; padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px;">
+                <div>
+                    <div style="font-weight: bold; font-size: 16px; color: #fff;">Add Payment Method</div>
+                    <div style="font-size: 11px; color: #aaa;">Manage your payment methods</div>
+                </div>
+            </div>
+
+            <!-- Provider Selector -->
+            <div style="text-align: left; margin-bottom: 12px;">
+                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Provider *</div>
+                <div onclick="openProviderSelector()" style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 12px; font-size: 14px; font-weight: bold; color: #fff; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                    <span id="selected-provider-label">Select a provider</span>
+                    <span style="color: #777;">▼</span>
+                </div>
+            </div>
+
+            <!-- Account Name -->
+            <div style="text-align: left; margin-bottom: 12px;">
+                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Account Name *</div>
+                <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px;">
+                    <input type="text" id="input-account-name" value="Melaku Awoke" style="background: transparent; border: none; color: #fff; font-size: 14px; font-weight: bold; width: 100%; outline: none;" readonly>
+                </div>
+                <div style="font-size: 10px; color: #777; margin-top: 3px;">Uses your verified full name (cannot be changed)</div>
+            </div>
+
+            <!-- Account Number -->
+            <div style="text-align: left; margin-bottom: 12px;">
+                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Account Number (Optional)</div>
+                <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px;">
+                    <input type="text" id="input-acc-num" placeholder="Account number" style="background: transparent; border: none; color: #fff; font-size: 14px; width: 100%; outline: none;">
+                </div>
+            </div>
+
+            <!-- Phone Number -->
+            <div style="text-align: left; margin-bottom: 16px;">
+                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Phone Number (Optional)</div>
+                <div style="background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px;">
+                    <input type="text" id="input-phone-num" placeholder="Phone number" style="background: transparent; border: none; color: #fff; font-size: 14px; width: 100%; outline: none;">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-action" style="background: #2b2b2b; color: #fff;" onclick="closePaymentAccountsModal()">Cancel</button>
+                <button class="btn-action" style="background: #f0b90b; color: #000;" onclick="savePaymentMethod()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Provider Selection Sub-Modal (Non-Skippable) -->
+    <div id="modal-provider-selector" class="modal-overlay">
+        <div class="modal-card" style="max-width: 320px; padding: 20px;">
+            <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px; text-align: left; border-bottom: 1px solid #2a2a2a; padding-bottom: 8px;">Select a provider</div>
+            <div class="dropdown-modal-list">
+                <div class="dropdown-item" onclick="selectProvider('CBE')"><span style="color:#0ecb81">🔘</span> CBE</div>
+                <div class="dropdown-item" onclick="selectProvider('Awash')"><span style="color:#0ecb81">⚪</span> Awash</div>
+                <div class="dropdown-item" onclick="selectProvider('Dashen')"><span style="color:#0ecb81">⚪</span> Dashen</div>
+                <div class="dropdown-item" onclick="selectProvider('Abyssinia')"><span style="color:#0ecb81">⚪</span> Abyssinia</div>
+                <div class="dropdown-item" onclick="selectProvider('Wegagen')"><span style="color:#0ecb81">⚪</span> Wegagen</div>
+                <div class="dropdown-item" onclick="selectProvider('Coop')"><span style="color:#0ecb81">⚪</span> Coop</div>
+                <div class="dropdown-item" onclick="selectProvider('Hibret')"><span style="color:#0ecb81">⚪</span> Hibret</div>
+                <div class="dropdown-item" onclick="selectProvider('Telebirr')"><span style="color:#0ecb81">⚪</span> Telebirr</div>
+                <div class="dropdown-item" onclick="selectProvider('CBE Birr')"><span style="color:#0ecb81">⚪</span> CBE Birr</div>
+                <div class="dropdown-item" onclick="selectProvider('M-PESA')"><span style="color:#0ecb81">⚪</span> M-PESA</div>
+            </div>
+            <button class="btn-action" style="background: #2b2b2b; color: #fff; margin-top: 15px;" onclick="closeProviderSelector()">Close</button>
+        </div>
+    </div>
+
+    <!-- 3. Deposit Modal (Non-Skippable) -->
+    <div id="modal-deposit" class="modal-overlay">
+        <div class="modal-card">
+            <h3 style="margin: 0 0 8px 0; color: #f0b90b;">Deposit USDT</h3>
+            <p style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Send only USDT to this deposit address (TRC20 / BEP20)</p>
+            <div style="background: #121212; padding: 12px; border-radius: 8px; border: 1px solid #2a2a2a; font-family: monospace; font-size: 12px; word-break: break-all; color: #0ecb81; margin-bottom: 20px;">
+                0x71C...392F8aB901452e
+            </div>
+            <button class="btn-action" style="background: #f0b90b; color: #000;" onclick="closeDepositModal()">I Have Sent / Done</button>
+        </div>
+    </div>
+
+    <!-- 4. Withdraw Modal (Non-Skippable) -->
+    <div id="modal-withdraw" class="modal-overlay">
+        <div class="modal-card">
+            <h3 style="margin: 0 0 8px 0; color: #f6465d;">Withdraw USDT</h3>
+            <div style="text-align: left; margin-bottom: 12px;">
+                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Destination Address</div>
+                <input type="text" placeholder="Paste wallet address" style="width: 100%; background: #121212; border: 1px solid #2a2a2a; border-radius: 6px; padding: 10px; color: #fff; font-size: 13px; outline: none; box-sizing: border-box;">
+            </div>
+            <div style="text-align: left; margin-bottom: 20px;">
+                <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Amount (USDT)</div>
+                <input type="number" value="50" style="width: 100%; background: #121212; border: 1px solid #2a2a2a; border-radius: 6px; padding: 10px; color: #fff; font-size: 13px; outline: none; box-sizing: border-box;">
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-action" style="background: #2b2b2b; color: #fff;" onclick="closeWithdrawModal()">Cancel</button>
+                <button class="btn-action sell" onclick="closeWithdrawModal()">Confirm Withdrawal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. TIMEOUT POPUP MODAL -->
     <div id="timeout-modal" class="modal-overlay">
         <div class="modal-card">
             <div style="font-size: 36px; margin-bottom: 10px;">⏰</div>
@@ -418,14 +375,48 @@
             }
         }
 
+        /* Non-Skippable Modal Controls */
+        function openPaymentAccountsModal() {
+            document.getElementById('modal-payment-accounts').style.display = 'flex';
+        }
+        function closePaymentAccountsModal() {
+            document.getElementById('modal-payment-accounts').style.display = 'none';
+        }
+        function openProviderSelector() {
+            document.getElementById('modal-provider-selector').style.display = 'flex';
+        }
+        function closeProviderSelector() {
+            document.getElementById('modal-provider-selector').style.display = 'none';
+        }
+        function selectProvider(name) {
+            document.getElementById('selected-provider-label').innerText = name;
+            closeProviderSelector();
+        }
+        function savePaymentMethod() {
+            alert('Payment Method successfully saved!');
+            closePaymentAccountsModal();
+        }
+
+        function openDepositModal() {
+            document.getElementById('modal-deposit').style.display = 'flex';
+        }
+        function closeDepositModal() {
+            document.getElementById('modal-deposit').style.display = 'none';
+        }
+
+        function openWithdrawModal() {
+            document.getElementById('modal-withdraw').style.display = 'flex';
+        }
+        function closeWithdrawModal() {
+            document.getElementById('modal-withdraw').style.display = 'none';
+        }
+
         function openCheckout(advertiser, rate, limits, payment, balance) {
             activeCheckout.advertiser = advertiser;
             activeCheckout.rate = parseFloat(rate);
             activeCheckout.payment = payment;
 
             document.getElementById('chk-payment').innerText = payment;
-            document.getElementById('chk-rate-val').innerText = rate;
-            document.getElementById('note-advertiser').innerText = advertiser;
             document.getElementById('chk-balance').innerText = balance + " USDT";
             document.getElementById('checkout-title-header').innerText = advertiser + " P2P";
 
@@ -433,26 +424,6 @@
             calculateETB();
 
             switchTab('checkout', null);
-        }
-
-        function openCreateAd() {
-            switchTab('create-ad', null);
-        }
-
-        function selectAdType(type) {
-            const buyCard = document.getElementById('ad-type-buy');
-            const sellCard = document.getElementById('ad-type-sell');
-            if (type === 'buy') {
-                buyCard.style.border = '1px solid #0ecb81';
-                buyCard.children[0].style.color = '#0ecb81';
-                sellCard.style.border = '1px solid #2a2a2a';
-                sellCard.children[0].style.color = '#f6465d';
-            } else {
-                sellCard.style.border = '1px solid #f6465d';
-                sellCard.children[0].style.color = '#f6465d';
-                buyCard.style.border = '1px solid #2a2a2a';
-                buyCard.children[0].style.color = '#0ecb81';
-            }
         }
 
         function calculateETB() {
@@ -483,37 +454,9 @@
             ongoingCard.innerHTML = `
                 <div class="card">
                     <div id="status-icon" class="waiting-timer-ring">⏱️</div>
-                    <h3 id="status-title" style="margin: 0 0 5px 0; color: #fff; text-align: center;">Waiting for Response</h3>
-                    <p id="status-subtitle" style="font-size: 12px; color: #aaa; margin-bottom: 15px; text-align: center;">Advertiser is reviewing your request</p>
+                    <h3 style="margin: 0 0 5px 0; color: #fff; text-align: center;">Waiting for Response</h3>
                     <div style="text-align: center; margin-bottom: 20px;">
                         <div id="countdown-timer" style="background: #121212; display: inline-block; padding: 6px 16px; border-radius: 20px; color: #f0b90b; font-weight: bold; border: 1px solid #333;">05:00</div>
-                    </div>
-                    <div style="text-align: left; border-top: 1px solid #2a2a2a; padding-top: 15px;">
-                        <div style="font-weight: bold; margin-bottom: 12px; color: #fff;">Order Details</div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                            <span>Request ID:</span> <span style="color: #fff; font-weight: bold;">${currentOrderData.id}</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                            <span>Trade Type:</span> <span style="color: #fff; font-weight: bold;">Buy USDT</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                            <span>Amount:</span> <span style="color: #fff; font-weight: bold;">${currentOrderData.amountUsd} USDT</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                            <span>ETB Amount:</span> <span style="color: #f0b90b; font-weight: bold;">${currentOrderData.amountEtb} ETB</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                            <span>Price per USD:</span> <span style="color: #fff; font-weight: bold;">${currentOrderData.rate}</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                            <span>Advertiser:</span> <span style="color: #fff; font-weight: bold;">${currentOrderData.advertiser}</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #aaa;">
-                            <span>Payment:</span> <span style="color: #00b0ff; font-weight: bold;">${currentOrderData.payment}</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px; color: #aaa;">
-                            <span>Created:</span> <span style="color: #fff; font-size: 12px;">${currentOrderData.created}</span>
-                        </div>
                     </div>
                 </div>
             `;
@@ -539,10 +482,7 @@
                     cancelledOrdersList.unshift(currentOrderData);
                     currentOrderData = null;
                 }
-                renderCancelledOrders();
-
                 document.getElementById('ongoing-order-card').style.display = 'none';
-                document.getElementById('ongoing-order-card').innerHTML = '';
                 document.getElementById('ongoing-empty').style.display = 'block';
                 document.getElementById('ongoing-count').innerText = "0";
 
@@ -557,56 +497,6 @@
                 let s = totalSeconds % 60;
                 timerEl.innerText = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
             }
-        }
-
-        function renderCancelledOrders() {
-            const listEl = document.getElementById('cancelled-list');
-            const emptyEl = document.getElementById('cancelled-empty');
-            
-            document.getElementById('cancelled-count').innerText = cancelledOrdersList.length;
-
-            if (cancelledOrdersList.length === 0) {
-                emptyEl.style.display = 'block';
-                listEl.innerHTML = '';
-                return;
-            }
-
-            emptyEl.style.display = 'none';
-            let html = '';
-            cancelledOrdersList.forEach(order => {
-                html += `
-                    <div class="card" style="border-left: 3px solid #f6465d; margin-bottom: 12px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <span style="font-weight: bold; color: #fff;">Buy USDT</span>
-                            <span style="font-size: 11px; background: rgba(246,70,93,0.15); color: #f6465d; padding: 2px 8px; border-radius: 4px; font-weight: bold;">Cancelled</span>
-                        </div>
-                        <div style="text-align: left; font-size: 13px; color: #aaa;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                                <span>Request ID:</span> <span style="color: #fff; font-weight: bold;">${order.id}</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                                <span>Amount:</span> <span style="color: #fff; font-weight: bold;">${order.amountUsd} USDT</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-sub between; margin-bottom: 6px;">
-                                <span>ETB Amount:</span> <span style="color: #f0b90b; font-weight: bold;">${order.amountEtb} ETB</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                                <span>Advertiser:</span> <span style="color: #fff; font-weight: bold;">${order.advertiser}</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                                <span>Payment:</span> <span style="color: #00b0ff; font-weight: bold;">${order.payment}</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                                <span>Created:</span> <span style="color: #fff; font-size: 12px;">${order.created}</span>
-                            </div>
-                            <div style="border-top: 1px solid #2a2a2a; margin-top: 10px; padding-top: 8px; color: #f6465d; font-size: 11px; font-weight: bold;">
-                                Reason: Timed out - No response from advertiser
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            listEl.innerHTML = html;
         }
 
         function findAnotherClient() {
