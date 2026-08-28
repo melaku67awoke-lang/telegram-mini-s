@@ -11,12 +11,14 @@
             color: #ffffff;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
         }
-        .app-shell {
+        .app-container {
+            width: 100%;
             max-width: 420px;
-            margin: 0 auto;
-            min-height: 100vh;
             background: #181a20;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -42,66 +44,67 @@
             color: #848e9c;
             font-size: 20px;
         }
-        .wallet-body {
+        .wallet-content {
             padding: 20px;
             flex: 1;
-            filter: blur(4px);
-            pointer-events: none;
-            user-select: none;
+            display: flex;
+            flex-direction: column;
         }
-        .wallet-title {
+        .wallet-label {
             color: #f0b90b;
             font-size: 20px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
-        .balance-card {
+        .balance-box {
             background: #1e2329;
             border-radius: 12px;
-            padding: 24px;
-            text-align: center;
+            padding: 20px;
             border: 1px solid #2b313a;
             margin-bottom: 20px;
+            text-align: center;
         }
-        .balance-label {
+        .balance-title {
             color: #848e9c;
             font-size: 13px;
             margin-bottom: 8px;
         }
-        .balance-amount {
+        .balance-value {
             color: #f0b90b;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: bold;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .balance-fiat {
             color: #848e9c;
-            font-size: 14px;
+            font-size: 13px;
         }
         .action-buttons {
             display: flex;
             gap: 12px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
         .btn-deposit {
             flex: 1;
             background-color: #0ecb81;
             color: #000;
             border: none;
-            padding: 14px;
+            padding: 12px;
             font-weight: bold;
             border-radius: 8px;
-            font-size: 15px;
+            cursor: pointer;
+            font-size: 14px;
         }
         .btn-withdraw {
             flex: 1;
             background-color: #f6465d;
             color: #fff;
             border: none;
-            padding: 14px;
+            padding: 12px;
             font-weight: bold;
             border-radius: 8px;
-            font-size: 15px;
+            cursor: pointer;
+            font-size: 14px;
         }
         .bottom-nav {
             display: flex;
@@ -109,8 +112,7 @@
             background: #181a20;
             border-top: 1px solid #23272f;
             padding: 10px 0;
-            position: sticky;
-            bottom: 0;
+            margin-top: auto;
         }
         .nav-item {
             display: flex;
@@ -124,34 +126,31 @@
             color: #f0b90b;
         }
 
-        /* Modal Overlay */
+        /* Deposit Modal Overlay matching your layout */
         .modal-overlay {
+            display: none;
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
+            background: rgba(0, 0, 0, 0.75);
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            z-index: 100;
+            padding: 16px;
+            z-index: 50;
             overflow-y: auto;
         }
-        .modal-content {
+        .modal-overlay.active {
+            display: flex;
+        }
+        .deposit-card-box {
             background: #1e2329;
             width: 100%;
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 20px;
             border: 1px solid #2b313a;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-        }
-        .modal-title {
-            color: #f0b90b;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
         .network-section {
             margin-bottom: 20px;
@@ -163,23 +162,23 @@
             margin-bottom: 0;
             padding-bottom: 0;
         }
-        .network-name {
+        .network-title {
             color: #f0b90b;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
         .qr-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
         .qr-box {
             background: #ffffff;
             padding: 8px;
             border-radius: 8px;
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -196,7 +195,7 @@
             font-family: monospace;
             font-size: 11px;
             word-break: break-all;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: #eaecef;
             border: 1px solid #363c4e;
         }
@@ -210,7 +209,6 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 13px;
-            transition: background 0.2s;
         }
         .copy-btn:active {
             background-color: #d4a30a;
@@ -220,13 +218,13 @@
             font-size: 11px;
             color: #0ecb81;
             margin-top: 4px;
-            height: 12px;
+            height: 14px;
         }
     </style>
 </head>
 <body>
 
-<div class="app-shell">
+<div class="app-container">
     <!-- Header -->
     <div class="app-header">
         <div class="left">
@@ -239,16 +237,16 @@
         </div>
     </div>
 
-    <!-- Main Wallet Background (Blurred) -->
-    <div class="wallet-body">
-        <div class="wallet-title">Wallet</div>
-        <div class="balance-card">
-            <div class="balance-label">Estimated Total Balance</div>
-            <div class="balance-amount">72.51 USDT</div>
+    <!-- Original Wallet Page Content -->
+    <div class="wallet-content">
+        <div class="wallet-label">Wallet</div>
+        <div class="balance-box">
+            <div class="balance-title">Estimated Total Balance</div>
+            <div class="balance-value">72.51 USDT</div>
             <div class="balance-fiat">≈ 14,102.34 ETB</div>
         </div>
         <div class="action-buttons">
-            <button class="btn-deposit">Deposit</button>
+            <button class="btn-deposit" onclick="openDepositModal()">Deposit</button>
             <button class="btn-withdraw">Withdraw</button>
         </div>
     </div>
@@ -277,17 +275,15 @@
         </div>
     </div>
 
-    <!-- Deposit Modal Popup Replacing Old Alert -->
-    <div class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-title">Deposit USDT</div>
-
+    <!-- Deposit Popup Modal (Appears when clicking Deposit button) -->
+    <div class="modal-overlay" id="depositModal" onclick="closeOnOutside(event)">
+        <div class="deposit-card-box">
             <!-- Solana Section -->
             <div class="network-section">
-                <div class="network-name">Solana (SPL) Network</div>
+                <div class="network-title">Solana (SPL) Network</div>
                 <div class="qr-container">
                     <div class="qr-box">
-                        <img src="Screenshot_2026-08-28_134649.682.jpg" alt="Solana QR Code">
+                        <img src="Screenshot_2026-08-28_134649.682.jpg" alt="Solana QR">
                     </div>
                 </div>
                 <div class="address-box" id="sol-address">H49kEYE5F1hnMPwiyJrSr51Ya44ySRaQW1FhE2gWEvmY</div>
@@ -297,10 +293,10 @@
 
             <!-- BSC Section -->
             <div class="network-section">
-                <div class="network-name">BSC (BEP20) Network</div>
+                <div class="network-title">BSC (BEP20) Network</div>
                 <div class="qr-container">
                     <div class="qr-box">
-                        <img src="Screenshot_2026-08-28_134632.444.jpg" alt="BSC QR Code">
+                        <img src="Screenshot_2026-08-28_134632.444.jpg" alt="BSC QR">
                     </div>
                 </div>
                 <div class="address-box" id="bsc-address">0x8e54105bed3243e1ca44a0cccc6b62cf2bff9df4</div>
@@ -312,6 +308,16 @@
 </div>
 
 <script>
+    function openDepositModal() {
+        document.getElementById('depositModal').classList.add('active');
+    }
+
+    function closeOnOutside(event) {
+        if (event.target === document.getElementById('depositModal')) {
+            document.getElementById('depositModal').classList.remove('active');
+        }
+    }
+
     function copyAddress(text, toastId) {
         navigator.clipboard.writeText(text).then(() => {
             const toast = document.getElementById(toastId);
